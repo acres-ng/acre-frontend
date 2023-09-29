@@ -1,6 +1,44 @@
-import React from "react";
+import authService, { getCurrentUser } from "@/services/authService";
+import React, { FormEvent, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 function Login() {
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [email, setEmail] = useState<string | undefined>("");
+  const [password, setPassword] = useState<string>("");
+  const [errors, setErrors] = useState("");
+
+  const user = getCurrentUser();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    user ? navigate("/") : null;
+  }, [user]);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    try {
+      setIsLoggingIn(true);
+      // const hashedPassword = await bcrypt.hash(password, 10);
+
+      await authService.login({ email, password });
+      const loginUser = authService.getCurrentUser();
+      if (loginUser) {
+        if (location.state?.from) {
+          navigate(location.state.from);
+        } else {
+          navigate("/");
+        }
+      }
+    } catch (error: any) {
+      setErrors(error.response.data);
+      setIsLoggingIn(false);
+    }
+  };
+
   return (
     <div className="grid grid-cols-2">
       <section className="">
@@ -13,7 +51,11 @@ function Login() {
               <p className="text-gray-400 text-sm">
                 Please fill in your details tto access your account on Acre
               </p>
-              <form className="space-y-4 md:space-y-6" action="#">
+              <form
+                className="space-y-4 md:space-y-6"
+                action="#"
+                onSubmit={handleSubmit}
+              >
                 <div>
                   <label
                     htmlFor="email"
@@ -28,6 +70,7 @@ function Login() {
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     placeholder="name@company.com"
                     required
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
                 <div>
@@ -44,6 +87,7 @@ function Login() {
                     placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     required
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
                 <div className="flex items-center justify-between">
@@ -78,12 +122,12 @@ function Login() {
                 </button>
                 <p className="text-sm font-light text-gray-500">
                   Don’t have an account yet?{" "}
-                  <a
-                    href="#"
+                  <Link
+                    to="/signup"
                     className="font-medium text-green-600 hover:underline"
                   >
                     Sign up
-                  </a>
+                  </Link>
                 </p>
               </form>
             </div>
