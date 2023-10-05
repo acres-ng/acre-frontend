@@ -1,39 +1,51 @@
-import authService, { getCurrentUser } from "@/services/authService";
+import authService from "@/services/authService";
 import React, { FormEvent, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import { Toaster, toast } from "sonner";
 
 function Login() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [email, setEmail] = useState<string | undefined>("");
+  const [login, setLogin] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [login_type, setLogin_type] = useState("email"); // Set a default value of "email"
   const [errors, setErrors] = useState("");
 
-  const user = getCurrentUser();
+  // const user = getCurrentUser();
   const navigate = useNavigate();
   const location = useLocation();
 
-  useEffect(() => {
-    user ? navigate("/") : null;
-  }, [user]);
+  // useEffect(() => {
+  //   user ? navigate("/") : null;
+  // }, [user]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     try {
       setIsLoggingIn(true);
-      // const hashedPassword = await bcrypt.hash(password, 10);
 
-      await authService.login({ email, password });
-      const loginUser = authService.getCurrentUser();
-      if (loginUser) {
-        if (location.state?.from) {
-          navigate(location.state.from);
-        } else {
-          navigate("/");
-        }
+      if (login?.includes("@")) {
+        setLogin_type("email");
+      } else if (/\d{11}/.test(login)) {
+        setLogin_type("phone");
+      } else {
+        console.error("Invalid email or phone format");
+        return;
       }
+
+      await authService.login({ login, password, login_type });
+      // if(response.)
+      // const loginUser = authService.getCurrentUser();
+      // if (loginUser) {
+      //   if (location.state?.from) {
+      //     navigate(location.state.from);
+      //   } else {
+      //     navigate("/");
+      //   }
+      // }
     } catch (error: any) {
+      toast.error(error?.response?.data?.message);
       setErrors(error.response.data);
       setIsLoggingIn(false);
     }
@@ -49,7 +61,7 @@ function Login() {
                 Hi, welcome back!
               </h1>
               <p className="text-gray-400 text-sm">
-                Please fill in your details tto access your account on Acre
+                Please fill in your details to access your account on Acre
               </p>
               <form
                 className="space-y-4 md:space-y-6"
@@ -61,16 +73,15 @@ function Login() {
                     htmlFor="email"
                     className="block mb-2 text-sm font-medium text-gray-900 "
                   >
-                    Your email
+                    Your email or phone number
                   </label>
                   <input
-                    type="email"
+                    type="text"
                     name="email"
                     id="email"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                    placeholder="name@company.com"
                     required
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setLogin(e.target.value)}
                   />
                 </div>
                 <div>
@@ -84,7 +95,6 @@ function Login() {
                     type="password"
                     name="password"
                     id="password"
-                    placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                     required
                     onChange={(e) => setPassword(e.target.value)}
@@ -98,7 +108,6 @@ function Login() {
                         aria-describedby="remember"
                         type="checkbox"
                         className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300"
-                        required
                       />
                     </div>
                     <div className="ml-3 text-sm">

@@ -8,7 +8,7 @@ interface User {
   email: string;
 }
 
-const tokenKey: string = "token";
+const tokenKey: string = "user";
 const apiUrl = API_URL + "auth/login";
 
 http.setJwt(getJwt());
@@ -18,32 +18,21 @@ export function getJwt() {
 }
 
 export async function login(user: any) {
-  // await http.post(apiUrl, user);
-  const { data: jwt } = await http.post(apiUrl, user);
-  localStorage.setItem(tokenKey, jwt);
+  await http.post(apiUrl, user);
+  const { data } = await http.post(apiUrl, user);
+  localStorage.setItem(tokenKey, data?.data?.customer);
 }
 
-export function getCurrentUser(): User | null {
+export function getCurrentUser(): any {
   const token = localStorage.getItem(tokenKey); // Retrieve the JWT from local storage
   if (token) {
-    const decodedToken = decodeToken(token); // Decode the JWT
-    if (decodedToken) {
-      const { _id, name, email } = decodedToken; // Extract the user information from the decoded token
-      const user: User = {
-        _id,
-        name,
-        email,
-      };
-      return decodedToken;
-    }
+    return token;
   }
   return null; // Return null if the JWT is not present or invalid
 }
 
 // Example function to decode the JWT
 const decodeToken = (token: string) => {
-  // Implement the decoding logic for your specific JWT library or algorithm
-  // This is just a placeholder implementation
   try {
     const decoded = JSON.parse(atob(token.split(".")[1]));
     return decoded;
