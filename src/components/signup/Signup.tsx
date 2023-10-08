@@ -8,7 +8,9 @@ import PhoneInput, {
 } from "react-phone-number-input";
 import "react-phone-number-input/style.css";
 import userService from "@/services/userService";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import farmer from "../../assets/farmer.png";
+import { toast } from "sonner";
 
 const signUpSchema = z
   .object({
@@ -39,8 +41,11 @@ const Signup = () => {
   );
   const [serverError, setServerError] = useState<string | null>(null);
 
+  const navigate = useNavigate();
+
   const handlePhoneChange = (value: string) => {
     setValue("phone", value || "");
+    if (value === undefined) return;
     const phoneNumber = parsePhoneNumber(value);
     if (phoneNumber) {
       setValue("country_code", phoneNumber.country || "");
@@ -59,17 +64,22 @@ const Signup = () => {
     setError,
   } = useForm<TSignUpSchema>({ resolver: zodResolver(signUpSchema) });
 
-  const onSubmit = async (data: FieldValues) => {
-    console.log(data);
+  const onSubmit = async (values: FieldValues) => {
     try {
-      const result = await userService.register(data);
-      if (result.status >= 200 && result.status <= 300) {
-        setCurrentStep(RegistrationStep.RegistrationSuccess);
+      const { data } = await userService.register(values);
+      if (data?.status === "success" && data?.data?.otp_sent === true) {
+        navigate(`/otp?user=${data?.data?.customer?.profile_id}`, {
+          replace: true,
+        });
       } else {
-        setServerError("An error occurred during registration1."); // Handle other server errors
+        setServerError(
+          "An error occurred during registration, please try again."
+        ); // Handle other server errors
       }
     } catch (error: any) {
-      setServerError(error.response.data); // Handle unexpected errors
+      toast.error(
+        error?.response?.data?.message && error?.response?.data?.data
+      );
     }
   };
 
@@ -266,7 +276,9 @@ const Signup = () => {
           </div>
         </div>
       </section>
-      <div className="">second part</div>
+      <div className="flex justify-center items-center">
+        <img src={farmer} alt="" className="h-[500px]" />
+      </div>
     </div>
   );
 };

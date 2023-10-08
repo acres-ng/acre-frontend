@@ -1,8 +1,9 @@
-import authService from "@/services/authService";
+import authService, { getCurrentUser } from "@/services/authService";
 import React, { FormEvent, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { Toaster, toast } from "sonner";
+import farmer from "../../assets/farmer.png";
 
 function Login() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
@@ -34,19 +35,16 @@ function Login() {
         return;
       }
 
-      await authService.login({ login, password, login_type });
-      // if(response.)
-      // const loginUser = authService.getCurrentUser();
-      // if (loginUser) {
-      //   if (location.state?.from) {
-      //     navigate(location.state.from);
-      //   } else {
-      //     navigate("/");
-      //   }
-      // }
+      const response = await authService.login({ login, password, login_type });
+      if (response.status === "success") {
+        if (location.state?.from) {
+          navigate(location.state.from);
+        } else {
+          navigate("/");
+        }
+      }
     } catch (error: any) {
       toast.error(error?.response?.data?.message);
-      setErrors(error.response.data);
       setIsLoggingIn(false);
     }
   };
@@ -55,7 +53,7 @@ function Login() {
     <div className="grid grid-cols-2">
       <section className="">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-          <div className="w-full bg-white rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
+          <div className="w-full bg-white rounded-lg md:mt-0 sm:max-w-md xl:p-0">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                 Hi, welcome back!
@@ -143,7 +141,9 @@ function Login() {
           </div>
         </div>
       </section>
-      <div className="">COntetnt goes here</div>
+      <div className="flex justify-center items-center">
+        <img src={farmer} alt="" className="h-[500px]" />
+      </div>
     </div>
   );
 }

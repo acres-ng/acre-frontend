@@ -9,6 +9,7 @@ import Login from "./components/login/Login";
 import Signup from "./components/signup/Signup";
 import Dashboard from "./components/dashboard/Dashboard";
 import ProtectedRoute from "./lib/ProtectedRoutes";
+import Otp from "./components/otp/Otp";
 
 Login;
 function App() {
@@ -26,6 +27,7 @@ function App() {
           />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/otp" element={<Otp />} />
         </Routes>
       </Router>
     </>

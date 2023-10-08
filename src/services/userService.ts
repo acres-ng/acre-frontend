@@ -4,8 +4,8 @@ import { API_URL } from "@/config";
 const apiUrl = API_URL + "auth/register";
 
 interface Verify {
-  code: string;
-  phone: string;
+  profile_id: string;
+  otp: string;
 }
 
 export function register(user: any) {
@@ -13,7 +13,7 @@ export function register(user: any) {
 }
 
 export function verifyOtp(data: Verify) {
-  return http.post(apiUrl + "/verify", data);
+  return http.post(API_URL + "auth/send_otp", data);
 }
 
 export default {

@@ -3,9 +3,9 @@ import http from "./HttpService";
 import jwtDecode from "jwt-decode";
 
 interface User {
-  _id: string;
-  name: string;
-  email: string;
+  login: string;
+  password: string;
+  login_type: string;
 }
 
 const tokenKey: string = "user";
@@ -17,10 +17,10 @@ export function getJwt() {
   return localStorage.getItem(tokenKey);
 }
 
-export async function login(user: any) {
-  await http.post(apiUrl, user);
+export async function login(user: User) {
   const { data } = await http.post(apiUrl, user);
   localStorage.setItem(tokenKey, data?.data?.customer);
+  return data;
 }
 
 export function getCurrentUser(): any {
