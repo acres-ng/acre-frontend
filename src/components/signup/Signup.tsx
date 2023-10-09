@@ -90,11 +90,10 @@ const Signup = () => {
           <div className="w-full bg-white rounded-lg shadow  md:mt-0 sm:max-w-md xl:p-0">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                Hi, lets get you started
+                Hi, let's get you started
               </h1>
               <p className="text-sm text-gray-400">
-                To create an account, pleease enter your preferred phone number
-                and we would send an OTP verification to you shortly
+              To create your account, enter your details below and we'll send you an OTP shortly.
               </p>
               {serverError && (
                 <div className="text-red-500 text-sm mb-4">{serverError}</div>

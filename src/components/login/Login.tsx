@@ -59,7 +59,7 @@ function Login() {
                 Hi, welcome back!
               </h1>
               <p className="text-gray-400 text-sm">
-                Please fill in your details to access your account on Acre
+                Please fill in your details to access your account
               </p>
               <form
                 className="space-y-4 md:space-y-6"
