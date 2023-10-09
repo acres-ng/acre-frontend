@@ -2,15 +2,21 @@ import { FormEvent, useState } from "react";
 import farmer from "../../assets/farmer.png";
 import { verifyOtp } from "@/services/userService";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const Otp = () => {
   const [otpCode, setOtpCode] = useState(["", "", "", "", "", ""]);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [isVerified, setIsVerified] = useState(false);
+
+  const navigate = useNavigate();
+
   const queryString: URLSearchParams = new URLSearchParams(
     window.location.search
   );
-  const user = queryString.get("user");
+  const type = queryString.get("type");
 
-  if (!user) {
+  if (!type) {
     return null;
   }
 
@@ -36,14 +42,22 @@ const Otp = () => {
     e.preventDefault();
 
     try {
+      const code = otpCode.join("");
+      // Handle OTP verification or submission here
+      if (type) {
+        const { data } = await verifyOtp({ contact: type, otp: code });
+        if (data?.status === "success") {
+          toast.success(data?.message);
+          setIsVerified(true);
+        } else {
+          setServerError(
+            "An error occurred during registration, please try again."
+          ); // Handle other server errors
+        }
+      }
     } catch (error: any) {
       toast.error(error?.response?.data?.message);
-    }
-    const code = otpCode.join("");
-    // Handle OTP verification or submission here
-    if (user) {
-      const response = await verifyOtp({ profile_id: user, otp: code });
-      console.log("otp response", response);
+      console.log(error);
     }
   };
 
@@ -90,6 +104,8 @@ const Otp = () => {
                     </span>
                   </p>
                   <button
+                    disabled={!!isVerified}
+                    onClick={() => navigate("/success", { replace: true })}
                     type="submit"
                     className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline"
                   >

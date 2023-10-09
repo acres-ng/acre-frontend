@@ -36,17 +36,17 @@ enum RegistrationStep {
 }
 
 const Signup = () => {
-  const [currentStep, setCurrentStep] = useState<RegistrationStep>(
-    RegistrationStep.UserData
-  );
   const [serverError, setServerError] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
   const handlePhoneChange = (value: string) => {
-    setValue("phone", value || "");
+    // Remove spaces from the phone number value
     if (value === undefined) return;
+
+    setValue("phone", value || "");
     const phoneNumber = parsePhoneNumber(value);
+
     if (phoneNumber) {
       setValue("country_code", phoneNumber.country || "");
     } else {
@@ -65,10 +65,18 @@ const Signup = () => {
   } = useForm<TSignUpSchema>({ resolver: zodResolver(signUpSchema) });
 
   const onSubmit = async (values: FieldValues) => {
+    const cleanedPhoneNumber = values.phone.replace(/\s+/g, "");
+
+    const cleanedValues = {
+      ...values,
+      phone: cleanedPhoneNumber,
+    };
+
     try {
-      const { data } = await userService.register(values);
+      const { data } = await userService.register(cleanedValues);
+
       if (data?.status === "success" && data?.data?.otp_sent === true) {
-        navigate(`/otp?user=${data?.data?.customer?.profile_id}`, {
+        navigate(`/otp?type=${data?.data?.customer?.email}`, {
           replace: true,
         });
       } else {

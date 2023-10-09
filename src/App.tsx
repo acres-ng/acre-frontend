@@ -10,6 +10,8 @@ import Signup from "./components/signup/Signup";
 import Dashboard from "./components/dashboard/Dashboard";
 import ProtectedRoute from "./lib/ProtectedRoutes";
 import Otp from "./components/otp/Otp";
+import VerificationSuccess from "./components/success/VerificationSuccess";
+import RegisterFarm from "./components/farm/RegisterFarm";
 
 Login;
 function App() {
@@ -28,6 +30,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/otp" element={<Otp />} />
+          <Route path="/success" element={<VerificationSuccess />} />
+          <Route path="/add-farm" element={<RegisterFarm />} />
         </Routes>
       </Router>
     </>

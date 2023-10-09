@@ -4,7 +4,7 @@ import { API_URL } from "@/config";
 const apiUrl = API_URL + "auth/register";
 
 interface Verify {
-  profile_id: string;
+  contact: string;
   otp: string;
 }
 
