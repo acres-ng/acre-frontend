@@ -16,8 +16,8 @@ const signUpSchema = z
   .object({
     firstname: z.string().min(1, "Enter a valid name"),
     email: z.string().email("Email is required"),
-    password: z.string().min(8, "Password must be atleast 8 characters long"),
-    confirmPassword: z.string(),
+    password: z.string().min(8, "Password must be at least 8 characters long"),
+    confirmPassword: z.string().min(1, "Confirm Password is required"), // Make it required
     phone: z.string().refine(isValidPhoneNumber, {
       message: "Please enter a valid phone number",
     }),
@@ -101,7 +101,8 @@ const Signup = () => {
                 Hi, let's get you started
               </h1>
               <p className="text-sm text-gray-400">
-              To create your account, enter your details below and we'll send you an OTP shortly.
+                To create your account, enter your details below and we'll send
+                you an OTP shortly.
               </p>
               {serverError && (
                 <div className="text-red-500 text-sm mb-4">{serverError}</div>
@@ -130,25 +131,31 @@ const Signup = () => {
                     </p>
                   )}
                 </div>
-                <PhoneInput
-                  {...register("phone", {
-                    required: "Phone is required",
-                    validate: {
-                      validPhone: (value) =>
-                        isValidPhoneNumber(value) ||
-                        "Enter a valid phone number",
-                    },
-                  })}
-                  value={getValues("phone")}
-                  onChange={handlePhoneChange}
-                  defaultCountry="NG"
-                  countryCallingCodeEditable={false}
-                  country="NG"
-                  international
-                  withCountryCallingCode
-                  className="border appearance-none text-gray-700 border-gray-200 rounded py-2 px-1  focus:outline-none"
-                />
-
+                <div>
+                  <PhoneInput
+                    {...register("phone", {
+                      required: "Phone is required",
+                      validate: {
+                        validPhone: (value) =>
+                          isValidPhoneNumber(value) ||
+                          "Enter a valid phone number",
+                      },
+                    })}
+                    value={getValues("phone")}
+                    onChange={handlePhoneChange}
+                    defaultCountry="NG"
+                    countryCallingCodeEditable={false}
+                    country="NG"
+                    international
+                    withCountryCallingCode
+                    className="border appearance-none text-gray-700 border-gray-200 rounded py-2 px-1  focus:outline-none"
+                  />
+                  {errors.phone && (
+                    <p className="text-red-500 text-sm">
+                      {errors.phone.message}
+                    </p>
+                  )}
+                </div>
                 <div>
                   <label
                     htmlFor="email"
