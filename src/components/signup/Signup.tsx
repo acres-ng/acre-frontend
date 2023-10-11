@@ -85,9 +85,7 @@ const Signup = () => {
         ); // Handle other server errors
       }
     } catch (error: any) {
-      toast.error(
-        error?.response?.data?.message && error?.response?.data?.data
-      );
+      toast.error(error?.response?.data?.message);
     }
   };
 

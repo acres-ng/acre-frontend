@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldValues, useForm } from "react-hook-form";
 
 import farmer from "../../assets/farmer.png";
+import { sendOtp } from "@/services/userService";
 interface User {
   login: string;
   password: string;
@@ -67,7 +68,7 @@ function Login() {
 
       if (
         response.status === "success" &&
-        response?.data?.customer?.isVerified === true
+        response?.data?.customer?.is_verified === true
       ) {
         if (
           response?.data?.customer?.farm === null ||
@@ -82,6 +83,7 @@ function Login() {
           navigate("/");
         }
       } else {
+        await sendOtp(response?.data?.customer?.email);
         navigate(`/otp?type=${response?.data?.customer?.email}`);
       }
     } catch (error: any) {
