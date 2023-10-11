@@ -64,7 +64,11 @@ function Login() {
       };
 
       const response = await authService.login(user);
-      if (response.status === "success") {
+
+      if (
+        response.status === "success" &&
+        response?.data?.customer?.isVerified === true
+      ) {
         if (
           response?.data?.customer?.farm === null ||
           response?.data?.customer?.farm === undefined
@@ -77,6 +81,8 @@ function Login() {
         } else {
           navigate("/");
         }
+      } else {
+        navigate(`/otp?type=${response?.data?.customer?.email}`);
       }
     } catch (error: any) {
       toast.error(error?.response?.data?.message);
