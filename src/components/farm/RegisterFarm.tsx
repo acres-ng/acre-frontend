@@ -55,7 +55,7 @@ const RegisterFarm = () => {
                 Where is your farm located?
               </h1>
               <p className="text-gray-400 text-xs py-2">
-                Enter your famr's line address
+                Enter your farm's line address
               </p>
             </div>
             <div className="my-2">

@@ -76,9 +76,12 @@ const Signup = () => {
       const { data } = await userService.register(cleanedValues);
 
       if (data?.status === "success" && data?.data?.otp_sent === true) {
-        navigate(`/otp?type=${data?.data?.customer?.email}`, {
-          replace: true,
-        });
+        navigate(
+          `/otp?type=${data?.data?.customer?.email}&phone=${data?.data?.customer?.phone}`,
+          {
+            replace: true,
+          }
+        );
       } else {
         setServerError(
           "An error occurred during registration, please try again."

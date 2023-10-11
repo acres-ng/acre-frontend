@@ -15,6 +15,7 @@ const Otp = () => {
     window.location.search
   );
   const type = queryString.get("type");
+  const phone = queryString.get("phone");
 
   if (!type) {
     return null;
@@ -42,17 +43,18 @@ const Otp = () => {
     e.preventDefault();
 
     try {
-      const code = otpCode.join("");
-      // Handle OTP verification or submission here
       if (type) {
-        const { data } = await verifyOtp({ contact: type, otp: code });
-        if (data?.status === "success") {
-          toast.success(data?.message);
-          setIsVerified(true);
+        const code = otpCode.join("");
+        const response = await verifyOtp({ contact: type, otp: code });
+
+        if (response.status) {
+          toast.success(response?.data?.message);
+          navigate("/success", { replace: true });
+          setIsVerified(true); // Mark OTP as verified
         } else {
           setServerError(
             "An error occurred during registration, please try again."
-          ); // Handle other server errors
+          );
         }
       }
     } catch (error: any) {
@@ -78,9 +80,11 @@ const Otp = () => {
                   <p className="text-gray-400 text-sm">
                     Please check and enter the 6 digit code we just sent to your
                     phone number{" "}
-                    <span className="font-semibold text-gray-700 text-xs">
-                      +2347033448148
-                    </span>
+                    {phone && (
+                      <span className="font-semibold text-gray-700 text-xs">
+                        {phone}
+                      </span>
+                    )}
                   </p>
                 </div>
                 <div className="mb-4 flex justify-center">
@@ -98,14 +102,12 @@ const Otp = () => {
                 </div>
                 <div className="mb-6 text-center text-gray-400 text-xs">
                   <p className="py-5">
-                    Didn't recieve code{" "}
+                    Didn't receive the code{" "}
                     <span className="font-semibold text-xs cursor-pointer text-green-600">
                       Resend
                     </span>
                   </p>
                   <button
-                    disabled={!!isVerified}
-                    onClick={() => navigate("/success", { replace: true })}
                     type="submit"
                     className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline"
                   >
@@ -125,3 +127,4 @@ const Otp = () => {
 };
 
 export default Otp;
+6;

@@ -1,14 +1,15 @@
-import authService, { getCurrentUser } from "@/services/authService";
+import authService from "@/services/authService";
+import { sendOtp, verifyOtp } from "@/services/userService";
 import React, { FormEvent, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import { Toaster, toast } from "sonner";
+import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldValues, useForm } from "react-hook-form";
 
 import farmer from "../../assets/farmer.png";
-import { sendOtp } from "@/services/userService";
+
 interface User {
   login: string;
   password: string;
@@ -38,10 +39,6 @@ function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // useEffect(() => {
-  //   user ? navigate("/") : null;
-  // }, [user]);
-
   const {
     register,
     handleSubmit,
@@ -68,23 +65,23 @@ function Login() {
 
       if (
         response.status === "success" &&
-        response?.data?.customer?.is_verified === true
+        response.data?.is_verified === true
       ) {
         if (
-          response?.data?.customer?.farm === null ||
-          response?.data?.customer?.farm === undefined
+          response.data?.customer?.farm === null ||
+          response.data?.customer?.farm === undefined
         ) {
           navigate("/add-farm");
-          return;
-        }
-        if (location.state?.from) {
+        } else if (location.state?.from) {
           navigate(location.state.from);
         } else {
           navigate("/");
         }
       } else {
-        await sendOtp({ contact: response?.data?.customer?.email });
-        navigate(`/otp?type=${response?.data?.customer?.email}`);
+        await sendOtp({ contact: response.data?.customer?.email });
+        navigate(
+          `/otp?type=${response.data?.customer?.email}&phone=${response.data?.customer?.phone}`
+        );
       }
     } catch (error: any) {
       toast.error(error?.response?.data?.message);
@@ -122,6 +119,7 @@ function Login() {
                         message: "Enter a valid email address",
                       },
                     })}
+                    autoFocus
                     type="text"
                     name="login"
                     id="login"

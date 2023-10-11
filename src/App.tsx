@@ -31,7 +31,14 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/otp" element={<Otp />} />
           <Route path="/success" element={<VerificationSuccess />} />
-          <Route path="/add-farm" element={<RegisterFarm />} />
+          <Route
+            path="/add-farm"
+            element={
+              <ProtectedRoute>
+                <RegisterFarm />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
     </>
