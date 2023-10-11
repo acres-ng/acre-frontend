@@ -83,7 +83,7 @@ function Login() {
           navigate("/");
         }
       } else {
-        await sendOtp(response?.data?.customer?.email);
+        await sendOtp({ contact: response?.data?.customer?.email });
         navigate(`/otp?type=${response?.data?.customer?.email}`);
       }
     } catch (error: any) {

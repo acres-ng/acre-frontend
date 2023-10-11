@@ -16,8 +16,8 @@ export function verifyOtp(data: Verify) {
   return http.post(API_URL + "auth/verify_otp", data);
 }
 
-export function sendOtp(email: string) {
-  return http.post(API_URL + "auth/send_otp", email);
+export function sendOtp(data: any) {
+  return http.post(API_URL + "auth/send_otp", data);
 }
 
 export default {
