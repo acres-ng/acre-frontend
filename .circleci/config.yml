@@ -42,6 +42,11 @@ jobs:
           name: Build the app
           command: npm run build
 
+      - persist_to_workspace:
+          root: ~/app
+          paths:
+            - ./dist/
+
   deploy:
     docker:
       - image: circleci/python:3.8 # Use Python or any other base image for deploying to Heroku
