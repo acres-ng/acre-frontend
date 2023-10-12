@@ -79,12 +79,10 @@ function Login() {
         }
       } else {
         if (response.data?.customer?.primary_contact === "email") {
-          await sendOtp({ contact: response.data?.customer?.email });
           navigate(
             `/otp?contact=${response.data?.customer?.email}&t=${response.data?.customer?.primary_contact}`
           );
         } else {
-          await sendOtp({ contact: response.data?.customer?.phone });
           navigate(
             `/otp?contact=${response.data?.customer?.phone}&t=${response?.data?.customer?.primary_contact}`,
             {

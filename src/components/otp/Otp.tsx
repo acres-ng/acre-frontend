@@ -1,13 +1,15 @@
 import { FormEvent, useState } from "react";
 import farmer from "../../assets/farmer.png";
-import { verifyOtp } from "@/services/userService";
+import { sendOtp, verifyOtp } from "@/services/userService";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { AxiosResponse } from "axios";
 
 const Otp = () => {
   const [otpCode, setOtpCode] = useState(["", "", "", "", "", ""]);
   const [serverError, setServerError] = useState<string | null>(null);
   const [isVerified, setIsVerified] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
 
   const navigate = useNavigate();
 
@@ -17,7 +19,7 @@ const Otp = () => {
   const contact_type = queryString.get("contact");
   const type = queryString.get("t");
 
-  if (!contact_type) {
+  if (!contact_type || !type) {
     return null;
   }
 
@@ -41,9 +43,12 @@ const Otp = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    const jointCode = otpCode.join("");
 
-    if (otpCode.join("").length <= 6)
+    if (jointCode.length !== 6) {
+      console.log(jointCode.length);
       return toast.error("OTP code must be six characters long");
+    }
 
     try {
       if (contact_type) {
@@ -63,6 +68,30 @@ const Otp = () => {
     } catch (error: any) {
       toast.error(error?.response?.data?.message);
       console.log(error);
+    }
+  };
+
+  const handleResend = async (contact_type: string) => {
+    try {
+      if (type === "email") {
+        const response = await sendOtp({ contact: contact_type });
+        if (response?.data?.status === "success") {
+          toast.success(response.data.message);
+        }
+      } else {
+        const response = await sendOtp({ contact: contact_type });
+        if (response?.data?.status === "success") {
+          toast.success(response?.data?.message);
+        }
+      }
+    } catch (error: any) {
+      if (error && error.response && error.response.data) {
+        toast.error(error.response.data.message);
+      } else {
+        // Handle the error when it doesn't have the expected structure
+        console.error("Unexpected error structure:", error);
+        toast.error("An unexpected error occurred.");
+      }
     }
   };
 
@@ -119,15 +148,23 @@ const Otp = () => {
                   ))}
                 </div>
                 <div className="mb-6 text-center text-gray-400 text-xs">
-                  <p className="py-5">
-                    Didn't receive the code{" "}
-                    <span className="font-semibold text-xs cursor-pointer text-green-600">
-                      Resend
-                    </span>
-                  </p>
+                  {contact_type && (
+                    <p
+                      className="py-5"
+                      onClick={() => handleResend(contact_type)}
+                    >
+                      Didn't receive the code{" "}
+                      <span className="font-semibold text-xs cursor-pointer text-green-600">
+                        Resend
+                      </span>
+                    </p>
+                  )}
                   <button
                     type="submit"
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline"
+                    className={`bg-green-500 cursor-pointer hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline"
+              
+              
+             `}
                   >
                     Continue
                   </button>
