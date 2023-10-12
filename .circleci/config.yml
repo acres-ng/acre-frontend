@@ -71,10 +71,11 @@ jobs:
       - slack/notify: *slack-notify-only-main
 
 workflows:
-  deploy-fe-staging:
+  acre-frontend:
     jobs:
       - build
       - slack/on-hold:
+          channel: C052YJH1LBC
           context: slack
           requires:
             - build
