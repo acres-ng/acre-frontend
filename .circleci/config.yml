@@ -51,7 +51,7 @@ jobs:
           name: Deploy to Heroku
           command: |
             docker login --username=${HEROKU_USERNAME} --password=${HEROKU_API_KEY2} registry.heroku.com
-            git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-<< parameters.env >>.git master
+            git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-<< parameters.env >>.git main
       - slack/notify: *slack-notify-only-main
 
 workflows:
