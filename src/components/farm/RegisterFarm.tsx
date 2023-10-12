@@ -1,6 +1,30 @@
-// src/components/FarmForm.js
-import React, { useState } from "react";
+import { useState } from "react";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import house from "../../assets/farm-house.png";
+import locattion from "../../assets/farm-location.png";
+import selection from "../../assets/selection.png";
+
+const step1Schema = z.object({
+  farm_name: z.string().min(1, "Enter a valid farm name"),
+});
+
+const step2Schema = z.object({
+  address1: z.string().min(1, "Enter a valid address"),
+  address2: z.string().min(1, "Enter a valid address"),
+  country: z.string().min(1, "Enter a valid country"),
+  state: z.string().min(1, "Enter a valid state"),
+});
+
+const step3Schema = z.object({
+  currency: z.string().min(1, "Enter a valid currency"),
+  measuring_system: z.string().min(1, "Enter a valid measuring system"),
+});
+
+type TStep1Schema = z.infer<typeof step1Schema>;
+type TStep2Schema = z.infer<typeof step2Schema>;
+type TStep3Schema = z.infer<typeof step3Schema>;
 
 const RegisterFarm = () => {
   const [step, setStep] = useState(1);
@@ -13,11 +37,17 @@ const RegisterFarm = () => {
     setStep(step - 1);
   };
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TStep1Schema>({ resolver: zodResolver(step1Schema) });
+
   const renderFormStep = () => {
     switch (step) {
       case 1:
         return (
-          <div>
+          <form onSubmit={handleSubmit(submitStep1)}>
             <div className="my-10">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                 Create your first farm
@@ -34,71 +64,63 @@ const RegisterFarm = () => {
                 Farm name
               </label>
               <input
+                {...register("farm_name", {
+                  required: "Farm name is required",
+                })}
                 id="name"
-                type="name"
+                type="farm_name"
                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
               />
+              {errors.farm_name && (
+                <p className="text-red-500 text-sm">
+                  {errors.farm_name.message}
+                </p>
+              )}
             </div>
             <button
+              type="submit"
               className="bg-green-500 my-4 w-full hover:bg-green-700 text-white font-semibold py-2 rounded-lg focus:outline-none focus:shadow-outline"
-              onClick={nextStep}
+              // onClick={nextStep}
             >
               Continue
             </button>
-          </div>
+          </form>
         );
       case 2:
         return (
-          <div className="my-10">
-            <div className="my-5">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-                Where is your farm located?
-              </h1>
-              <p className="text-gray-400 text-xs py-2">
-                Enter your farm's line address
-              </p>
-            </div>
-            <div className="my-2">
-              <label
-                htmlFor="address1"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
-                Line Address 1
-              </label>
-              <input
-                type="text"
-                name="address1"
-                id="address1"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                required
-                // onChange={(e) => setLogin(e.target.value)}
-              />
-            </div>
-
-            <div className="my-2">
-              <label
-                htmlFor="address1"
-                className="block mb-2 text-sm font-medium text-gray-900 "
-              >
-                Line Address 2
-              </label>
-              <input
-                type="text"
-                name="address2"
-                id="address2"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                required
-                // onChange={(e) => setLogin(e.target.value)}
-              />
-            </div>
-
-            <div className="flex flex-row gap-5 w-full">
-              <div>
+          <form>
+            <div className="my-10">
+              <div className="my-5">
+                <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                  Where is your farm located?
+                </h1>
+                <p className="text-gray-400 text-xs py-2">
+                  Enter your farm's line address
+                </p>
+              </div>
+              <div className="my-2">
                 <label
                   htmlFor="address1"
                   className="block mb-2 text-sm font-medium text-gray-900 "
                 >
-                  Country
+                  Line Address 1
+                </label>
+                <input
+                  type="text"
+                  name="address1"
+                  id="address1"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  required
+                  // onChange={(e) => setLogin(e.target.value)}
+                />
+              </div>
+
+              <div className="my-2">
+                <label
+                  htmlFor="address1"
+                  className="block mb-2 text-sm font-medium text-gray-900 "
+                >
+                  Line Address 2
                 </label>
                 <input
                   type="text"
@@ -110,97 +132,118 @@ const RegisterFarm = () => {
                 />
               </div>
 
-              <div>
-                <label
-                  htmlFor="address1"
-                  className="block mb-2 text-sm font-medium text-gray-900 "
+              <div className="flex flex-row gap-5 w-full">
+                <div>
+                  <label
+                    htmlFor="address1"
+                    className="block mb-2 text-sm font-medium text-gray-900 "
+                  >
+                    Country
+                  </label>
+                  <input
+                    type="text"
+                    name="address2"
+                    id="address2"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                    required
+                    // onChange={(e) => setLogin(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="address1"
+                    className="block mb-2 text-sm font-medium text-gray-900 "
+                  >
+                    State
+                  </label>
+                  <input
+                    type="text"
+                    name="address2"
+                    id="address2"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                    required
+                    // onChange={(e) => setLogin(e.target.value)}
+                  />
+                </div>
+              </div>
+
+              <div className="flex flex-row my-2 gap-2">
+                <button
+                  className="border border-green-500 my-2 w-full hover:bg-gray-200 text-green-600  py-2 rounded-lg focus:outline-none focus:shadow-outline"
+                  onClick={prevStep}
                 >
-                  State
-                </label>
-                <input
-                  type="text"
-                  name="address2"
-                  id="address2"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                  required
-                  // onChange={(e) => setLogin(e.target.value)}
-                />
+                  Back
+                </button>
+
+                <button
+                  className="bg-green-500 my-2 w-full hover:bg-green-700 text-white  py-2 rounded-lg focus:outline-none focus:shadow-outline"
+                  // onClick={nextStep}
+                >
+                  Continue
+                </button>
               </div>
             </div>
-
-            <div className="flex flex-row my-2 gap-2">
-              <button
-                className="border border-green-500 my-2 w-full hover:bg-gray-200 text-green-600  py-2 rounded-lg focus:outline-none focus:shadow-outline"
-                onClick={prevStep}
-              >
-                Back
-              </button>
-
-              <button
-                className="bg-green-500 my-2 w-full hover:bg-green-700 text-white  py-2 rounded-lg focus:outline-none focus:shadow-outline"
-                onClick={nextStep}
-              >
-                Continue
-              </button>
-            </div>
-          </div>
+          </form>
         );
       case 3:
         return (
-          <div>
-            <div className="my-10">
-              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-                What are your preferences?
-              </h1>
-              <p className="text-gray-400 text-xs py-2">
-                Please choose your preferred options from the list below
-              </p>
-            </div>
-
+          <form>
             <div>
-              <label
-                htmlFor="name"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Currency
-              </label>
-              <input
-                id="name"
-                type="name"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              />
-            </div>
+              <div className="my-10">
+                <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                  What are your preferences?
+                </h1>
+                <p className="text-gray-400 text-xs py-2">
+                  Please choose your preferred options from the list below
+                </p>
+              </div>
 
-            <div>
-              <label
-                htmlFor="name"
-                className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Measuring system
-              </label>
-              <input
-                id="name"
-                type="name"
-                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              />
-            </div>
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Currency
+                </label>
+                <input
+                  id="name"
+                  type="name"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
+              </div>
 
-            <div className="flex flex-row my-5 gap-2">
-              <button
-                className="border border-green-500  w-full hover:bg-gray-200 text-green-600  py-2 rounded-lg focus:outline-none focus:shadow-outline"
-                onClick={prevStep}
-              >
-                Back
-              </button>
+              <div>
+                <label
+                  htmlFor="name"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Measuring system
+                </label>
+                <input
+                  id="name"
+                  type="name"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
+              </div>
 
-              <button
-                className="bg-green-500  w-full hover:bg-green-700 text-white  py-2 rounded-lg focus:outline-none focus:shadow-outline"
-                // onClick={nextStep}
-              >
-                Continue
-              </button>
+              <div className="flex flex-row my-5 gap-2">
+                <button
+                  className="border border-green-500  w-full hover:bg-gray-200 text-green-600  py-2 rounded-lg focus:outline-none focus:shadow-outline"
+                  onClick={prevStep}
+                >
+                  Back
+                </button>
+
+                <button
+                  className="bg-green-500  w-full hover:bg-green-700 text-white  py-2 rounded-lg focus:outline-none focus:shadow-outline"
+                  // onClick={nextStep}
+                >
+                  Continue
+                </button>
+              </div>
             </div>
-          </div>
+          </form>
         );
       default:
         return null;
@@ -235,6 +278,23 @@ const RegisterFarm = () => {
         </div>
       </div>
     );
+  };
+
+  const submitStep1 = (data: TStep1Schema) => {
+    // Handle form submission for step 1
+    console.log("Step 1 Data:", data);
+    nextStep();
+  };
+
+  const submitStep2 = (data: TStep2Schema) => {
+    // Handle form submission for step 2
+    console.log("Step 2 Data:", data);
+    nextStep();
+  };
+
+  const submitStep3 = (data: TStep3Schema) => {
+    // Handle form submission for step 3
+    console.log("Step 3 Data:", data);
   };
 
   return (

@@ -42,6 +42,9 @@ const Otp = () => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
+    if (otpCode.join("").length <= 6)
+      return toast.error("OTP code must be six characters long");
+
     try {
       if (contact_type) {
         const code = otpCode.join("");

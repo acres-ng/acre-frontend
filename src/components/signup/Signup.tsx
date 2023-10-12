@@ -30,11 +30,6 @@ const signUpSchema = z
 
 type TSignUpSchema = z.infer<typeof signUpSchema>;
 
-enum RegistrationStep {
-  UserData,
-  RegistrationSuccess,
-}
-
 const Signup = () => {
   const [serverError, setServerError] = useState<string | null>(null);
 
