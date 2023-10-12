@@ -12,10 +12,9 @@ orbs:
 aliases:
   - &slack-notify-only-main
       event: pass
-      branch_pattern: "master"
+      branch_pattern: "main"
       template: basic_success_1
       channel: "C052YJH1LBC"
-
 
 jobs:
   build:
@@ -58,6 +57,14 @@ workflows:
   deploy-fe-staging:
     jobs:
       - build
+      - deploy-fe-staging-approval:
+          type: approval
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - build
       - deploy:
           matrix:
             parameters:
