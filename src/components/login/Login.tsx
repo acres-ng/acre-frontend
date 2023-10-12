@@ -78,10 +78,20 @@ function Login() {
           navigate("/");
         }
       } else {
-        await sendOtp({ contact: response.data?.customer?.email });
-        navigate(
-          `/otp?type=${response.data?.customer?.email}&phone=${response.data?.customer?.phone}`
-        );
+        if (response.data?.customer?.primary_contact === "email") {
+          await sendOtp({ contact: response.data?.customer?.email });
+          navigate(
+            `/otp?contact=${response.data?.customer?.email}&t=${response.data?.customer?.primary_contact}`
+          );
+        } else {
+          await sendOtp({ contact: response.data?.customer?.phone });
+          navigate(
+            `/otp?contact=${response.data?.customer?.phone}&t=${response?.data?.customer?.primary_contact}`,
+            {
+              replace: true,
+            }
+          );
+        }
       }
     } catch (error: any) {
       toast.error(error?.response?.data?.message);

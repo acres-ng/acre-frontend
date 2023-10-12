@@ -14,10 +14,10 @@ const Otp = () => {
   const queryString: URLSearchParams = new URLSearchParams(
     window.location.search
   );
-  const type = queryString.get("type");
-  const phone = queryString.get("phone");
+  const contact_type = queryString.get("contact");
+  const type = queryString.get("t");
 
-  if (!type) {
+  if (!contact_type) {
     return null;
   }
 
@@ -43,9 +43,9 @@ const Otp = () => {
     e.preventDefault();
 
     try {
-      if (type) {
+      if (contact_type) {
         const code = otpCode.join("");
-        const response = await verifyOtp({ contact: type, otp: code });
+        const response = await verifyOtp({ contact: contact_type, otp: code });
 
         if (response.status) {
           toast.success(response?.data?.message);
@@ -73,20 +73,35 @@ const Otp = () => {
                 className="bg-white  rounded px-8 pt-6 pb-8 mb-4"
                 onSubmit={handleSubmit}
               >
-                <div className="mb-4 text-center">
-                  <p className="text-xl font-bold py-5">
-                    Verify your phone number
-                  </p>
-                  <p className="text-gray-400 text-sm">
-                    Please check and enter the 6 digit code we just sent to your
-                    phone number{" "}
-                    {phone && (
-                      <span className="font-semibold text-gray-700 text-xs">
-                        {phone}
-                      </span>
-                    )}
-                  </p>
-                </div>
+                {type === "phone" ? (
+                  <div className="mb-4 text-center">
+                    <p className="text-xl font-bold py-5">
+                      Verify your phone number
+                    </p>
+                    <p className="text-gray-400 text-sm">
+                      Please check and enter the 6 digit code we just sent to
+                      your phone number{" "}
+                      {contact_type && (
+                        <span className="font-semibold text-gray-700 text-xs">
+                          {contact_type}
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                ) : (
+                  <div className="mb-4 text-center">
+                    <p className="text-xl font-bold py-5">Verify your Email</p>
+                    <p className="text-gray-400 text-sm">
+                      Please check and enter the 6 digit code we just sent to
+                      your email address{" "}
+                      {contact_type && (
+                        <span className="font-semibold text-gray-700 text-xs">
+                          {contact_type}
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                )}
                 <div className="mb-4 flex justify-center">
                   {otpCode.map((digit, index) => (
                     <input
