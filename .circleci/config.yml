@@ -58,6 +58,7 @@ workflows:
     jobs:
       - build
       - deploy-fe-staging-approval:
+          name: approve-staging-deploy
           type: approval
           filters:
             branches:
@@ -73,4 +74,4 @@ workflows:
             - heroku
             - slack
           requires:
-            - build
+            - approve-staging-deploy
