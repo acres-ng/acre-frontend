@@ -97,5 +97,6 @@ workflows:
           context:
             - heroku
             - slack
-          # requires:
+          requires:
+            -  build_fe
           #   - approve-staging-deploy
