@@ -47,7 +47,7 @@ jobs:
   deploy:
     docker:
       - image: cimg/node:18.17
-    working_directory: ~/app
+    # working_directory: ~/app
     parameters:
       env:
         type: enum
@@ -57,15 +57,17 @@ jobs:
       - attach_workspace:
           at: ~/app
           # Restore Node.js cache if available
-      - restore_cache:
-          keys:
-            - node_modules-{{ checksum "package.json" }}
-      # Deploy to Heroku
-      - run:
-          name: Deploy to Heroku
-          command: |
-            docker login --username=${HEROKU_USERNAME} --password=${HEROKU_API_KEY2} registry.heroku.com
-            git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-<< parameters.env >>.git main --force
+      - heroku/deploy-via-git:
+          force: true
+      # - restore_cache:
+      #     keys:
+      #       - node_modules-{{ checksum "package.json" }}
+      # # Deploy to Heroku
+      # - run:
+      #     name: Deploy to Heroku
+      #     command: |
+      #       docker login --username=${HEROKU_USERNAME} --password=${HEROKU_API_KEY2} registry.heroku.com
+      #       git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-<< parameters.env >>.git main --force
       - slack/notify: *slack-notify-only-main
 
 workflows:
