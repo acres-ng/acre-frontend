@@ -39,10 +39,10 @@ jobs:
       - run:
           name: Build frontend app
           command: npm run build
-      # - persist_to_workspace:
-      #     root: ~/app
-      #     paths:
-      #       - .
+      - persist_to_workspace:
+          root: ~/app
+          paths:
+            - .
       - run:
           name: Deploy to Heroku
           command: |
@@ -79,7 +79,10 @@ jobs:
 workflows:
   acre-frontend:
     jobs:
-      - build_fe
+      - build_fe:
+          context:
+            - heroku
+            - slack
       # - slack/on-hold:
       #     channel: C052YJH1LBC
       #     context: slack
@@ -94,7 +97,7 @@ workflows:
       #           - main
       #     requires:
       #       - build_fe
-      # - slack/on-hold
+      # # - slack/on-hold
       # - deploy:
       #     matrix:
       #       parameters:
@@ -103,5 +106,5 @@ workflows:
       #       - heroku
       #       - slack
       #     requires:
-      #       - build_fe
-          #   - approve-staging-deploy
+      #       # - build_fe
+      #       - approve-staging-deploy
