@@ -21,7 +21,6 @@ jobs:
     docker:
       - image: cimg/node:18.17
     working_directory: ~/app
-
     steps:
       - checkout
       - restore_cache:
@@ -43,7 +42,7 @@ jobs:
       - persist_to_workspace:
           root: ~/app
           paths:
-            - /
+            - .
 
   deploy:
     docker:
