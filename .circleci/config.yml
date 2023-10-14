@@ -58,18 +58,17 @@ jobs:
       - attach_workspace:
           at: ~/app
           # Restore Node.js cache if available
-
       - restore_cache:
           keys:
             - node_modules-{{ checksum "package.json" }}
-      - heroku/deploy-via-git:
-          force: true
+      # - heroku/deploy-via-git:
+      #     force: true
       # # Deploy to Heroku
-      # - run:
-      #     name: Deploy to Heroku
-      #     command: |
-      #       docker login --username=${HEROKU_USERNAME} --password=${HEROKU_API_KEY2} registry.heroku.com
-      #       git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-<< parameters.env >>.git main --force
+      - run:
+          name: Deploy to Heroku
+          command: |
+            docker login --username=${HEROKU_USERNAME} --password=${HEROKU_API_KEY2} registry.heroku.com
+            git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-<< parameters.env >>.git main --force
       # - slack/notify: *slack-notify-only-main
 
 workflows:
