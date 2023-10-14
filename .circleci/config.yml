@@ -40,11 +40,6 @@ jobs:
       - run:
           name: Build frontend app
           command: npm run build
-    # Save build cache
-      - save_cache:
-          key: app-build-cache-{{ .Branch }}
-          paths:
-            - dist
       - persist_to_workspace:
           root: ~/app
           paths:
