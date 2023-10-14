@@ -26,26 +26,29 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - node-v1-{{ checksum "package.json" }}
-      # Install dependencies
+            - node_modules-{{ checksum "package.json" }}
+         # Install dependencies
       - run:
           name: Install Node.js dependencies
           command: npm install
       # Save Node.js cache
       - save_cache:
-          key: node-v1-{{ checksum "package.json" }}
+          key: node_modules-{{ checksum "package.json" }}
           paths:
-            - ~/.npm
-
+            - node_modules
       # Build the app
       - run:
-          name: Build the app
+          name: Build frontend app
           command: npm run build
-
+    # Save build cache
+      - save_cache:
+          key: app-build-cache-{{ .Branch }}
+          paths:
+            - dist
       - persist_to_workspace:
           root: ~/app
           paths:
-            - ./dist/
+            - /
 
   deploy:
     docker:
@@ -61,7 +64,7 @@ jobs:
       # Restore Node.js cache if available
       - restore_cache:
           keys:
-            - node-v1-{{ checksum "package.json" }}
+            - node_modules-{{ checksum "package.json" }}
 
       # Restore workspace from the build job
       - attach_workspace:
