@@ -80,15 +80,15 @@ workflows:
       #     context: slack
       #     requires:
       #       - build_fe
-      - deploy-fe-staging-approval:
-          name: approve-staging-deploy
-          type: approval
-          filters:
-            branches:
-              only:
-                - main
-          requires:
-            - build_fe
+      # - deploy-fe-staging-approval:
+      #     name: approve-staging-deploy
+      #     type: approval
+      #     filters:
+      #       branches:
+      #         only:
+      #           - main
+      #     requires:
+      #       - build_fe
             # - slack/on-hold
       - deploy:
           matrix:
@@ -97,5 +97,5 @@ workflows:
           context:
             - heroku
             - slack
-          requires:
-            - approve-staging-deploy
+          # requires:
+          #   - approve-staging-deploy
