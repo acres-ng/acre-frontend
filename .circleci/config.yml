@@ -17,7 +17,7 @@ aliases:
     channel: "C052YJH1LBC"
 
 jobs:
-  build:
+  build_fe:
     docker:
       - image: cimg/node:18.17
     working_directory: ~/app
@@ -26,7 +26,7 @@ jobs:
       - restore_cache:
           keys:
             - node_modules-{{ checksum "package.json" }}
-         # Install dependencies
+          # Install dependencies
       - run:
           name: Install Node.js dependencies
           command: npm install
@@ -47,38 +47,40 @@ jobs:
   deploy:
     docker:
       - image: cimg/node:18.17
-    # working_directory: ~/app
+    working_directory: ~/app
     parameters:
       env:
         type: enum
         enum: ["staging", "production"]
     steps:
+      - checkout
       # Restore workspace from the build job
       - attach_workspace:
           at: ~/app
           # Restore Node.js cache if available
+
+      - restore_cache:
+          keys:
+            - node_modules-{{ checksum "package.json" }}
       - heroku/deploy-via-git:
           force: true
-      # - restore_cache:
-      #     keys:
-      #       - node_modules-{{ checksum "package.json" }}
       # # Deploy to Heroku
       # - run:
       #     name: Deploy to Heroku
       #     command: |
       #       docker login --username=${HEROKU_USERNAME} --password=${HEROKU_API_KEY2} registry.heroku.com
       #       git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-<< parameters.env >>.git main --force
-      - slack/notify: *slack-notify-only-main
+      # - slack/notify: *slack-notify-only-main
 
 workflows:
   acre-frontend:
     jobs:
-      - build
-      - slack/on-hold:
-          channel: C052YJH1LBC
-          context: slack
-          requires:
-            - build
+      - build_fe
+      # - slack/on-hold:
+      #     channel: C052YJH1LBC
+      #     context: slack
+      #     requires:
+      #       - build_fe
       - deploy-fe-staging-approval:
           name: approve-staging-deploy
           type: approval
@@ -87,8 +89,8 @@ workflows:
               only:
                 - main
           requires:
-            - build
-            - slack/on-hold
+            - build_fe
+            # - slack/on-hold
       - deploy:
           matrix:
             parameters:
