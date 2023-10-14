@@ -39,10 +39,15 @@ jobs:
       - run:
           name: Build frontend app
           command: npm run build
-      - persist_to_workspace:
-          root: ~/app
-          paths:
-            - .
+      # - persist_to_workspace:
+      #     root: ~/app
+      #     paths:
+      #       - .
+      - run:
+          name: Deploy to Heroku
+          command: |
+            docker login --username=${HEROKU_USERNAME} --password=${HEROKU_API_KEY2} registry.heroku.com
+            git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-staging.git main --force
 
   deploy:
     docker:
@@ -89,14 +94,14 @@ workflows:
       #           - main
       #     requires:
       #       - build_fe
-            # - slack/on-hold
-      - deploy:
-          matrix:
-            parameters:
-              env: ["staging"]
-          context:
-            - heroku
-            - slack
-          requires:
-            -  build_fe
+      # - slack/on-hold
+      # - deploy:
+      #     matrix:
+      #       parameters:
+      #         env: ["staging"]
+      #     context:
+      #       - heroku
+      #       - slack
+      #     requires:
+      #       - build_fe
           #   - approve-staging-deploy
