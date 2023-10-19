@@ -7,14 +7,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import location from "../../assets/farm-location.png";
 import selection from "../../assets/selection.png";
 import Navbar from "../common/Navbar";
+import { addFarm } from "@/services/farmService";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 const step1Schema = z.object({
   farm_name: z.string().nonempty({ message: "Enter a valid farm name" }),
 });
 
 const step2Schema = z.object({
-  address1: z.string().min(1, "Enter a valid address"),
-  address2: z.string().min(1, "Enter a valid address"),
+  line_address1: z.string().min(1, "Enter a valid address"),
+  line_address2: z.string().optional(),
   country: z.string().min(1, "Enter a valid country"),
   state: z.string().min(1, "Enter a valid state"),
 });
@@ -33,6 +36,8 @@ const RegisterFarm = () => {
   const [step1Data, setStep1Data] = useState({});
   const [step2Data, setStep2Data] = useState({});
   const [step3Data, setStep3Data] = useState({});
+
+  const navigate = useNavigate();
 
   const {
     handleSubmit,
@@ -58,7 +63,7 @@ const RegisterFarm = () => {
     }
   };
 
-  const onSubmit = (stepData: any) => {
+  const onSubmit = async (stepData: any) => {
     if (step < 3) {
       if (step === 1) {
         setStep1Data(stepData);
@@ -74,9 +79,20 @@ const RegisterFarm = () => {
         ...step1Data,
         ...step2Data,
         ...step3Data,
-        ...stepData, // Include step3Data
+        // ...stepData, // Include step3Data
       };
-      console.log("Form data:", finalData);
+      try {
+        const { data } = await addFarm(finalData);
+
+        if (data?.status === "success") {
+          toast.success(data?.message);
+          navigate(`/login`, {
+            replace: true,
+          });
+        }
+      } catch (error: any) {
+        toast.error(error?.response?.data?.message);
+      }
     }
   };
 
@@ -111,17 +127,20 @@ const RegisterFarm = () => {
   };
 
   return (
-    <div className="bg-[#eaf8f2] h-screen">
+    <div className="bg-[#eaf8f2] h-full">
       <Navbar />
       <div className="grid grid-cols-2">
-        <section className="">
+        <section className="space-y-10">
           <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             <div className="w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0">
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <div className="">
                   {renderProgressIndicator()}
                   <div className="">
-                    <form onSubmit={handleSubmit(onSubmit)}>
+                    <form
+                      onSubmit={handleSubmit(onSubmit)}
+                      className="space-y-5"
+                    >
                       {step === 1 && (
                         <>
                           <div className="my-10">
@@ -148,11 +167,11 @@ const RegisterFarm = () => {
                               type="farm_name"
                               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             />
-                            {/* {errors.farm_name && (
-                            <p className="text-red-500 text-sm">
-                              {errors.farm_name.message}
-                            </p>
-                          )} */}
+                            {errors.farm_name && (
+                              <p className="text-red-500 text-sm">
+                                {errors.farm_name.message?.toString()}
+                              </p>
+                            )}
                           </div>
                           <button
                             type="submit"
@@ -171,97 +190,98 @@ const RegisterFarm = () => {
                               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                                 Where is your farm located?
                               </h1>
-                              <p className="text-gray-400 text-xs py-2">
+                              <p className="text-gray-500 text-xs py-2">
                                 Enter your farm's line address
                               </p>
                             </div>
                             <div className="my-2">
                               <label
-                                htmlFor="address1"
+                                htmlFor="line_address1"
                                 className="block mb-2 text-sm font-medium text-gray-900 "
                               >
                                 Line Address 1
                               </label>
                               <input
                                 type="text"
-                                id="address1"
-                                {...register("address1", {
+                                id="line_address1"
+                                {...register("line_address1", {
                                   required: "Farm name is required",
                                 })}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               />
-                              {/* {errors.address1 && (
-                              <p className="text-red-500 text-sm">
-                                {errors.address1.message}
-                              </p>
-                            )} */}
+                              {errors.line_address1 && (
+                                <p className="text-red-500 text-sm">
+                                  {errors.line_address1.message?.toString()}
+                                </p>
+                              )}
                             </div>
 
                             <div className="my-2">
                               <label
-                                htmlFor="address1"
+                                htmlFor="line_address2"
                                 className="block mb-2 text-sm font-medium text-gray-900 "
                               >
                                 Line Address 2
                               </label>
                               <input
-                                {...register("address2", {
-                                  required: "Farm name is required",
-                                })}
+                                {...register("line_address2")}
                                 type="text"
-                                id="address2"
+                                id="line_address2"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               />
                               {/* {errors.address2 && (
-                              <p className="text-red-500 text-sm">
-                                {errors.address2.message}
-                              </p>
-                            )} */}
+                                <p className="text-red-500 text-sm">
+                                  {errors.address2.message?.toString()}
+                                </p>
+                              )} */}
                             </div>
 
                             <div className="flex flex-row gap-5 w-full">
-                              <div>
+                              <div className="w-full">
                                 <label
                                   htmlFor="country"
-                                  className="block mb-2 text-sm font-medium text-gray-900 "
+                                  className="block mb-2 text-sm font-medium text-gray-900"
                                 >
                                   Country
                                 </label>
-                                <input
-                                  type="text"
+                                <select
                                   {...register("country", {
                                     required: "Country is required",
                                   })}
                                   id="country"
                                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                                />
-                                {/* {errors.country && (
-                                <p className="text-red-500 text-sm">
-                                  {errors.country.message}
-                                </p>
-                              )} */}
+                                >
+                                  <option value="">Select a country</option>
+                                  <option value="Nigeria">Nigeria</option>
+                                </select>
+                                {errors.country && (
+                                  <p className="text-red-500 text-sm">
+                                    {errors.country.message?.toString()}
+                                  </p>
+                                )}
                               </div>
 
-                              <div>
+                              <div className="w-full">
                                 <label
                                   htmlFor="state"
-                                  className="block mb-2 text-sm font-medium text-gray-900 "
+                                  className="block mb-2 text-sm font-medium text-gray-900"
                                 >
                                   State
                                 </label>
-                                <input
-                                  type="text"
-                                  {...register("state", {
-                                    required: "State is required",
-                                  })}
+                                <select
+                                  {...register("state")}
                                   id="state"
                                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                                />
-                                {/* {errors.state && (
-                                <p className="text-red-500 text-sm">
-                                  {errors.state.message}
-                                </p>
-                              )} */}
+                                >
+                                  <option value="">Select a state</option>
+                                  <option value="Adamawa">Adamawa</option>
+                                  {/* Add more options for different countries as needed */}
+                                </select>
+                                {errors.state && (
+                                  <p className="text-red-500 text-sm">
+                                    {errors.state.message?.toString()}
+                                  </p>
+                                )}
                               </div>
                             </div>
 
@@ -290,7 +310,7 @@ const RegisterFarm = () => {
                             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                               What are your preferences?
                             </h1>
-                            <p className="text-gray-400 text-xs py-2">
+                            <p className="text-gray-500 text-xs py-2">
                               Please choose your preferred options from the list
                               below
                             </p>
@@ -299,45 +319,51 @@ const RegisterFarm = () => {
                           <div>
                             <label
                               htmlFor="currency"
-                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                              className="block mb-2 text-sm font-medium text-gray-900"
                             >
                               Currency
                             </label>
-                            <input
-                              id="currency"
+                            <select
                               {...register("currency", {
                                 required: "Currency is required",
                               })}
-                              type="currency"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            />
-                            {/* {errors.currency && (
-                            <p className="text-red-500 text-sm">
-                              {errors.currency?.message}
-                            </p>
-                          )} */}
+                              id="currency"
+                              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5"
+                            >
+                              <option value="">Select a currency</option>
+                              <option value="Nigeria">Nigeria</option>
+                            </select>
+                            {errors.currency && (
+                              <p className="text-red-500 text-sm">
+                                {errors.currency.message?.toString()}
+                              </p>
+                            )}
                           </div>
 
                           <div>
                             <label
-                              htmlFor="measuring_system"
-                              className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                              htmlFor="country"
+                              className="block mb-2 text-sm font-medium text-gray-900"
                             >
-                              Measuring system
+                              Measuring System
                             </label>
-                            <input
+                            <select
                               {...register("measuring_system", {
-                                required: "Measuring system is required",
+                                required: "measuring_system is required",
                               })}
                               id="measuring_system"
-                              type="measuring_system"
-                              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            />
-                            {/* {errors.measuring_system && (
-                            <p className="text-red-500 text-sm">
-                              {errors.measuring_system?.message}
-                            </p>
-                          )} */}
+                              className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5"
+                            >
+                              <option value="">
+                                Select a measuring system
+                              </option>
+                              <option value="grams">Grams</option>
+                            </select>
+                            {errors.measuring_system && (
+                              <p className="text-red-500 text-sm">
+                                {errors.measuring_system.message?.toString()}
+                              </p>
+                            )}
                           </div>
 
                           <div className="flex flex-row my-5 gap-2">

@@ -22,7 +22,7 @@ axios.interceptors.response.use(
 );
 
 function setJwt(jwt: any) {
-  axios.defaults.headers.common["x-auth-token"] = jwt;
+  axios.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
 }
 
 export default {

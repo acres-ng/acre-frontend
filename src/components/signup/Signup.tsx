@@ -57,8 +57,6 @@ const Signup = () => {
     formState: { errors, isSubmitting },
     setValue,
     getValues,
-    reset,
-    setError,
   } = useForm<TSignUpSchema>({ resolver: zodResolver(signUpSchema) });
 
   const onSubmit = async (values: FieldValues) => {

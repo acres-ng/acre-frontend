@@ -11,15 +11,14 @@ interface User {
 const tokenKey: string = "user";
 const apiUrl = API_URL + "auth/login";
 
-http.setJwt(getJwt());
-
 export function getJwt() {
   return localStorage.getItem(tokenKey);
 }
 
 export async function login(user: User) {
   const { data } = await http.post(apiUrl, user);
-  localStorage.setItem(tokenKey, data?.data?.customer);
+  localStorage.setItem(tokenKey, data?.data?.token);
+  http.setJwt(getJwt());
   return data;
 }
 
