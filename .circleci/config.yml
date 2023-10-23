@@ -83,7 +83,7 @@ jobs:
           command: |
             docker login --username=${HEROKU_USERNAME} --password=${HEROKU_API_KEY2} registry.heroku.com
             git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-<< parameters.env >>.git main --force
-      # - slack/notify: *slack-notify-only-main
+      - slack/notify: *slack-notify-only-main
 
 #####################
 # WORKFLOWS
@@ -95,21 +95,20 @@ workflows:
           context:
             - heroku
             - slack
-      # - slack/on-hold:
-      #     channel: C052YJH1LBC
-      #     context: slack
-      #     requires:
-      #       - build_fe
-      # - deploy-fe-staging-approval:
-      #     name: approve-staging-deploy
-      #     type: approval
-      #     filters:
-      #       branches:
-      #         only:
-      #           - main
-      #     requires:
-      #       - build_fe
-      # # - slack/on-hold
+      - slack/on-hold:
+          channel: C052YJH1LBC
+          context: slack
+          requires:
+            - build-frontend
+      - deploy-fe-staging-approval:
+          name: approve-staging-deploy
+          type: approval
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - slack/on-hold
       - deploy-frontend-staging:
           matrix:
             parameters:
@@ -118,4 +117,4 @@ workflows:
             - heroku
             - slack
           requires:
-            - build-frontend
+            - approve-staging-deploy
