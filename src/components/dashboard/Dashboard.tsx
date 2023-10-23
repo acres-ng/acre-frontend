@@ -35,12 +35,12 @@ export default function Dashboard() {
     <>
       <div className="hidden md:block">
         <div className="border-t">
-          <div className="bg-background">
+          <div className="bg-white">
             <div className="grid lg:grid-cols-5">
               <Sidebar className="hidden lg:block" />
-              <div className="col-span-3 lg:col-span-4 lg:border-l ptt-20">
+              <div className="col-span-3 lg:col-span-4 lg:border-l pt-16 bg-green-50 h-screen">
                 <div className="h-full px-4 py-6 lg:px-8">
-                  <div defaultValue="music" className="h-full space-y-6">
+                  <div className="h-full space-y-6">
                     <div className="space-between flex items-center">
                       <div className="flex w-full">
                         <div className="flex w-full max-w-lg items-center space-x-2">
@@ -49,16 +49,14 @@ export default function Dashboard() {
                       </div>
                       <div className="flex ml-auto mr-4">
                         <Select>
-                          <SelectTrigger className="w-[280px]">
+                          <SelectTrigger className="w-[280px] bg-primary text-white">
                             <SelectValue placeholder="Abdulsalam's Idris farms" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
-                              {/* <SelectLabel>Fruits</SelectLabel> */}
                               <SelectItem value="apple">
                                 Abdulsalam's Idris farms
                               </SelectItem>
-                              {/* <SelectItem value="apple">Nexus farm</SelectItem> */}
                             </SelectGroup>
                           </SelectContent>
                         </Select>
@@ -108,13 +106,13 @@ export default function Dashboard() {
                             <Popover>
                               <PopoverTrigger asChild>
                                 <Button
-                                  variant={"outline"}
+                                  variant={"default"}
                                   className={cn(
-                                    "w-[280px] justify-start text-left font-normal",
-                                    !date && "text-muted-foreground"
+                                    "w-auto justify-start text-left font-normal",
+                                    !date && "text-white"
                                   )}
                                 >
-                                  <CalendarIcon className="mr-2 h-4 w-4" />
+                                  <CalendarIcon className="mr-2 h-4 w-4 text-white" />
                                   {date ? (
                                     format(date, "PPP")
                                   ) : (
@@ -135,9 +133,9 @@ export default function Dashboard() {
 
                           <div className="space-y-10">
                             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-                              <Card>
+                              <Card className="border-0 bg-white">
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                  <CardTitle className="text-sm font-medium">
+                                  <CardTitle className="text-sm font-medium text-gray-400">
                                     Total Livestocks
                                   </CardTitle>
                                   <svg
@@ -159,7 +157,7 @@ export default function Dashboard() {
                               </Card>
                               <Card>
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                  <CardTitle className="text-sm font-medium">
+                                  <CardTitle className="text-sm font-medium  text-gray-400">
                                     Mortality
                                   </CardTitle>
                                   <svg
@@ -183,7 +181,7 @@ export default function Dashboard() {
                               </Card>
                               <Card>
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                  <CardTitle className="text-sm font-medium">
+                                  <CardTitle className="text-sm font-medium  text-gray-400">
                                     Births
                                   </CardTitle>
                                   <svg
@@ -212,7 +210,7 @@ export default function Dashboard() {
                               </Card>
                               <Card>
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                  <CardTitle className="text-sm font-medium">
+                                  <CardTitle className="text-sm font-medium  text-gray-400">
                                     Total Revenue
                                   </CardTitle>
                                   <svg

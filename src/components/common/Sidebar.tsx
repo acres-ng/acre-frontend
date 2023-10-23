@@ -10,8 +10,8 @@ interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 export default function Sidebar({ className }: SidebarProps) {
   return (
     <div className={cn("pb-12", className)}>
-      <div className="space-y-4 py-4">
-        <div className="px-3 py-2">
+      <div className="space-y-6 py-6">
+        <div className="px-3 py-5">
           <div className="py-10">
             <img src={logo} alt="acre logo" className="h-10 w-auto" />
           </div>
