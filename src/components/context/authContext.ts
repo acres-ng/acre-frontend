@@ -1,8 +1,19 @@
 import React, { createContext } from "react";
 
-type User = {
+interface User {
   token: string;
-};
+  customer: {
+    profile_id: string;
+    id: string;
+    firstname: string;
+    email: string;
+    phone: string;
+  };
+  farms: {
+    id: string;
+    name: string;
+  }[];
+}
 
 // Define the type for your context value
 type AuthContextType = {

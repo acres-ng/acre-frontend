@@ -74,11 +74,14 @@ function Login() {
       ) {
         if (response.data?.farms.length >= 1) {
           const loginUser = authService.getCurrentUser();
-          authContext.setUser(loginUser);
-          // Farms array has a value, redirect to the home page
-          navigate("/");
-        } else if (location.state?.from) {
-          navigate(location.state.from);
+          console.log("Here");
+          if (loginUser) {
+            authContext.setUser(loginUser);
+            navigate("/");
+          }
+        } else {
+          console.log("Else");
+          navigate("/add-farm");
         }
       } else {
         if (response.data?.customer?.primary_contact === "email") {
@@ -100,7 +103,7 @@ function Login() {
   };
 
   return (
-    <div className=" bg-[#eaf8f2]">
+    <div className=" bg-[#eaf8f2] min-h-screen">
       <Navbar />
       <div className="grid grid-cols-2">
         <section>

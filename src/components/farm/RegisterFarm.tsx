@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import house from "../../assets/farm-house.png";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -10,6 +10,7 @@ import Navbar from "../common/Navbar";
 import { addFarm } from "@/services/farmService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import authService from "@/services/authService";
 
 const step1Schema = z.object({
   farm_name: z.string().nonempty({ message: "Enter a valid farm name" }),
@@ -38,6 +39,14 @@ const RegisterFarm = () => {
   const [step3Data, setStep3Data] = useState({});
 
   const navigate = useNavigate();
+
+  const user = authService.getCurrentUser();
+
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [user]);
 
   const {
     handleSubmit,

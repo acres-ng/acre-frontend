@@ -36,8 +36,6 @@ const Otp = () => {
     setIsDisabled(cleanedValue.length !== 6);
   };
 
-  console.log(otpCode.length);
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 

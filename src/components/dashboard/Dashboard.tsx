@@ -29,6 +29,7 @@ import { Calendar } from "../ui/calendar";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { getFarmById } from "@/services/farmService";
+import { getCurrentUser } from "@/services/authService";
 
 type Farm = {
   id: string;
@@ -41,19 +42,15 @@ type Farm = {
 
 export default function Dashboard() {
   const [date, setDate] = useState<Date>();
-  const [farms, setFarms] = useState<Farm[]>([]);
-
+  const [farms, setFarms] = useState<Farm>();
+  const user = getCurrentUser();
   useEffect(() => {
     const fetchFarms = async () => {
-      const response = await getFarmById(2);
+      const response = await getFarmById(user?.farms[0]?.id);
       setFarms(response?.data?.data);
     };
     fetchFarms();
-  }, []);
-
-  const dataArray: any = Object.entries(farms);
-
-  console.log(dataArray);
+  }, [user]);
 
   return (
     <>
@@ -73,11 +70,11 @@ export default function Dashboard() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {dataArray?.map((farm: any, idx: number) => (
+                      {/* {farms?.map((farm: any, idx: number) => (
                         <SelectItem key={idx} value={farm.id}>
                           {farm.farm_name}
                         </SelectItem>
-                      ))}
+                      ))} */}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -116,10 +113,10 @@ export default function Dashboard() {
                       Welcome to
                     </p>
                     <p className="font-bold text-gray-700 text-lg tracking-tight">
-                      Old Macdonald farms
+                      {farms?.farm_name}
                     </p>
                     <p className="font-light text-gray-500 text-sm">
-                      No 18, Farmers road, Abuja Nigeria
+                      {`${farms?.line_address1}, ${farms?.state}`}
                     </p>
                   </div>
 

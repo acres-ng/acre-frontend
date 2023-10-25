@@ -19,7 +19,7 @@ const Layout = () => {
               <Route path="/">
                 <Route index element={<Dashboard />} />
               </Route>
-              <Route path="add-farm" element={<RegisterFarm />} />
+              {/* <Route path="add-farm" element={<RegisterFarm />} /> */}
 
               {/* Other routes can be defined here */}
             </Routes>

@@ -8,27 +8,59 @@ interface User {
   login_type: string;
 }
 
+interface Token {
+  token: string;
+  customer: {
+    profile_id: string;
+    id: string;
+    firstname: string;
+    email: string;
+    phone: string;
+  };
+  farms: {
+    id: string;
+    name: string;
+  }[];
+}
+
 const tokenKey: string = "user";
 const apiUrl = API_URL + "auth/login";
 
 export function getJwt() {
-  return localStorage.getItem(tokenKey);
+  const storedDataString = localStorage.getItem(tokenKey);
+
+  if (storedDataString !== null) {
+    const storedData = JSON.parse(storedDataString);
+    if (storedData && storedData.token) {
+      return storedData.token;
+    }
+  }
 }
 http.setJwt(getJwt());
 
 export async function login(user: User) {
   const { data } = await http.post(apiUrl, user);
-  localStorage.setItem(tokenKey, data?.data?.token);
+  localStorage.setItem(
+    tokenKey,
+    JSON.stringify({
+      token: data?.data?.token,
+      customer: data?.data?.customer,
+      farms: data?.data?.farms,
+    })
+  );
   http.setJwt(getJwt());
   return data;
 }
 
-export function getCurrentUser(): any {
-  const token = localStorage.getItem(tokenKey); // Retrieve the JWT from local storage
-  if (token) {
-    return token;
+export function getCurrentUser() {
+  const storedDataString = localStorage.getItem(tokenKey);
+
+  if (storedDataString !== null) {
+    const storedData = JSON.parse(storedDataString);
+    return storedData;
   }
-  return null; // Return null if the JWT is not present or invalid
+
+  return null;
 }
 
 // Example function to decode the JWT
