@@ -1,6 +1,6 @@
 import authService from "@/services/authService";
 import { sendOtp, verifyOtp } from "@/services/userService";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
@@ -10,6 +10,8 @@ import { FieldValues, useForm } from "react-hook-form";
 import farmer from "../../assets/farmer.png";
 import { encryptData } from "@/lib/encrypt";
 import Navbar from "../common/Navbar";
+import useAuth from "../context/useAuth";
+import AuthContext from "../context/authContext";
 
 interface User {
   login: string;
@@ -40,6 +42,8 @@ function Login() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const authContext = useContext(AuthContext);
+
   const {
     register,
     handleSubmit,
@@ -68,15 +72,13 @@ function Login() {
         response.status === "success" &&
         response.data?.is_verified === true
       ) {
-        if (
-          response.data?.customer?.farm === null ||
-          response.data?.customer?.farm === undefined
-        ) {
-          navigate("/add-farm");
+        if (response.data?.farms.length >= 1) {
+          const loginUser = authService.getCurrentUser();
+          authContext.setUser(loginUser);
+          // Farms array has a value, redirect to the home page
+          navigate("/");
         } else if (location.state?.from) {
           navigate(location.state.from);
-        } else {
-          navigate("/");
         }
       } else {
         if (response.data?.customer?.primary_contact === "email") {

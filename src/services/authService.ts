@@ -14,6 +14,7 @@ const apiUrl = API_URL + "auth/login";
 export function getJwt() {
   return localStorage.getItem(tokenKey);
 }
+http.setJwt(getJwt());
 
 export async function login(user: User) {
   const { data } = await http.post(apiUrl, user);

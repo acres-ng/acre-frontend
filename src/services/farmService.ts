@@ -27,3 +27,7 @@ export function verifyOtp(data: Verify) {
 export function sendOtp(data: any) {
   return http.post(API_URL + "auth/send_otp", data);
 }
+
+export function getFarmById(id: number) {
+  return http.get(API_URL + "farms/" + id);
+}
