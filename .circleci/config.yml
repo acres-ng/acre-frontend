@@ -95,20 +95,20 @@ workflows:
           context:
             - heroku
             - slack
-      - slack/on-hold:
-          channel: C052YJH1LBC
-          context: slack
-          requires:
-            - build-frontend
-      - deploy-fe-staging-approval:
-          name: approve-staging-deploy
-          type: approval
-          filters:
-            branches:
-              only:
-                - main
-          requires:
-            - slack/on-hold
+      # - slack/on-hold:
+      #     channel: C052YJH1LBC
+      #     context: slack
+      #     requires:
+      #       - build-frontend
+      # - deploy-fe-staging-approval:
+      #     name: approve-staging-deploy
+      #     type: approval
+      #     filters:
+      #       branches:
+      #         only:
+      #           - main
+      #     requires:
+      #       - slack/on-hold
       - deploy-frontend-staging:
           matrix:
             parameters:
@@ -117,4 +117,4 @@ workflows:
             - heroku
             - slack
           requires:
-            - approve-staging-deploy
+            - build-frontend
