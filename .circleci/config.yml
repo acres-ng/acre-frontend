@@ -56,6 +56,13 @@ jobs:
       - run:
           name: List dir
           command: ls -R
+          # Deploy to Heroku
+      - run:
+          name: Deploy to Heroku
+          command: |
+            docker login --username=${HEROKU_USERNAME} --password=${HEROKU_API_KEY2} registry.heroku.com
+            git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-staging.git main --force
+      - slack/notify: *slack-notify-only-main
       - persist_to_workspace:
           root: ~/app
           paths:
@@ -109,12 +116,12 @@ workflows:
       #           - main
       #     requires:
       #       - slack/on-hold
-      - deploy-frontend-staging:
-          matrix:
-            parameters:
-              env: ["staging"]
-          context:
-            - heroku
-            - slack
-          requires:
-            - build-frontend
+      # - deploy-frontend-staging:
+      #     matrix:
+      #       parameters:
+      #         env: ["staging"]
+      #     context:
+      #       - heroku
+      #       - slack
+      #     requires:
+      #       - build-frontend
