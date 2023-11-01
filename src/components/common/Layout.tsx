@@ -4,6 +4,8 @@ import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "@/lib/ProtectedRoutes";
 import Dashboard from "../dashboard/Dashboard";
 import RegisterFarm from "../farm/RegisterFarm";
+import Livestock from "../livestock/Livestock";
+import Add from "../livestock/Add";
 
 type Props = {
   children: React.ReactNode;
@@ -19,7 +21,10 @@ const Layout = () => {
               <Route path="/">
                 <Route index element={<Dashboard />} />
               </Route>
-              {/* <Route path="add-farm" element={<RegisterFarm />} /> */}
+              <Route path="/livestock">
+                <Route path="list" element={<Livestock />} />
+                <Route path="add" element={<Add />} />
+              </Route>
 
               {/* Other routes can be defined here */}
             </Routes>

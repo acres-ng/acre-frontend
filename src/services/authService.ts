@@ -53,14 +53,16 @@ export async function login(user: User) {
 }
 
 export function getCurrentUser() {
-  const storedDataString = localStorage.getItem(tokenKey);
+  try {
+    const storedDataString = localStorage.getItem(tokenKey);
 
-  if (storedDataString !== null) {
-    const storedData = JSON.parse(storedDataString);
-    return storedData;
+    if (storedDataString !== null) {
+      const storedData = JSON.parse(storedDataString);
+      return storedData;
+    }
+  } catch (error) {
+    return null;
   }
-
-  return null;
 }
 
 // Example function to decode the JWT
@@ -73,13 +75,6 @@ const decodeToken = (token: string) => {
     return null;
   }
 };
-
-// export function getCurrentUser() {
-//   if (localStorage.getItem(tokenKey)) {
-//     const jwt: any = localStorage.getItem(tokenKey);
-//     return jwtDecode(jwt);
-//   }
-// }
 
 export function logout() {
   return localStorage.removeItem(tokenKey);
