@@ -11,12 +11,14 @@ export default function Sidebar({ className }: SidebarProps) {
     <div className={cn("pb-12", className)}>
       <div className="space-y-6 py-6">
         <div className="px-3 py-5">
-          <div className="py-10">
-            <img src={logo} alt="acre logo" className="h-10 w-auto" />
+          <div className="pb-10">
+            <Link to={"/"}>
+              <img src={logo} alt="acre logo" className="h-10 w-auto" />
+            </Link>
           </div>
           <div className="space-y-1">
-            <Link to={"/"} className="w-full justify-start">
-              <Button variant="secondary">
+            <Link to={"/"} className="justify-start">
+              <Button variant="secondary" className="w-full justify-start">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -77,8 +79,8 @@ export default function Sidebar({ className }: SidebarProps) {
             </Button>
           </div>
         </div>
-        <div className="px-3 py-2 flex justify-items-start">
-          <div className="space-y-1">
+        <div className="px-3 py-2">
+          <div className="space-y-1 w-full">
             <Link to="/logout">
               <Button variant="ghost" className="w-full justify-start">
                 <svg

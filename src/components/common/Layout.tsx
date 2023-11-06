@@ -16,7 +16,7 @@ const Layout = () => {
       <div className="bg-white">
         <div className="grid lg:grid-cols-5">
           <Sidebar />
-          <main className="col-span-3 lg:col-span-4 lg:border-l pt-16 bg-green-50 h-screen">
+          <main className="col-span-3 lg:col-span-4 lg:border-l pt-5 bg-green-50 h-full">
             <Routes>
               <Route path="/">
                 <Route index element={<Dashboard />} />

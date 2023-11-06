@@ -36,6 +36,7 @@ export function getJwt() {
     }
   }
 }
+
 http.setJwt(getJwt());
 
 export async function login(user: User) {
