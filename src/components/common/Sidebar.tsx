@@ -3,10 +3,17 @@ import { Button } from "../ui/button";
 import { ScrollArea } from "../ui/scroll-area";
 import logo from "../../assets/logo.png";
 import { Link } from "react-router-dom";
+import authService, { getCurrentUser } from "@/services/authService";
 
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function Sidebar({ className }: SidebarProps) {
+  const user = getCurrentUser();
+
+  const handleLogout = () => {
+    authService.logout();
+    window.location.reload();
+  };
   return (
     <div className={cn("pb-12", className)}>
       <div className="space-y-6 py-6">
@@ -81,25 +88,27 @@ export default function Sidebar({ className }: SidebarProps) {
         </div>
         <div className="px-3 py-2">
           <div className="space-y-1 w-full">
-            <Link to="/logout">
-              <Button variant="ghost" className="w-full justify-start">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="mr-2 h-4 w-4"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
-                  />
-                </svg>
-                Logout
-              </Button>
-            </Link>
+            <Button
+              variant="ghost"
+              className="w-full justify-start"
+              onClick={() => handleLogout()}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+                stroke="currentColor"
+                className="mr-2 h-4 w-4"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9"
+                />
+              </svg>
+              Logout
+            </Button>
           </div>
         </div>
       </div>
