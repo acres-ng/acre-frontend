@@ -59,7 +59,7 @@ export default function Dashboard() {
     <div className="h-full px-4 py-6 lg:px-8">
       <div className="h-full space-y-6">
         <div className="space-between flex items-center">
-          <div className="flex w-full">
+          <div className="flex w-2/5">
             <div className="flex w-full max-w-lg items-center space-x-2">
               <Input type="text" placeholder="Search" />
             </div>
@@ -345,8 +345,6 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-
-            <div className="">{/* <BarCharts /> */}</div>
           </div>
         </div>
       </div>
