@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import farmer from "../../assets/farmer.png";
 import { sendOtp, verifyOtp } from "@/services/userService";
 import { toast } from "sonner";
@@ -11,9 +11,6 @@ const Otp = () => {
   const [serverError, setServerError] = useState<string | null>(null);
   const [isVerified, setIsVerified] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
-  const [showResendButton, setShowResendButton] = useState(false);
-  const [timer, setTimer] = useState({ minutes: 10, seconds: 0 }); // Timer set to 10 minutesf
-  const [showTimer, setShowTimer] = useState(true);
 
   const navigate = useNavigate();
 
@@ -26,36 +23,6 @@ const Otp = () => {
   if (!contact_type || !type) {
     return null;
   }
-
-  useEffect(() => {
-    let timerInterval;
-
-    if (timer.minutes === 0 && timer.seconds === 0) {
-      setShowResendButton(true); // Show the "Resend code" button when the timer expires
-      setShowTimer(false); // Hide the timer
-    } else {
-      setShowResendButton(false); // Hide the "Resend code" button while the timer is running
-
-      timerInterval = setInterval(() => {
-        setTimer((prevTimer) => {
-          if (prevTimer.seconds === 0) {
-            // When seconds reach 0, decrement the minutes and set seconds to 59
-            return { minutes: prevTimer.minutes - 1, seconds: 59 };
-          } else {
-            // Decrement seconds
-            return {
-              minutes: prevTimer.minutes,
-              seconds: prevTimer.seconds - 1,
-            };
-          }
-        });
-      }, 1000);
-    }
-
-    return () => {
-      clearInterval(timerInterval);
-    };
-  }, [timer]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -113,11 +80,6 @@ const Otp = () => {
         toast.error("An unexpected error occurred.");
       }
     }
-
-    // Reset the timer when the "Resend code" button is clicked
-    setTimer({ minutes: 10, seconds: 0 });
-    setShowResendButton(false); // Hide the "Resend code" button
-    setShowTimer(true); // Show the timer
   };
 
   return (
@@ -170,25 +132,21 @@ const Otp = () => {
                     />
                   </div>
                   <div className="mb-6 text-center text-gray-500 text-xs">
-                    {contact_type && showTimer && (
-                      <p className="py-5">
-                        Didn't receive any code? Resend code in{" "}
-                        {timer.minutes.toString().padStart(2, "0")}:
-                        {timer.seconds.toString().padStart(2, "0")} minutes
-                      </p>
-                    )}
-                    {showResendButton && (
+                    {contact_type && (
                       <p
-                        className="py-5 cursor-pointer"
+                        className="py-5"
                         onClick={() => handleResend(contact_type)}
                       >
-                        Resend code
+                        Didn't receive the code{" "}
+                        <span className="font-semibold text-xs cursor-pointer text-green-600">
+                          Resend
+                        </span>
                       </p>
                     )}
                     <button
                       type="submit"
-                      className={`bg-green-500 cursor-pointer hover-bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline`}
-                      disabled={isDisabled}
+                      className={`bg-green-500 cursor-pointer hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline`}
+                      // disabled={isDisabled}
                     >
                       Continue
                     </button>
