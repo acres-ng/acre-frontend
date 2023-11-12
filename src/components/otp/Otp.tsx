@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import OtpInput from "react-otp-input";
 import Navbar from "../common/Navbar";
-import { getCurrentUser } from "@/services/authService";
+import { getCurrentUser, getOTP } from "@/services/authService";
 
 const Otp = () => {
   const [otpCode, setOtpCode] = useState("");
@@ -13,39 +13,62 @@ const Otp = () => {
   const [isVerified, setIsVerified] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
   const [showResendButton, setShowResendButton] = useState(false);
-  const [timer, setTimer] = useState({ minutes: 10, seconds: 0 }); // Timer set to 10 minutesf
+  const [timer, setTimer] = useState({ minutes: 0, seconds: 0 });
   const [showTimer, setShowTimer] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+
+  const details = JSON.parse(localStorage.getItem("farmDetails") || "{}");
+  const {
+    contact,
+    primaryContact,
+  }: { contact: string; primaryContact: string } = details;
 
   const queryString: URLSearchParams = new URLSearchParams(
     window.location.search
   );
   const currentUser = getCurrentUser();
-  const customerContactType = currentUser?.primary_contact; //email or phone
+  const customerContactType = currentUser?.primary_contact; // email or phone
   const customerContact = currentUser[customerContactType];
 
-  if (!customerContact || !customerContactType) {
-    return null;
-  }
+  useEffect(() => {
+    const fetchOTP = async () => {
+      try {
+        setLoading(true);
+        const response = await getOTP({ contact: customerContact });
+        setTimer({
+          minutes: Math.floor(response?.data / 60),
+          seconds: response?.data % 60,
+        });
+        setShowResendButton(false);
+        setShowTimer(true);
+      } catch (error: any) {
+        console.error("Error fetching OTP:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
+    if (customerContact) {
+      fetchOTP();
+    }
+  }, [customerContact]);
 
   useEffect(() => {
     let timerInterval;
 
     if (timer.minutes === 0 && timer.seconds === 0) {
-      setShowResendButton(true); // Show the "Resend code" button when the timer expires
-      setShowTimer(false); // Hide the timer
+      setShowResendButton(true);
+      setShowTimer(false);
     } else {
-      setShowResendButton(false); // Hide the "Resend code" button while the timer is running
+      setShowResendButton(false);
 
       timerInterval = setInterval(() => {
         setTimer((prevTimer) => {
           if (prevTimer.seconds === 0) {
-            // When seconds reach 0, decrement the minutes and set seconds to 59
             return { minutes: prevTimer.minutes - 1, seconds: 59 };
           } else {
-            // Decrement seconds
             return {
               minutes: prevTimer.minutes,
               seconds: prevTimer.seconds - 1,
@@ -62,13 +85,9 @@ const Otp = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-
-    // Ensure only digits are entered and limit the length to 6 characters
     const cleanedValue = value.replace(/[^\d]/g, "").slice(0, 6);
 
     setOtpCode(cleanedValue);
-
-    // If the OTP is 6 characters long, enable the "Continue" button
     setIsDisabled(cleanedValue.length !== 6);
   };
 
@@ -76,11 +95,13 @@ const Otp = () => {
     e.preventDefault();
 
     if (otpCode.length !== 6) {
-      return toast.error("OTP code must be six characters long");
+      toast.error("OTP code must be six characters long");
+      return;
     }
 
     try {
       if (customerContact) {
+        setLoading(true);
         const response = await verifyOtp({
           contact: customerContact,
           otp: otpCode,
@@ -89,7 +110,7 @@ const Otp = () => {
         if (response.status) {
           toast.success(response?.data?.message);
           navigate("/success", { replace: true });
-          setIsVerified(true); // Mark OTP as verified
+          setIsVerified(true);
         } else {
           setServerError(
             "An error occurred during registration, please try again."
@@ -98,15 +119,23 @@ const Otp = () => {
       }
     } catch (error: any) {
       toast.error(error?.response?.data?.message);
-      console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const sendOtpToContact = async (customerContact: string) => {
+  const handleResend = async () => {
     try {
+      setLoading(true);
       const response = await sendOtp({ contact: customerContact });
       if (response?.data?.status === "success") {
         toast.success(response.data.message);
+        setTimer({
+          minutes: Math.floor(response?.data?.data / 60),
+          seconds: response?.data?.data % 60,
+        });
+        setShowResendButton(false);
+        setShowTimer(true);
       }
     } catch (error: any) {
       if (error && error.response && error.response.data) {
@@ -115,16 +144,13 @@ const Otp = () => {
         console.error("Unexpected error structure:", error);
         toast.error("An unexpected error occurred.");
       }
+    } finally {
+      setLoading(false);
     }
-
-    // Reset the timer when the "Resend code" button is clicked
-    setTimer({ minutes: 10, seconds: 0 });
-    setShowResendButton(false); // Hide the "Resend code" button
-    setShowTimer(true); // Show the timer
   };
 
   return (
-    <div className=" bg-[#eaf8f2] h-screen">
+    <div className="bg-[#eaf8f2] h-screen">
       <Navbar />
       <div className="grid grid-cols-2">
         <section className="">
@@ -132,22 +158,22 @@ const Otp = () => {
             <div className="w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0">
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <form
-                  className=" rounded px-8 pt-6 pb-8 mb-4"
+                  className="rounded px-8 pt-6 pb-8 mb-4"
                   onSubmit={handleSubmit}
                 >
                   <div className="mb-4 text-center">
-                    {customerContactType === "phone" ? (
-                      <p className="text-xl font-bold py-5">
-                        Verify your phone number
-                      </p>
-                    ) : (
-                      <p className="text-xl font-bold py-5">
-                        Verify your Email
-                      </p>
-                    )}
+                    <p className="text-xl font-bold py-5">
+                      Verify your{" "}
+                      {customerContactType === "phone"
+                        ? "phone number"
+                        : "Email"}
+                    </p>
                     <p className="text-gray-500 text-sm">
                       Please check and enter the 6 digit code we just sent to
-                      your {customerContactType === "phone" ? "phone number" : "email address"}{" "}
+                      your{" "}
+                      {customerContactType === "phone"
+                        ? "phone number"
+                        : "Email address"}{" "}
                       {customerContact && (
                         <span className="font-semibold text-gray-700 text-xs">
                           {customerContact}
@@ -168,7 +194,6 @@ const Otp = () => {
                         borderRadius: "10px",
                         margin: "0 5px",
                       }}
-                      // renderSeparator={<span>-</span>}
                       renderInput={(props) => <input {...props} />}
                     />
                   </div>
@@ -176,24 +201,32 @@ const Otp = () => {
                     {customerContact && showTimer && (
                       <p className="py-5">
                         Didn't receive any code? Resend code in{" "}
-                        {timer.minutes.toString().padStart(2, "0")}:
-                        {timer.seconds.toString().padStart(2, "0")} minutes
+                        {`${timer.minutes
+                          .toString()
+                          .padStart(2, "0")}:${timer.seconds
+                          .toString()
+                          .padStart(2, "0")}`}{" "}
+                        minutes
                       </p>
                     )}
                     {showResendButton && (
                       <p
-                        className="py-5 cursor-pointer"
-                        onClick={() => sendOtpToContact(customerContact)}
+                        className={`py-5 cursor-pointer ${
+                          loading ? "opacity-50" : ""
+                        }`}
+                        onClick={() => handleResend()}
                       >
                         Resend code
                       </p>
                     )}
                     <button
                       type="submit"
-                      className={`bg-green-500 cursor-pointer hover-bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline`}
-                      disabled={isDisabled}
+                      className={`bg-green-500 cursor-pointer hover-bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline ${
+                        loading ? "opacity-50" : ""
+                      }`}
+                      disabled={isDisabled || loading}
                     >
-                      Continue
+                      {loading ? "Loading..." : "Continue"}
                     </button>
                   </div>
                 </form>
