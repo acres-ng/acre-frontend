@@ -66,6 +66,15 @@ export function getCurrentUser() {
   }
 }
 
+export function setCurrentUser(data:string) {
+  try {
+    localStorage.setItem(tokenKey, JSON.stringify(data));
+
+  } catch (error) {
+    return null;
+  }
+}
+
 // Example function to decode the JWT
 const decodeToken = (token: string) => {
   try {

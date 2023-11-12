@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import OtpInput from "react-otp-input";
 import Navbar from "../common/Navbar";
+import { getCurrentUser } from "@/services/authService";
 
 const Otp = () => {
   const [otpCode, setOtpCode] = useState("");
@@ -20,12 +21,14 @@ const Otp = () => {
   const queryString: URLSearchParams = new URLSearchParams(
     window.location.search
   );
-  const contact_type = queryString.get("contact");
-  const type = queryString.get("t");
+  const currentUser = getCurrentUser();
+  const customerContactType = currentUser?.primary_contact; //email or phone
+  const customerContact = currentUser[customerContactType];
 
-  if (!contact_type || !type) {
+  if (!customerContact || !customerContactType) {
     return null;
   }
+
 
   useEffect(() => {
     let timerInterval;
@@ -77,9 +80,9 @@ const Otp = () => {
     }
 
     try {
-      if (contact_type) {
+      if (customerContact) {
         const response = await verifyOtp({
-          contact: contact_type,
+          contact: customerContact,
           otp: otpCode,
         });
 
@@ -99,9 +102,9 @@ const Otp = () => {
     }
   };
 
-  const handleResend = async (contact_type: string) => {
+  const sendOtpToContact = async (customerContact: string) => {
     try {
-      const response = await sendOtp({ contact: contact_type });
+      const response = await sendOtp({ contact: customerContact });
       if (response?.data?.status === "success") {
         toast.success(response.data.message);
       }
@@ -115,6 +118,7 @@ const Otp = () => {
     }
 
     // Reset the timer when the "Resend code" button is clicked
+    sendOtpToContact(customerContact);
     setTimer({ minutes: 10, seconds: 0 });
     setShowResendButton(false); // Hide the "Resend code" button
     setShowTimer(true); // Show the timer
@@ -133,7 +137,7 @@ const Otp = () => {
                   onSubmit={handleSubmit}
                 >
                   <div className="mb-4 text-center">
-                    {type === "phone" ? (
+                    {customerContactType === "phone" ? (
                       <p className="text-xl font-bold py-5">
                         Verify your phone number
                       </p>
@@ -144,10 +148,10 @@ const Otp = () => {
                     )}
                     <p className="text-gray-500 text-sm">
                       Please check and enter the 6 digit code we just sent to
-                      your {type === "phone" ? "phone number" : "email address"}{" "}
-                      {contact_type && (
+                      your {customerContactType === "phone" ? "phone number" : "email address"}{" "}
+                      {customerContact && (
                         <span className="font-semibold text-gray-700 text-xs">
-                          {contact_type}
+                          {customerContact}
                         </span>
                       )}
                     </p>
@@ -170,7 +174,7 @@ const Otp = () => {
                     />
                   </div>
                   <div className="mb-6 text-center text-gray-500 text-xs">
-                    {contact_type && showTimer && (
+                    {customerContact && showTimer && (
                       <p className="py-5">
                         Didn't receive any code? Resend code in{" "}
                         {timer.minutes.toString().padStart(2, "0")}:
@@ -180,7 +184,7 @@ const Otp = () => {
                     {showResendButton && (
                       <p
                         className="py-5 cursor-pointer"
-                        onClick={() => handleResend(contact_type)}
+                        onClick={() => sendOtpToContact(customerContact)}
                       >
                         Resend code
                       </p>
