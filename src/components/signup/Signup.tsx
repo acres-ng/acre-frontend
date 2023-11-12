@@ -13,6 +13,7 @@ import farmer from "../../assets/farmer.png";
 import { toast } from "sonner";
 import { encryptData } from "@/lib/encrypt";
 import Navbar from "../common/Navbar";
+import { setCurrentUser } from "@/services/authService";
 
 const signUpSchema = z
   .object({
@@ -70,22 +71,9 @@ const Signup = () => {
     try {
       const { data } = await userService.register(cleanedValues);
 
-      if (data?.status === "success" && data?.data?.otp_sent === true) {
-        if (data?.data?.customer?.primary_contact === "email") {
-          navigate(
-            `/otp?contact=${data?.data?.customer?.email}&t=${data?.data?.customer?.primary_contact}`,
-            {
-              replace: true,
-            }
-          );
-        } else {
-          navigate(
-            `/otp?contact=${data?.data?.customer?.phone}&t=${data?.data?.customer?.primary_contact}`,
-            {
-              replace: true,
-            }
-          );
-        }
+      if (data?.status === "success") {
+        setCurrentUser(data.data.customer);
+        navigate(`/otp`, { replace: true });
       } else {
         setServerError(
           "An error occurred during registration, please try again."
