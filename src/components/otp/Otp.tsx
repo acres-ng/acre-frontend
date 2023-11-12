@@ -118,7 +118,6 @@ const Otp = () => {
     }
 
     // Reset the timer when the "Resend code" button is clicked
-    sendOtpToContact(customerContact);
     setTimer({ minutes: 10, seconds: 0 });
     setShowResendButton(false); // Hide the "Resend code" button
     setShowTimer(true); // Show the timer
