@@ -86,6 +86,11 @@ const decodeToken = (token: string) => {
   }
 };
 
+export async function getOTP(payload: { contact: string; }) {
+  const { data } = await http.post(`${API_URL}auth/send_otp`, payload);
+  return data;
+}
+
 export function logout() {
   return localStorage.removeItem(tokenKey);
 }
