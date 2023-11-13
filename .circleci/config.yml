@@ -28,6 +28,11 @@ aliases:
     branch_pattern: "main"
     template: basic_success_1
     channel: "C052YJH1LBC"
+  - &slack-notify-only-main-fail
+    channel: "C052YJH1LBC"
+    event: fail
+    template: basic_fail_1
+    branch_pattern: "main"
 
 #####################
 # JOBS
@@ -91,6 +96,7 @@ jobs:
             docker login --username=${HEROKU_USERNAME} --password=${HEROKU_API_KEY2} registry.heroku.com
             git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-<< parameters.env >>.git main --force
       - slack/notify: *slack-notify-only-main
+      - slack/notify: *slack-notify-only-main-fail
 
 #####################
 # WORKFLOWS
