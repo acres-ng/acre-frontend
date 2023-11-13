@@ -97,12 +97,11 @@ jobs:
             git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-<< parameters.env >>.git main --force
       - slack/notify: *slack-notify-only-main-fail
 
-    staging-deploy-notifier:
-      executor: node_executor
-      working_directory: ~/app
-      steps:
-         - slack/notify: *slack-notify-only-main
-
+  deploy-notifier:
+    executor: node_executor
+    working_directory: ~/app
+    steps:
+      - slack/notify: *slack-notify-only-main
 
 #####################
 # WORKFLOWS
@@ -114,12 +113,12 @@ workflows:
           context:
             - heroku
             - slack
-      - staging-deploy-notifier:
+      - deploy-notifier:
           requires:
-            - build-frontend  
+            - build-frontend
           context:
             - heroku
-            - slack  
+            - slack
       # - slack/on-hold:
       #     channel: C052YJH1LBC
       #     context: slack
