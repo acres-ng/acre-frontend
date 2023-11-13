@@ -56,7 +56,7 @@ const Otp = () => {
   }, [customerContact]);
 
   useEffect(() => {
-    let timerInterval;
+    let timerInterval: NodeJS.Timeout;
 
     if (timer.minutes === 0 && timer.seconds === 0) {
       setShowResendButton(true);
