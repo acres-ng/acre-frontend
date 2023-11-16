@@ -109,12 +109,10 @@ const Otp = () => {
 
         if (response.status) {
           toast.success(response?.data?.message);
-          navigate("/success", { replace: true });
           setIsVerified(true);
+          navigate("/success", { replace: true });
         } else {
-          setServerError(
-            "An error occurred during registration, please try again."
-          );
+          setServerError("An error occurred during registration, please try again.");
         }
       }
     } catch (error: any) {
@@ -220,13 +218,9 @@ const Otp = () => {
                       </p>
                     )}
                     <button
-                      type="submit"
-                      className={`bg-green-500 cursor-pointer hover-bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline ${
-                        loading ? "opacity-50" : ""
-                      }`}
-                      disabled={isDisabled || loading}
-                    >
-                      {loading ? "Loading..." : "Continue"}
+                     customerContact="submit"
+                      className="bg-green-500 cursor-pointer hover-bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline " >
+                       Continue
                     </button>
                   </div>
                 </form>
