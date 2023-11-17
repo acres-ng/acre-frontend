@@ -103,24 +103,23 @@ function Login() {
   };
 
   return (
-    <div className=" bg-[#eaf8f2] min-h-screen">
-      <Navbar />
-      <div className="grid grid-cols-2">
-        <section>
-          <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-            <div className="w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0">
-              <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-                  Hi, welcome back!
-                </h1>
-                <p className="text-gray-500 text-sm">
-                  Please fill in your details to access your account
-                </p>
-                <form
-                  className="space-y-4 md:space-y-6"
-                  onSubmit={handleSubmit(onSubmit)}
-                >
-                  <div>
+    <div className="bg-[#eaf8f2] min-h-screen">
+    <Navbar />
+    <div className="grid grid-cols-1 sm:grid-cols-2">
+      <section className="flex flex-col justify-center items-center px-6 py-8 mx-auto sm:py-20">
+        <div className="w-full rounded-lg sm:max-w-md xl:p-0">
+          <div className="p-6 space-y-4 sm:space-y-6">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+              Hi, welcome back!
+            </h1>
+            <p className="text-gray-500 text-sm">
+              Please fill in your details to access your account
+            </p>
+            <form
+              className="space-y-4 sm:space-y-6"
+              onSubmit={handleSubmit(onSubmit)}
+            >
+                   <div>
                     <label
                       htmlFor="login"
                       className="block mb-2 text-sm font-medium text-gray-900 "
@@ -197,38 +196,37 @@ function Login() {
                       Forgot password?
                     </a>
                   </div>
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
-                  >
-                    {isSubmitting ? (
-                      <span className="flex items-center">
-                        <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
-                      </span>
-                    ) : (
-                      "Sign In"
-                    )}
-                  </button>
-                  <p className="text-sm font-light text-gray-500">
-                    Don’t have an account yet?{" "}
-                    <Link
-                      to="/signup"
-                      className="font-medium text-green-600 hover:underline"
-                    >
-                      Sign up
-                    </Link>
-                  </p>
-                </form>
-              </div>
-            </div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
+              >
+                {isSubmitting ? (
+                  <span className="flex items-center">
+                    <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+                  </span>
+                ) : (
+                  'Sign In'
+                )}
+              </button>
+              <p className="text-sm font-light text-gray-500">
+                Don’t have an account yet?{' '}
+                <Link
+                  to="/signup"
+                  className="font-medium text-green-600 hover:underline"
+                >
+                  Sign up
+                </Link>
+              </p>
+            </form>
           </div>
-        </section>
-        <div className="flex justify-center items-center">
-          <img src={farmer} alt="" className="h-[500px]" />
         </div>
+      </section>
+      <div className="hidden sm:flex justify-center items-center">
+        <img src={farmer} alt="" className="h-[500px]" />
       </div>
     </div>
+  </div>
   );
 }
 

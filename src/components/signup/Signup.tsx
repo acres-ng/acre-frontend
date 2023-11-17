@@ -85,14 +85,13 @@ const Signup = () => {
   };
 
   return (
-    <div className="bg-[#eaf8f2] h-screen">
+    <div className="bg-[#eaf8f2] min-h-screen">
       <Navbar />
-      <div className="grid grid-cols-2 gap-5">
-        <section className="">
-          <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
-            <div className="w-full rounded-lg  md:mt-0 sm:max-w-md xl:p-0">
-              <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-                <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <section className="flex flex-col justify-center items-center px-6 py-8 mx-auto lg:py-0">
+          <div className="w-full rounded-lg sm:max-w-md xl:p-0">
+            <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                   Hi, let's get you started!
                 </h1>
                 <p className="text-sm text-gray-500">
@@ -102,11 +101,8 @@ const Signup = () => {
                 {serverError && (
                   <div className="text-red-500 text-sm mb-4">{serverError}</div>
                 )}
-                <form
-                  className="space-y-4 md:space-y-6"
-                  onSubmit={handleSubmit(onSubmit)}
-                >
-                  <div>
+              <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit(onSubmit)}>
+              <div>
                     <label
                       htmlFor="name"
                       className="block mb-2 text-sm font-medium text-gray-900"
@@ -261,35 +257,33 @@ const Signup = () => {
                       </label>
                     </div>
                   </div>
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full text-white bg-green-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full text-white bg-green-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center">
+                      <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+                    </span>
+                  ) : (
+                    'Create account'
+                  )}
+                </button>
+                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                  Already have an account?{' '}
+                  <Link
+                    to="/login"
+                    className="font-medium text-green-600 hover:underline dark:text-primary-500"
                   >
-                    {isSubmitting ? (
-                      <span className="flex items-center">
-                        {/* <span className="mr-2">Signing up...</span> */}
-                        <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
-                      </span>
-                    ) : (
-                      "Create account"
-                    )}
-                  </button>
-                  <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                    Already have an account?{" "}
-                    <Link
-                      to="/login"
-                      className="font-medium text-green-600 hover:underline dark:text-primary-500"
-                    >
-                      Login
-                    </Link>
-                  </p>
-                </form>
-              </div>
+                    Login
+                  </Link>
+                </p>
+              </form>
             </div>
           </div>
         </section>
-        <div className="flex justify-center items-center">
+        <div className="hidden lg:flex justify-center items-center">
           <img src={farmer} alt="" className="h-[500px]" />
         </div>
       </div>
