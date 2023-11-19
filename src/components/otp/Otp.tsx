@@ -1,5 +1,5 @@
 import React, { useState, useEffect, FormEvent } from "react";
-import farmer from "../../assets/farmer.png";
+import anim from "../../assets/anim.png";
 import { sendOtp, verifyOtp } from "@/services/userService";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
@@ -112,7 +112,9 @@ const Otp = () => {
           setIsVerified(true);
           navigate("/success", { replace: true });
         } else {
-          setServerError("An error occurred during registration, please try again.");
+          setServerError(
+            "An error occurred during registration, please try again."
+          );
         }
       }
     } catch (error: any) {
@@ -148,9 +150,9 @@ const Otp = () => {
   };
 
   return (
-    <div className="bg-[#eaf8f2] h-screen">
-      <Navbar />
-      <div className="grid grid-cols-2">
+    <div className="min-h-screen bg-[#eaf8f2]">
+      <div className="grid grid-cols-1 sm:grid-cols-2">
+        {/* Left Side */}
         <section className="">
           <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             <div className="w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0">
@@ -229,8 +231,15 @@ const Otp = () => {
             </div>
           </div>
         </section>
-        <div className="flex justify-center items-center">
-          <img src={farmer} alt="" className="h-[500px]" />
+
+        {/* Right Side */}
+        <div className="hidden sm:flex justify-center items-center">
+          <div className="h-screen w-full  relative">
+            <img src={anim} alt="Farmer" className="h-full w-full object-cover rounded-lg" />
+            <div className="absolute bottom-6 left-4 right-4 bg-white bg-opacity-20 p-4 rounded-b-lg backdrop-filter backdrop-blur-md">
+              <p className="text-white text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris diam tellus, euismod sit amet est et, tempus semper diam. Etiam condimentum lectus ut leo cursus scelerisque. Nullam sed bibendum orci. Phasellus in lacinia neque. Aliquam volutpat elit nibh, non luctus enim aliquam vel. Etiam eu volutpat nunc. Integer aliquam metus ac nisl imperdiet lobortis.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
