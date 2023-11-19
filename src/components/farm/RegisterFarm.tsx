@@ -386,6 +386,7 @@ const RegisterFarm = () => {
                             <button
                               className="bg-green-500  w-full hover:bg-green-700 text-white  py-2 rounded-lg focus:outline-none focus:shadow-outline"
                               type="submit"
+                              onClick={() => navigate("/dashboard", { replace: true })}
                             >
                               Continue
                             </button>
