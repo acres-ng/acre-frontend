@@ -9,10 +9,10 @@ import PhoneInput, {
 import "react-phone-number-input/style.css";
 import userService from "@/services/userService";
 import { Link, useNavigate } from "react-router-dom";
-import farmer from "../../assets/farmer.png";
+import cow from "../../assets/cow.png";
 import { toast } from "sonner";
 import { encryptData } from "@/lib/encrypt";
-import Navbar from "../common/Navbar";
+import logo from "../../assets/logo.png";
 import { setCurrentUser } from "@/services/authService";
 
 const signUpSchema = z
@@ -85,10 +85,13 @@ const Signup = () => {
   };
 
   return (
-    <div className="bg-[#eaf8f2] min-h-screen">
-      <Navbar />
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <section className="flex flex-col justify-center items-center px-6 py-8 mx-auto lg:py-0">
+    <div className="min-h-screen bg-[#eaf8f2]">
+    <div className="grid grid-cols-1 sm:grid-cols-2">
+      {/* Left Side */}
+      <section className="flex flex-col justify-center items-center px-6 py-8 mx-auto lg:py-0">
+      <Link to="/">
+        <img src={logo} alt="acre logo" className="absolute left-4 top-4 h-12 w-12" />
+      </Link>
           <div className="w-full rounded-lg sm:max-w-md xl:p-0">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -105,7 +108,7 @@ const Signup = () => {
               <div>
                     <label
                       htmlFor="name"
-                      className="block mb-2 text-sm font-medium text-gray-900"
+                      className="block mb-1 text-sm font-medium text-gray-900"
                     >
                       Your name
                     </label>
@@ -152,10 +155,10 @@ const Signup = () => {
                   <div>
                     <label
                       htmlFor="email"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Email address{" "}
-                      <span className="text-gray-500">(optional)</span>
+                     
                     </label>
                     <input
                       {...register("email", {
@@ -178,7 +181,7 @@ const Signup = () => {
                   <div>
                     <label
                       htmlFor="password"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Password
                     </label>
@@ -206,7 +209,7 @@ const Signup = () => {
                   <div>
                     <label
                       htmlFor="confirm-password"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
                     >
                       Confirm password
                     </label>
@@ -222,7 +225,7 @@ const Signup = () => {
                       type="password"
                       name="confirmPassword"
                       id="confirm-password"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                     />
                     {errors.confirmPassword && (
                       <p className="text-red-500 text-sm">
@@ -270,24 +273,36 @@ const Signup = () => {
                     'Create account'
                   )}
                 </button>
-                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                  Already have an account?{' '}
-                  <Link
-                    to="/login"
-                    className="font-medium text-green-600 hover:underline dark:text-primary-500"
-                  >
-                    Login
-                  </Link>
-                </p>
+                <div className="flex items-center justify-center dark:bg-gray-800">
+                <button className="px-4 py-2 border flex gap-2 w-full border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150 items-center justify-center">
+  <span className="flex items-center justify-center">
+    <img
+      className="w-6 h-6"
+      src="https://www.svgrepo.com/show/475656/google-color.svg"
+      loading="lazy"
+      alt="Google Logo"
+    />
+    <span>Login with Google</span>
+  </span>
+</button>
+
+</div>
               </form>
             </div>
           </div>
         </section>
-        <div className="hidden lg:flex justify-center items-center">
-          <img src={farmer} alt="" className="h-[500px]" />
+
+      {/* Right Side */}
+      <div className="hidden sm:flex justify-center items-center">
+        <div className="h-screen w-full  relative">
+          <img src={cow} alt="Farmer" className="h-full w-full object-cover rounded-lg" />
+          <div className="absolute bottom-6 left-4 right-4 bg-white bg-opacity-20 p-4 rounded-b-lg backdrop-filter backdrop-blur-md">
+            <p className="text-white text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris diam tellus, euismod sit amet est et, tempus semper diam. Etiam condimentum lectus ut leo cursus scelerisque. Nullam sed bibendum orci. Phasellus in lacinia neque. Aliquam volutpat elit nibh, non luctus enim aliquam vel. Etiam eu volutpat nunc. Integer aliquam metus ac nisl imperdiet lobortis.</p>
+          </div>
         </div>
       </div>
     </div>
+  </div>
   );
 };
 

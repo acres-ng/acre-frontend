@@ -218,7 +218,8 @@ const Otp = () => {
                       </p>
                     )}
                     <button
-                     customerContact="submit"
+                     type="submit"
+                     onClick={customerContact}
                       className="bg-green-500 cursor-pointer hover-bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline " >
                        Continue
                     </button>

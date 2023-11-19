@@ -9,7 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldValues, useForm } from "react-hook-form";
 import farmer from "../../assets/farmer.png";
 import { encryptData } from "@/lib/encrypt";
-import Navbar from "../common/Navbar";
+import logo from "../../assets/logo.png";
 import useAuth from "../context/useAuth";
 import AuthContext from "../context/authContext";
 
@@ -103,18 +103,16 @@ function Login() {
   };
 
   return (
-    <div className="bg-[#eaf8f2] min-h-screen">
-    <Navbar />
-    <div className="grid grid-cols-1 sm:grid-cols-2">
-      <section className="flex flex-col justify-center items-center px-6 py-8 mx-auto sm:py-20">
-        <div className="w-full rounded-lg sm:max-w-md xl:p-0">
-          <div className="p-6 space-y-4 sm:space-y-6">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-              Hi, welcome back!
-            </h1>
-            <p className="text-gray-500 text-sm">
-              Please fill in your details to access your account
-            </p>
+    <div className="min-h-screen bg-[#eaf8f2]">
+      <div className="grid grid-cols-1 sm:grid-cols-2">
+        {/* Left Side */}
+        <section className="flex flex-col justify-center items-center px-6 py-8 sm:py-20 relative">
+         
+          <Link to="/">
+        <img src={logo} alt="acre logo" className="absolute left-4 top-4 h-12 w-12" />
+      </Link>
+          <div className="w-full rounded-lg sm:max-w-md xl:p-0">
+            <div className="p-6 space-y-4 sm:space-y-6">
             <form
               className="space-y-4 sm:space-y-6"
               onSubmit={handleSubmit(onSubmit)}
@@ -219,14 +217,21 @@ function Login() {
                 </Link>
               </p>
             </form>
+            </div>
+          </div>
+        </section>
+
+        {/* Right Side */}
+        <div className="hidden sm:flex justify-center items-center">
+          <div className="h-screen w-full  relative">
+            <img src={farmer} alt="Farmer" className="h-full w-full object-cover rounded-lg" />
+            <div className="absolute bottom-6 left-4 right-4 bg-white bg-opacity-20 p-4 rounded-b-lg backdrop-filter backdrop-blur-md">
+              <p className="text-white text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris diam tellus, euismod sit amet est et, tempus semper diam. Etiam condimentum lectus ut leo cursus scelerisque. Nullam sed bibendum orci. Phasellus in lacinia neque. Aliquam volutpat elit nibh, non luctus enim aliquam vel. Etiam eu volutpat nunc. Integer aliquam metus ac nisl imperdiet lobortis.</p>
+            </div>
           </div>
         </div>
-      </section>
-      <div className="hidden sm:flex justify-center items-center">
-        <img src={farmer} alt="" className="h-[500px]" />
       </div>
     </div>
-  </div>
   );
 }
 
