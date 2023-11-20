@@ -9,11 +9,14 @@ import PhoneInput, {
 import "react-phone-number-input/style.css";
 import userService from "@/services/userService";
 import { Link, useNavigate } from "react-router-dom";
-import cow from "../../assets/cow.png";
+import regimg from "../../assets/regimg.png";
 import { toast } from "sonner";
 import { encryptData } from "@/lib/encrypt";
 import logo from "../../assets/logo.png";
 import { setCurrentUser } from "@/services/authService";
+import { BiSolidLock } from "react-icons/bi";
+import { IoCheckbox } from "react-icons/io5";
+import { useFormik } from "formik";
 
 const signUpSchema = z
   .object({
@@ -61,6 +64,11 @@ const Signup = () => {
   } = useForm<TSignUpSchema>({ resolver: zodResolver(signUpSchema) });
 
   const onSubmit = async (values: FieldValues) => {
+
+    if (!hasEightCharacters || !hasOneNumber || !hasSpecialCharacter || !hasUpperCase || !hasLowerCase) {
+      toast.error('Please complete the password requirements.');
+      return; // Stop submission if criteria are not met
+    }
     const cleanedPhoneNumber = values.phone.replace(/\s+/g, "");
 
     const cleanedValues = {
@@ -84,182 +92,283 @@ const Signup = () => {
     }
   };
 
+  const formik = useFormik({
+    initialValues: {
+      fullName: "",
+      password: "",
+      email: "",
+    },
+    onSubmit: (values) => {
+      console.log("Form values:", values);
+    },
+  });
+
+  // states for mananging validation
+  const [hasEightCharacters, setHasEightCharacters] = useState(false);
+  const [hasSpecialCharacter, setHasSpecialCharacter] = useState(false);
+  const [hasUpperCase, setHasUpperCase] = useState(false);
+  const [hasLowerCase, setHasLowerCase] = useState(false);
+  const [hasOneNumber, setHasOneNumber] = useState(false);
+
+  const handlePasswordChange = (e: any) => {
+    const value = e.target.value;
+
+    // has special characters
+    const hasSpecialCharacterTest = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\]/;
+    setHasSpecialCharacter(hasSpecialCharacterTest.test(value));
+
+    // has uppercase characters
+    const hasUpperCaseTest = /[A-Z]/;
+    setHasUpperCase(hasUpperCaseTest.test(value));
+
+    // has lowercase characters
+    const hasLowerCaseTest = /[a-z]/;
+    setHasLowerCase(hasLowerCaseTest.test(value));
+
+    // has one number
+    const hasOneNumberTest = /\d+/;
+    setHasOneNumber(hasOneNumberTest.test(value));
+
+    // has eight characters
+    setHasEightCharacters(value.length >= 8 ? true : false);
+    formik.setFieldValue("password", value);
+  };
+
   return (
-    <div className="min-h-screen bg-[#eaf8f2]">
-    <div className="grid grid-cols-1 sm:grid-cols-2">
-      {/* Left Side */}
-      <section className="flex flex-col justify-center items-center px-6 py-8 mx-auto lg:py-0">
-      <Link to="/">
-        <img src={logo} alt="acre logo" className="absolute left-4 top-4 h-12 w-12" />
-      </Link>
+    <div className=" bg-[#eaf8f2]">
+        <div>
+            <img
+              src={logo}
+              alt="acre logo"
+              className="absolute left-4 top-0 w-[120px]  flex flex-col md:mx-40"
+            />
+          </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2">
+    
+        {/* Left Side */}
+        <section className=" flex mt-12 flex-col justify-center items-center px-6 py-8 mx-auto lg:py-0">
+          
           <div className="w-full rounded-lg sm:max-w-md xl:p-0">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-                  Hi, let's get you started!
-                </h1>
-                <p className="text-sm text-gray-500">
-                  To create your account, enter your details below and we'll
-                  send you an OTP shortly.
-                </p>
-                {serverError && (
-                  <div className="text-red-500 text-sm mb-4">{serverError}</div>
-                )}
-              <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit(onSubmit)}>
-              <div>
-                    <label
-                      htmlFor="name"
-                      className="block mb-1 text-sm font-medium text-gray-900"
-                    >
-                      Your name
-                    </label>
-                    <input
-                      {...register("firstname", {
-                        required: "Name is required",
-                      })}
-                      type="text"
-                      name="firstname"
-                      id="name"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                    {errors.firstname && (
-                      <p className="text-red-500 text-sm">
-                        {errors.firstname.message}
-                      </p>
-                    )}
-                  </div>
+              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                Hi, let's get you started!
+              </h1>
+              <p className="text-sm text-gray-500">
+                To create your account, enter your details below and we'll send
+                you an OTP shortly.
+              </p>
+              {serverError && (
+                <div className="text-red-500 text-sm mb-4">{serverError}</div>
+              )}
+              <form
+                className="space-y-4 md:space-y-6"
+                onSubmit={handleSubmit(onSubmit)}
+              >
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="block mb-1 text-sm font-medium text-gray-900"
+                  >
+                    Your name
+                  </label>
+                  <input
+                    {...register("firstname", {
+                      required: "Name is required",
+                    })}
+                    type="text"
+                    name="firstname"
+                    id="name"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  />
+                  {errors.firstname && (
+                    <p className="text-red-500 text-sm">
+                      {errors.firstname.message}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <PhoneInput
+                    {...register("phone", {
+                      required: "Phone is required",
+                      validate: {
+                        validPhone: (value) =>
+                          isValidPhoneNumber(value) ||
+                          "Enter a valid phone number",
+                      },
+                    })}
+                    value={getValues("phone")}
+                    onChange={handlePhoneChange}
+                    defaultCountry="NG"
+                    countryCallingCodeEditable={false}
+                    country="NG"
+                    international
+                    withCountryCallingCode
+                    className="border appearance-none text-gray-700 bg-gray-50 border-gray-200 rounded py-2 px-1  focus:outline-none"
+                  />
+                  {errors.phone && (
+                    <p className="text-red-500 text-sm">
+                      {errors.phone.message}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label
+                    htmlFor="email"
+                    className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Email address{" "}
+                  </label>
+                  <input
+                    {...register("email", {
+                      required: "Email is required",
+                      pattern: {
+                        value: /\S+@\S+\.\S+/,
+                        message: "Enter a valid email address",
+                      },
+                    })}
+                    id="email"
+                    type="email"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  />
+                  {errors.email && (
+                    <p className="text-red-500 text-sm">
+                      {errors.email.message}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Password
+                  </label>
+
+                  <input
+                    {...register("password", {
+                      required: "Password is required",
+                      minLength: {
+                        value: 6,
+                        message: "Password must be at least 6 characters long",
+                      },
+                    })}
+                    type="password"
+                    name="password"
+                    id="password"
+                    onChange={handlePasswordChange}
+               
+                    // placeholder="••••••••"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  />
                   <div>
-                    <PhoneInput
-                      {...register("phone", {
-                        required: "Phone is required",
-                        validate: {
-                          validPhone: (value) =>
-                            isValidPhoneNumber(value) ||
-                            "Enter a valid phone number",
-                        },
-                      })}
-                      value={getValues("phone")}
-                      onChange={handlePhoneChange}
-                      defaultCountry="NG"
-                      countryCallingCodeEditable={false}
-                      country="NG"
-                      international
-                      withCountryCallingCode
-                      className="border appearance-none text-gray-700 bg-gray-50 border-gray-200 rounded py-2 px-1  focus:outline-none"
-                    />
-                    {errors.phone && (
-                      <p className="text-red-500 text-sm">
-                        {errors.phone.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Email address{" "}
-                     
-                    </label>
-                    <input
-                      {...register("email", {
-                        required: "Email is required",
-                        pattern: {
-                          value: /\S+@\S+\.\S+/,
-                          message: "Enter a valid email address",
-                        },
-                      })}
-                      id="email"
-                      type="email"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                    {errors.email && (
-                      <p className="text-red-500 text-sm">
-                        {errors.email.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="password"
-                      className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Password
-                    </label>
-                    <input
-                      {...register("password", {
-                        required: "Password is required",
-                        minLength: {
-                          value: 6,
-                          message:
-                            "Password must be at least 6 characters long",
-                        },
-                      })}
-                      type="password"
-                      name="password"
-                      id="password"
-                      // placeholder="••••••••"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    />
-                    {errors.password && (
-                      <p className="text-red-500 text-sm">
-                        {errors.password.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="confirm-password"
-                      className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Confirm password
-                    </label>
-                    <input
-                      {...register("confirmPassword", {
-                        required: "Password do not match",
-                        minLength: {
-                          value: 6,
-                          message:
-                            "Password must be at least 6 characters long",
-                        },
-                      })}
-                      type="password"
-                      name="confirmPassword"
-                      id="confirm-password"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                    />
-                    {errors.confirmPassword && (
-                      <p className="text-red-500 text-sm">
-                        {errors.confirmPassword.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="terms"
-                        aria-describedby="terms"
-                        type="checkbox"
-                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label
-                        htmlFor="terms"
-                        className="font-light text-gray-500 "
-                      >
-                        I agree to the{" "}
-                        <a
-                          className="font-medium text-gray-600 hover:underline "
-                          href="#"
+                    {formik.values.password.length > 0 && (
+                      <div>
+                        <div
+                          className={`flex flex-row gap-x-3 items-center my-2 ${
+                            hasEightCharacters
+                              ? "text-green-600"
+                              : "text-gray-600"
+                          }`}
                         >
-                          <span className="text-green-500">
-                            Terms and Conditions
-                          </span>
-                        </a>{" "}
-                        of Acre
-                      </label>
-                    </div>
+                          <IoCheckbox />
+                          <p>At least 8 characters</p>
+                        </div>
+                        <div
+                          className={`flex flex-row gap-x-3 items-center my-2 ${
+                            hasOneNumber ? "text-green-600" : "text-gray-600"
+                          }`}
+                        >
+                          <IoCheckbox />
+                          <p>Contains at least one number</p>
+                        </div>
+                        <div
+                          className={`flex flex-row gap-x-3 items-center my-2 ${
+                            hasSpecialCharacter
+                              ? "text-green-600"
+                              : "text-gray-600"
+                          }`}
+                        >
+                          <IoCheckbox />
+                          <p>Contains a special character</p>
+                        </div>
+                        <div
+                          className={`flex flex-row gap-x-3 items-center my-2 ${
+                            hasUpperCase ? "text-green-600" : "text-gray-600"
+                          }`}
+                        >
+                          <IoCheckbox />
+                          <p>Contains uppercase letter</p>
+                        </div>
+                        <div
+                          className={`flex flex-row gap-x-3 items-center my-2 ${
+                            hasLowerCase ? "text-green-600" : "text-gray-600"
+                          }`}
+                        >
+                          <IoCheckbox />
+                          <p>Contains lowercase letter</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
+                  {errors.password && (
+                    <p className="text-red-500 text-sm">
+                      {errors.password.message}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label
+                    htmlFor="confirm-password"
+                    className="block mb-1 text-sm font-medium text-gray-900 dark:text-white"
+                  >
+                    Confirm password
+                  </label>
+                  <input
+                    {...register("confirmPassword", {
+                      required: "Password do not match",
+                      minLength: {
+                        value: 6,
+                        message: "Password must be at least 6 characters long",
+                      },
+                    })}
+                    type="password"
+                    name="confirmPassword"
+                    id="confirm-password"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                  />
+                  {errors.confirmPassword && (
+                    <p className="text-red-500 text-sm">
+                      {errors.confirmPassword.message}
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-start">
+                  <div className="flex items-center h-5">
+                    <input
+                      id="terms"
+                      aria-describedby="terms"
+                      type="checkbox"
+                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                    />
+                  </div>
+                  <div className="ml-3 text-sm">
+                    <label
+                      htmlFor="terms"
+                      className="font-light text-gray-500 "
+                    >
+                      I agree to the{" "}
+                      <a
+                        className="font-medium text-gray-600 hover:underline "
+                        href="#"
+                      >
+                        <span className="text-green-500">
+                          Terms and Conditions
+                        </span>
+                      </a>{" "}
+                      of Acre
+                    </label>
+                  </div>
+                </div>
                 <button
                   type="submit"
                   disabled={isSubmitting}
@@ -270,39 +379,50 @@ const Signup = () => {
                       <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
                     </span>
                   ) : (
-                    'Create account'
+                    "Create account"
                   )}
                 </button>
                 <div className="flex items-center justify-center dark:bg-gray-800">
-                <button className="px-4 py-2 border flex gap-2 w-full border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150 items-center justify-center">
-  <span className="flex items-center justify-center">
-    <img
-      className="w-6 h-6"
-      src="https://www.svgrepo.com/show/475656/google-color.svg"
-      loading="lazy"
-      alt="Google Logo"
-    />
-    <span>Login with Google</span>
-  </span>
-</button>
-
-</div>
+                  <button className="px-4 py-2 border flex gap-2 w-full border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150 items-center justify-center">
+                    <span className="flex items-center justify-center">
+                      <img
+                        className="w-6 h-6"
+                        src="https://www.svgrepo.com/show/475656/google-color.svg"
+                        loading="lazy"
+                        alt="Google Logo"
+                      />
+                      <span>Login with reg</span>
+                    </span>
+                  </button>
+                </div>
               </form>
             </div>
           </div>
         </section>
 
-      {/* Right Side */}
-      <div className="hidden sm:flex justify-center items-center">
-        <div className="h-screen w-full  relative">
-          <img src={cow} alt="Farmer" className="h-full w-full object-cover rounded-lg" />
-          <div className="absolute bottom-6 left-4 right-4 bg-white bg-opacity-20 p-4 rounded-b-lg backdrop-filter backdrop-blur-md">
-            <p className="text-white text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris diam tellus, euismod sit amet est et, tempus semper diam. Etiam condimentum lectus ut leo cursus scelerisque. Nullam sed bibendum orci. Phasellus in lacinia neque. Aliquam volutpat elit nibh, non luctus enim aliquam vel. Etiam eu volutpat nunc. Integer aliquam metus ac nisl imperdiet lobortis.</p>
+        {/* Right Side */}
+        <div className="hidden sm:flex justify-center items-center fixed top-0 right-0 bottom-0">
+          <div className="h-screen w-full  relative">
+            <img
+              src={regimg}
+              alt="Farmer"
+              className="h-full w-[100vh] object-cover border-4 rounded-lg"
+              style={{ borderRadius: '20px' }}
+            />
+            <div className="absolute bottom-6 left-4 right-4 bg-white bg-opacity-20 p-4 rounded-b-lg backdrop-filter backdrop-blur-md">
+              <p className="text-white text-sm">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
+                diam tellus, euismod sit amet est et, tempus semper diam. Etiam
+                condimentum lectus ut leo cursus scelerisque. Nullam sed
+                bibendum orci. Phasellus in lacinia neque. Aliquam volutpat elit
+                nibh, non luctus enim aliquam vel. Etiam eu volutpat nunc.
+                Integer aliquam metus ac nisl imperdiet lobortis.
+              </p>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
   );
 };
 

@@ -6,6 +6,7 @@ import Otp from "../otp/Otp";
 import VerificationSuccess from "../success/VerificationSuccess";
 import RegisterFarm from "../farm/RegisterFarm";
 import Logout from "../logout/Logout";
+
 const PublicRoutes = () => {
   return (
     <Routes>
@@ -17,6 +18,7 @@ const PublicRoutes = () => {
       <Route path="/success" element={<VerificationSuccess />} />
       <Route path="/add-farm" element={<RegisterFarm />} />
       <Route path="*" element={<Login />} />
+      
     </Routes>
   );
 };
