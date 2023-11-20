@@ -7,11 +7,12 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldValues, useForm } from "react-hook-form";
-import farmer from "../../assets/farmer.png";
+import loginimg from "../../assets/loginimg.png";
 import { encryptData } from "@/lib/encrypt";
 import logo from "../../assets/logo.png";
 import useAuth from "../context/useAuth";
 import AuthContext from "../context/authContext";
+
 
 interface User {
   login: string;
@@ -109,10 +110,19 @@ function Login() {
         <section className="flex flex-col justify-center items-center px-6 py-8 sm:py-20 relative">
          
           <Link to="/">
-        <img src={logo} alt="acre logo" className="absolute left-4 top-4 h-12 w-12" />
+        <img src={logo} alt="acre logo" className=" left-4 top-0 h-20 w-[120px]  flex flex-col pt-8 md:mx-40" />
       </Link>
-          <div className="w-full rounded-lg sm:max-w-md xl:p-0">
-            <div className="p-6 space-y-4 sm:space-y-6">
+          <div className="w-full sm:mt-7 rounded-lg sm:max-w-md xl:p-0">
+           
+           
+          <div className="p-6 space-y-4 sm:space-y-6">
+            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+              Hi, welcome back!
+            </h1>
+            <p className="text-gray-500 text-sm">
+              Please fill in your details to access your account
+            </p>
+            <div/>
             <form
               className="space-y-4 sm:space-y-6"
               onSubmit={handleSubmit(onSubmit)}
@@ -224,13 +234,14 @@ function Login() {
         {/* Right Side */}
         <div className="hidden sm:flex justify-center items-center">
           <div className="h-screen w-full  relative">
-            <img src={farmer} alt="Farmer" className="h-full w-full object-cover rounded-lg" />
+            <img src={loginimg} alt="Farmer" className="h-full w-full object-cover rounded-lg"   style={{ borderRadius: '20px' }}/>
             <div className="absolute bottom-6 left-4 right-4 bg-white bg-opacity-20 p-4 rounded-b-lg backdrop-filter backdrop-blur-md">
               <p className="text-white text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris diam tellus, euismod sit amet est et, tempus semper diam. Etiam condimentum lectus ut leo cursus scelerisque. Nullam sed bibendum orci. Phasellus in lacinia neque. Aliquam volutpat elit nibh, non luctus enim aliquam vel. Etiam eu volutpat nunc. Integer aliquam metus ac nisl imperdiet lobortis.</p>
             </div>
           </div>
         </div>
       </div>
+    
     </div>
   );
 }

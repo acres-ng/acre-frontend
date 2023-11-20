@@ -6,10 +6,10 @@ const VerificationSuccess = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-[#eaf8f2] h-screen">
-      <Navbar />
-      <div className="grid grid-cols-2">
-        <section className="">
+    <div className="min-h-screen bg-[#eaf8f2]">
+    <div className="grid grid-cols-1 sm:grid-cols-2">
+      {/* Left Side */}
+      <section className="">
           <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             <div className="w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0">
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -32,11 +32,18 @@ const VerificationSuccess = () => {
             </div>
           </div>
         </section>
-        <div className="flex justify-center items-center">
-          <img src={success} alt="" className="h-[500px]" />
+
+      {/* Right Side */}
+      <div className="hidden sm:flex justify-center items-center">
+        <div className="h-screen w-full  relative">
+          <img src={success} alt="Farmer" className="h-full w-full object-cover rounded-lg" />
+          <div className="absolute bottom-6 left-4 right-4 bg-white bg-opacity-20 p-4 rounded-b-lg backdrop-filter backdrop-blur-md">
+            <p className="text-white text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris diam tellus, euismod sit amet est et, tempus semper diam. Etiam condimentum lectus ut leo cursus scelerisque. Nullam sed bibendum orci. Phasellus in lacinia neque. Aliquam volutpat elit nibh, non luctus enim aliquam vel. Etiam eu volutpat nunc. Integer aliquam metus ac nisl imperdiet lobortis.</p>
+          </div>
         </div>
       </div>
     </div>
+  </div>
   );
 };
 

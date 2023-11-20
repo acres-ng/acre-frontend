@@ -402,7 +402,9 @@ const RegisterFarm = () => {
         </section>
         <div className="flex justify-center items-center">
           {step === 1 ? (
-            <img src={house} alt="" className="h-[500px] object-contain" />
+            <div>
+              <iframe width="500" height="600"  scrolling="no"  src="https://maps.google.com/maps?width=500&amp;height=600&amp;hl=en&amp;q=33a,%20Beecroft%20Street,%20Lagos%20Island,%20Lagos,%20Nigeria.+(Acre)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/population/">Calculate population in area</a></iframe>
+            </div>
           ) : step === 2 ? (
             <img src={location} alt="" className="h-[500px] object-contain" />
           ) : (
