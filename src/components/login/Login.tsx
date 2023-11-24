@@ -13,7 +13,6 @@ import logo from "../../assets/logo.png";
 import useAuth from "../context/useAuth";
 import AuthContext from "../context/authContext";
 
-
 interface User {
   login: string;
   password: string;
@@ -104,129 +103,129 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-[#eaf8f2]">
-      <div className="grid grid-cols-1 sm:grid-cols-2">
+    <div className=" h-screen overflow-hidden bg-[#eaf8f2]">
+      <div>
+        <img
+          src={logo}
+          alt="acre logo"
+          className="absolute left-4 top-0 w-[120px]  flex flex-col md:mx-40"
+        />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 ">
         {/* Left Side */}
-        <section className="flex flex-col justify-center items-center px-6 py-8 sm:py-20 relative">
-         
-          <Link to="/">
-        <img src={logo} alt="acre logo" className=" left-4 top-0 h-20 w-[120px]  flex flex-col pt-8 md:mx-40" />
-      </Link>
+        <section className="flex flex-col justify-center items-center px-6 pt-[12rem] sm:py-20 relative">
           <div className="w-full sm:mt-7 rounded-lg sm:max-w-md xl:p-0">
-           
-           
-          <div className="p-6 space-y-4 sm:space-y-6">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
-              Hi, welcome back!
-            </h1>
-            <p className="text-gray-500 text-sm">
-              Please fill in your details to access your account
-            </p>
-            <div/>
-            <form
-              className="space-y-4 sm:space-y-6"
-              onSubmit={handleSubmit(onSubmit)}
-            >
-                   <div>
-                    <label
-                      htmlFor="login"
-                      className="block mb-2 text-sm font-medium text-gray-900 "
-                    >
-                      Your email or phone number
-                    </label>
-                    <input
-                      {...register("login", {
-                        required: "Email or phone is required",
-                        pattern: {
-                          value: /\S+@\S+\.\S+/,
-                          message: "Enter a valid email address",
-                        },
-                      })}
-                      autoFocus
-                      type="text"
-                      name="login"
-                      id="login"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                    />
-                    {errors.login && (
-                      <p className="text-red-500 text-sm">
-                        {errors.login.message}
-                      </p>
-                    )}
-                  </div>
-                  <div>
-                    <label
-                      htmlFor="password"
-                      className="block mb-2 text-sm font-medium text-gray-900"
-                    >
-                      Password
-                    </label>
-                    <input
-                      {...register("password", {
-                        required: "Password is required",
-                        minLength: {
-                          value: 6,
-                          message:
-                            "Password must be at least 6 characters long",
-                        },
-                      })}
-                      type="password"
-                      name="password"
-                      id="password"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                    />
-                    {errors.password && (
-                      <p className="text-red-500 text-sm">
-                        {errors.password.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-start">
-                      <div className="flex items-center h-5">
-                        <input
-                          id="remember"
-                          aria-describedby="remember"
-                          type="checkbox"
-                          className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300"
-                        />
-                      </div>
-                      <div className="ml-3 text-sm">
-                        <label htmlFor="remember" className="text-gray-500 ">
-                          Remember me
-                        </label>
-                      </div>
-                    </div>
-                    <a
-                      href="#"
-                      className="text-sm font-medium text-green-600 hover:underline"
-                    >
-                      Forgot password?
-                    </a>
-                  </div>
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
-              >
-                {isSubmitting ? (
-                  <span className="flex items-center">
-                    <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
-                  </span>
-                ) : (
-                  'Sign In'
-                )}
-              </button>
-              <p className="text-sm font-light text-gray-500">
-                Don’t have an account yet?{' '}
-                <Link
-                  to="/signup"
-                  className="font-medium text-green-600 hover:underline"
-                >
-                  Sign up
-                </Link>
+            <div className="p-6 space-y-4 sm:space-y-6">
+              <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
+                Hi, welcome back!
+              </h1>
+              <p className="text-gray-500 text-sm">
+                Please fill in your details to access your account
               </p>
-            </form>
+              <div />
+              <form
+                className="space-y-4 sm:space-y-6"
+                onSubmit={handleSubmit(onSubmit)}
+              >
+                <div>
+                  <label
+                    htmlFor="login"
+                    className="block mb-2 text-sm font-medium text-gray-900 "
+                  >
+                    Your email or phone number
+                  </label>
+                  <input
+                    {...register("login", {
+                      required: "Email or phone is required",
+                      pattern: {
+                        value: /\S+@\S+\.\S+/,
+                        message: "Enter a valid email address",
+                      },
+                    })}
+                    autoFocus
+                    type="text"
+                    name="login"
+                    id="login"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  />
+                  {errors.login && (
+                    <p className="text-red-500 text-sm">
+                      {errors.login.message}
+                    </p>
+                  )}
+                </div>
+                <div>
+                  <label
+                    htmlFor="password"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
+                    Password
+                  </label>
+                  <input
+                    {...register("password", {
+                      required: "Password is required",
+                      minLength: {
+                        value: 6,
+                        message: "Password must be at least 6 characters long",
+                      },
+                    })}
+                    type="password"
+                    name="password"
+                    id="password"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                  />
+                  {errors.password && (
+                    <p className="text-red-500 text-sm">
+                      {errors.password.message}
+                    </p>
+                  )}
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-start">
+                    <div className="flex items-center h-5">
+                      <input
+                        id="remember"
+                        aria-describedby="remember"
+                        type="checkbox"
+                        className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300"
+                      />
+                    </div>
+                    <div className="ml-3 text-sm">
+                      <label htmlFor="remember" className="text-gray-500 ">
+                        Remember me
+                      </label>
+                    </div>
+                  </div>
+                  <a
+                    href="#"
+                    className="text-sm font-medium text-green-600 hover:underline"
+                  >
+                    Forgot password?
+                  </a>
+                </div>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center">
+                      <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
+                    </span>
+                  ) : (
+                    "Sign In"
+                  )}
+                </button>
+                <p className="text-sm font-light text-gray-500">
+                  Don’t have an account yet?{" "}
+                  <Link
+                    to="/signup"
+                    className="font-medium text-green-600 hover:underline"
+                  >
+                    Sign up
+                  </Link>
+                </p>
+              </form>
             </div>
           </div>
         </section>
@@ -234,14 +233,23 @@ function Login() {
         {/* Right Side */}
         <div className="hidden sm:flex justify-center items-center">
           <div className="h-screen w-full  relative">
-            <img src={loginimg} alt="Farmer" className="h-full w-full object-cover rounded-lg"   style={{ borderRadius: '20px' }}/>
+            <img
+              src={loginimg}
+              alt="Farmer"
+              className="h-[95vh] mt-4 mb-4 w-[105vh]  object-cover rounded-lg"
+              style={{ borderRadius: "15px" }}
+            />
             <div className="absolute bottom-6 left-4 right-4 bg-white bg-opacity-20 p-4 rounded-b-lg backdrop-filter backdrop-blur-md">
-              <p className="text-white text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris diam tellus, euismod sit amet est et, tempus semper diam. Etiam condimentum lectus ut leo cursus scelerisque. Nullam sed bibendum orci. Phasellus in lacinia neque. Aliquam volutpat elit nibh, non luctus enim aliquam vel. Etiam eu volutpat nunc. Integer aliquam metus ac nisl imperdiet lobortis.</p>
+            <h1 className="text-white text-lg font-bold">Helping you grow</h1>
+              <p className="text-white text-sm">
+                Dive Back into Agricultural Excellence! Unlock New Growth
+                Opportunities and Effortlessly Navigate Your Farm's Success with
+                acre
+              </p>
             </div>
           </div>
         </div>
       </div>
-    
     </div>
   );
 }

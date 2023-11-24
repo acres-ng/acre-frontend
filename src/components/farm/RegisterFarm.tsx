@@ -3,8 +3,9 @@ import house from "../../assets/farm-house.png";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
+import logo from "../../assets/logo.png";
 import location from "../../assets/farm-location.png";
+import anim from "../../assets/anim.png";
 import selection from "../../assets/selection.png";
 import Navbar from "../common/Navbar";
 import { addFarm } from "@/services/farmService";
@@ -137,10 +138,19 @@ const RegisterFarm = () => {
 
   return (
     <div className="bg-[#eaf8f2] h-full">
-      <Navbar />
-      <div className="grid grid-cols-2">
-        <section className="space-y-10">
-          <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+
+       <div>
+            <img
+              src={logo}
+              alt="acre logo"
+              className="absolute left-4 top-0 w-[120px]  flex flex-col md:mx-40"
+            />
+          </div>
+     
+      <div className="grid grid-cols-1 sm:grid-cols-2">
+
+        <section className="">
+          <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto h-screen lg:py-0">
             <div className="w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0">
               <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                 <div className="">
@@ -400,20 +410,47 @@ const RegisterFarm = () => {
             </div>
           </div>
         </section>
-        <div className="flex justify-center items-center">
+
+        {/* Right */}
+        <div className="">
           {step === 1 ? (
-            <div>
-              <iframe width="500" height="600"  scrolling="no"  src="https://maps.google.com/maps?width=500&amp;height=600&amp;hl=en&amp;q=33a,%20Beecroft%20Street,%20Lagos%20Island,%20Lagos,%20Nigeria.+(Acre)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/population/">Calculate population in area</a></iframe>
+            <div className="hidden sm:flex justify-center items-center fixed top-0 right-0 bottom-0">
+            <div className="h-screen w-full  relative">
+              <img
+                src={anim}
+                alt="Farmer"
+                className="h-full w-[100vh] object-cover rounded-lg"
+                style={{ borderRadius: '20px' }}
+              />
+            
             </div>
+          </div>
           ) : step === 2 ? (
-            <img src={location} alt="" className="h-[500px] object-contain" />
+            <div className="hidden sm:flex justify-center items-center">
+            <div className="h-screen w-full  relative">
+            <iframe   className="h-[95vh] mt-4 mb-4 w-[105vh]  object-cover rounded-lg" style={{ borderRadius: '15px' }}  src="https://maps.google.com/maps?width=500&amp;height=600&amp;hl=en&amp;q=33a,%20Beecroft%20Street,%20Lagos%20Island,%20Lagos,%20Nigeria.+(Acre)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/population/">Calculate population in area</a></iframe>
+              
+            </div>
+          </div>
           ) : (
-            <img src={selection} alt="" className="h-[500px] object-contain" />
+            <div className="hidden sm:flex justify-center items-center fixed top-0 right-0 bottom-0">
+            <div className="h-screen w-full  relative">
+              <img
+                src={selection}
+                alt="Farmer"
+                className="h-full w-[100vh] object-cover rounded-lg"
+                style={{ borderRadius: '20px' }}
+              />
+           
+            </div>
+          </div>
           )}
         </div>
       </div>
+
     </div>
   );
 };
+
 
 export default RegisterFarm;

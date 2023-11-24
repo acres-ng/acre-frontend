@@ -1,9 +1,11 @@
 import React, { useState, useEffect, FormEvent } from "react";
-import anim from "../../assets/anim.png";
+import otpimg from "../../assets/otpimg.png";
+import mail from "../../assets/mail.png";
 import { sendOtp, verifyOtp } from "@/services/userService";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import OtpInput from "react-otp-input";
+import logo from "../../assets/logo.png";
 import Navbar from "../common/Navbar";
 import { getCurrentUser, getOTP } from "@/services/authService";
 
@@ -150,7 +152,14 @@ const Otp = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#eaf8f2]">
+    <div className=" h-screen overflow-hidden bg-[#eaf8f2]">
+      <div>
+        <img
+          src={logo}
+          alt="acre logo"
+          className="absolute left-4 top-0 w-[120px]  flex flex-col md:mx-40"
+        />
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2">
         {/* Left Side */}
         <section className="">
@@ -161,14 +170,17 @@ const Otp = () => {
                   className="rounded px-8 pt-6 pb-8 mb-4"
                   onSubmit={handleSubmit}
                 >
-                  <div className="mb-4 text-center">
-                    <p className="text-xl font-bold py-5">
+                  <div className="text-center">
+                    <div className="flex justify-center mt-[5rem] items-center">
+                      <img src={mail} alt="tick" className="" />
+                    </div>
+                    <p className="text-xl font-bold py-3">
                       Verify your{" "}
                       {customerContactType === "phone"
                         ? "phone number"
                         : "Email"}
                     </p>
-                    <p className="text-gray-500 text-sm">
+                    <p className="text-gray-500 text-sm py-3">
                       Please check and enter the 6 digit code we just sent to
                       your{" "}
                       {customerContactType === "phone"
@@ -197,7 +209,7 @@ const Otp = () => {
                       renderInput={(props) => <input {...props} />}
                     />
                   </div>
-                  <div className="mb-6 text-center text-gray-500 text-xs">
+                  <div className="mb-4 text-center text-gray-500 text-xs">
                     {customerContact && showTimer && (
                       <p className="py-5">
                         Didn't receive any code? Resend code in{" "}
@@ -211,7 +223,7 @@ const Otp = () => {
                     )}
                     {showResendButton && (
                       <p
-                        className={`py-5 cursor-pointer ${
+                        className={`pb-3 cursor-pointer ${
                           loading ? "opacity-50" : ""
                         }`}
                         onClick={() => handleResend()}
@@ -220,10 +232,11 @@ const Otp = () => {
                       </p>
                     )}
                     <button
-                     type="submit"
-                     onClick={customerContact}
-                      className="bg-green-500 cursor-pointer hover-bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline " >
-                       Continue
+                      type="submit"
+                      onClick={customerContact}
+                      className="bg-green-500 cursor-pointer hover-bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline "
+                    >
+                      Continue
                     </button>
                   </div>
                 </form>
@@ -235,9 +248,22 @@ const Otp = () => {
         {/* Right Side */}
         <div className="hidden sm:flex justify-center items-center">
           <div className="h-screen w-full  relative">
-            <img src={anim} alt="Farmer" className="h-full w-full object-cover rounded-lg" />
+            <img
+              src={otpimg}
+              alt="Farmer"
+              style={{ borderRadius: "15px" }}
+              className="h-[95vh] mt-4 mb-4 w-[105vh]  object-cover rounded-lg"
+            />
             <div className="absolute bottom-6 left-4 right-4 bg-white bg-opacity-20 p-4 rounded-b-lg backdrop-filter backdrop-blur-md">
-              <p className="text-white text-sm">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris diam tellus, euismod sit amet est et, tempus semper diam. Etiam condimentum lectus ut leo cursus scelerisque. Nullam sed bibendum orci. Phasellus in lacinia neque. Aliquam volutpat elit nibh, non luctus enim aliquam vel. Etiam eu volutpat nunc. Integer aliquam metus ac nisl imperdiet lobortis.</p>
+              <h1 className="text-white text-lg font-bold">
+                Cultivate Success With Acre
+              </h1>
+              <p className="text-white text-sm">
+                Transform your farming experience with our intuitive livestock
+                and crop management app. Track your farm activities, cultivate
+                crops, raise livestock, and craft feeds/rations for maximum
+                productivity!
+              </p>
             </div>
           </div>
         </div>
