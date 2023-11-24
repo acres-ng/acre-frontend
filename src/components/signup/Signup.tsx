@@ -64,9 +64,14 @@ const Signup = () => {
   } = useForm<TSignUpSchema>({ resolver: zodResolver(signUpSchema) });
 
   const onSubmit = async (values: FieldValues) => {
-
-    if (!hasEightCharacters || !hasOneNumber || !hasSpecialCharacter || !hasUpperCase || !hasLowerCase) {
-      toast.error('Please complete the password requirements.');
+    if (
+      !hasEightCharacters ||
+      !hasOneNumber ||
+      !hasSpecialCharacter ||
+      !hasUpperCase ||
+      !hasLowerCase
+    ) {
+      toast.error("Please complete the password requirements.");
       return; // Stop submission if criteria are not met
     }
     const cleanedPhoneNumber = values.phone.replace(/\s+/g, "");
@@ -135,19 +140,17 @@ const Signup = () => {
   };
 
   return (
-    <div className=" bg-[#eaf8f2]">
-        <div>
-            <img
-              src={logo}
-              alt="acre logo"
-              className="absolute left-4 top-0 w-[120px]  flex flex-col md:mx-40"
-            />
-          </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2">
-    
+    <div className=" bg-[#eaf8f2] lg:min-h-screen min-h-[110vh]  ">
+      <div>
+        <img
+          src={logo}
+          alt="acre logo"
+          className="absolute left-4 top-0 w-[120px]  flex flex-col md:mx-40"
+        />
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 ">
         {/* Left Side */}
         <section className=" flex mt-12 flex-col justify-center items-center px-6 py-8 mx-auto lg:py-0">
-          
           <div className="w-full rounded-lg sm:max-w-md xl:p-0">
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -256,7 +259,6 @@ const Signup = () => {
                     name="password"
                     id="password"
                     onChange={handlePasswordChange}
-               
                     // placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
@@ -382,7 +384,7 @@ const Signup = () => {
                     "Create account"
                   )}
                 </button>
-                <div className="flex items-center justify-center dark:bg-gray-800">
+                {/* <div className="flex items-center justify-center dark:bg-gray-800">
                   <button className="px-4 py-2 border flex gap-2 w-full border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150 items-center justify-center">
                     <span className="flex items-center justify-center">
                       <img
@@ -394,36 +396,41 @@ const Signup = () => {
                       <span>Login with reg</span>
                     </span>
                   </button>
-                </div>
+                </div> */}
               </form>
             </div>
           </div>
         </section>
 
         {/* Right Side */}
-        <div className="hidden sm:flex justify-center items-center fixed top-0 right-0 bottom-0">
-          <div className="h-screen w-full  relative">
-            <img
-              src={regimg}
-              alt="Farmer"
-              className="h-full w-[100vh] object-cover border-4 rounded-lg"
-              style={{ borderRadius: '20px' }}
-            />
-            <div className="absolute bottom-6 left-4 right-4 bg-white bg-opacity-20 p-4 rounded-b-lg backdrop-filter backdrop-blur-md">
-              <p className="text-white text-sm">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris
-                diam tellus, euismod sit amet est et, tempus semper diam. Etiam
-                condimentum lectus ut leo cursus scelerisque. Nullam sed
-                bibendum orci. Phasellus in lacinia neque. Aliquam volutpat elit
-                nibh, non luctus enim aliquam vel. Etiam eu volutpat nunc.
-                Integer aliquam metus ac nisl imperdiet lobortis.
-              </p>
-            </div>
-          </div>
-        </div>
+        <div className="hidden md:flex sm:hidden relative">
+  <div className="h-screen w-full relative">
+    <div className="relative">
+      <img
+        src={regimg}
+        alt="Farmer"
+        className="h-[95vh] w-[105vh] fixed mt-4 mb-4 object-cover rounded-lg"
+        style={{ borderRadius: "20px" }}
+      />
+      <div className="fixed w-[45%] bottom-6 right-6 bg-white bg-opacity-20 p-4 rounded-b-lg backdrop-filter backdrop-blur-md">
+        <h1 className="text-white text-lg font-bold">Cultivate Success With Acre</h1>
+        <p className="text-white text-sm ">
+          Transform your farming experience with our intuitive livestock and crop
+          management app. Track your farm activities, cultivate crops, raise
+          livestock, and craft feeds/rations for maximum productivity!
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
       </div>
     </div>
   );
 };
 
 export default Signup;
+
+
+
