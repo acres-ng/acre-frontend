@@ -108,7 +108,7 @@ function Login() {
         <img
           src={logo}
           alt="acre logo"
-          className="absolute left-4 top-0 w-[120px]  flex flex-col md:mx-40"
+          className="absolute left-4 top-0 w-[120px]  flex flex-col md:ml-5 lg:mr-28 xl:mx-28"
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 ">
@@ -231,16 +231,16 @@ function Login() {
         </section>
 
         {/* Right Side */}
-        <div className="hidden sm:flex justify-center items-center">
-          <div className="h-screen w-full  relative">
+        <div className="hidden h-screen sm:flex justify-center items-center">
+          <div className=" mt-4 mb-4 w-full  relative">
             <img
               src={loginimg}
               alt="Farmer"
-              className="h-[95vh] mt-4 mb-4 w-[105vh]  object-cover rounded-lg"
-              style={{ borderRadius: "15px" }}
+              className="h-[97vh] w-[49vw]  object-cover rounded-lg"
+              style={{ borderRadius: "20px" }}
             />
-            <div className="absolute bottom-6 left-4 right-4 bg-white bg-opacity-20 p-4 rounded-b-lg backdrop-filter backdrop-blur-md">
-            <h1 className="text-white text-lg font-bold">Helping you grow</h1>
+            <div className="w-[45vw] absolute bottom-4 left-6 right-4 bg-white bg-opacity-20 p-4 rounded-lg backdrop-filter backdrop-blur-md">
+              <h1 className="text-white text-lg font-bold">Helping you grow</h1>
               <p className="text-white text-sm">
                 Dive Back into Agricultural Excellence! Unlock New Growth
                 Opportunities and Effortlessly Navigate Your Farm's Success with

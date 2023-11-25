@@ -108,7 +108,7 @@ const RegisterFarm = () => {
 
   const renderProgressIndicator = () => {
     return (
-      <div className="text-left mb-4">
+      <div className="text-left mt-14">
         <div className="text-gray-600 dark:text-gray-400 pt-5">
           Step {step} of 3
         </div>
@@ -143,7 +143,7 @@ const RegisterFarm = () => {
             <img
               src={logo}
               alt="acre logo"
-              className="absolute left-4 top-0 w-[120px]  flex flex-col md:mx-40"
+              className="absolute left-4 top-0 w-[120px]  flex flex-col md:ml-5 lg:mr-28 xl:mx-28"
             />
           </div>
      
@@ -204,7 +204,7 @@ const RegisterFarm = () => {
 
                       {step === 2 && (
                         <>
-                          <div className="my-10">
+                          <div className="mt-14">
                             <div className="my-5">
                               <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl">
                                 Where is your farm located?
@@ -414,24 +414,33 @@ const RegisterFarm = () => {
         {/* Right */}
         <div className="">
           {step === 1 ? (
-            <div className="hidden sm:flex justify-center items-center fixed top-0 right-0 bottom-0">
-            <div className="h-screen w-full  relative">
-              <img
-                src={anim}
-                alt="Farmer"
-                className="h-full w-[100vh] object-cover rounded-lg"
-                style={{ borderRadius: '20px' }}
-              />
-            
-            </div>
-          </div>
+           <div className="hidden h-screen sm:flex justify-center items-center">
+           <div className=" mt-4 mb-4 w-full  relative">
+             <img
+               src={anim}
+               alt="Farmer"
+               className="h-[97vh] w-[49vw]  object-cover rounded-lg"
+               style={{ borderRadius: "20px" }}
+             />
+             <div className="w-[45vw] absolute bottom-4 left-6 right-4 bg-white bg-opacity-20 p-4 rounded-lg backdrop-filter backdrop-blur-md">
+               <h1 className="text-white text-lg font-bold">Helping you grow</h1>
+               <p className="text-white text-sm">
+                 Dive Back into Agricultural Excellence! Unlock New Growth
+                 Opportunities and Effortlessly Navigate Your Farm's Success with
+                 acre
+               </p>
+             </div>
+           </div>
+         </div>
           ) : step === 2 ? (
-            <div className="hidden sm:flex justify-center items-center">
-            <div className="h-screen w-full  relative">
-            <iframe   className="h-[95vh] mt-4 mb-4 w-[105vh]  object-cover rounded-lg" style={{ borderRadius: '15px' }}  src="https://maps.google.com/maps?width=500&amp;height=600&amp;hl=en&amp;q=33a,%20Beecroft%20Street,%20Lagos%20Island,%20Lagos,%20Nigeria.+(Acre)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/population/">Calculate population in area</a></iframe>
-              
-            </div>
-          </div>
+           
+
+<div className="hidden h-screen sm:flex justify-center items-center">
+<div className=" mt-4 mb-4 w-full  relative">
+<iframe  className="h-[97vh] w-[49vw]  object-cover rounded-lg" style={{ borderRadius: '15px' }}  src="https://maps.google.com/maps?width=500&amp;height=600&amp;hl=en&amp;q=33a,%20Beecroft%20Street,%20Lagos%20Island,%20Lagos,%20Nigeria.+(Acre)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/population/">Calculate population in area</a></iframe>
+
+</div>
+</div>
           ) : (
             <div className="hidden sm:flex justify-center items-center fixed top-0 right-0 bottom-0">
             <div className="h-screen w-full  relative">
