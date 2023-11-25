@@ -140,12 +140,12 @@ const Signup = () => {
   };
 
   return (
-    <div className=" bg-[#eaf8f2] lg:min-h-screen min-h-[110vh]  ">
+    <div className=" bg-[#eaf8f2] lg:min-h-screen min-h-[110vh]">
       <div>
         <img
           src={logo}
           alt="acre logo"
-          className="absolute left-4 top-0 w-[120px]  flex flex-col md:mx-40"
+          className="absolute left-4 top-0 w-[120px]  flex flex-col md:ml-5 lg:mr-28 xl:mx-28"
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 ">
@@ -403,16 +403,16 @@ const Signup = () => {
         </section>
 
         {/* Right Side */}
-        <div className="hidden md:flex sm:hidden relative">
-  <div className="h-screen w-full relative">
-    <div className="relative">
+        <div className="h-screen hidden md:flex sm:hidden relative">
+  <div className=" w-full relative">
+    <div className="relative  ">
       <img
         src={regimg}
         alt="Farmer"
-        className="h-[95vh] w-[105vh] fixed mt-4 mb-4 object-cover rounded-lg"
+        className=" fixed h-[97vh] w-[49vw] mt-[10px] object-cover rounded-lg"
         style={{ borderRadius: "20px" }}
       />
-      <div className="fixed w-[45%] bottom-6 right-6 bg-white bg-opacity-20 p-4 rounded-b-lg backdrop-filter backdrop-blur-md">
+      <div className="fixed w-[45%] bottom-6 right-9 bg-white bg-opacity-20 p-4 rounded-lg backdrop-filter backdrop-blur-md">
         <h1 className="text-white text-lg font-bold">Cultivate Success With Acre</h1>
         <p className="text-white text-sm ">
           Transform your farming experience with our intuitive livestock and crop
