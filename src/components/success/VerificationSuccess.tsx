@@ -3,12 +3,13 @@ import success from "../../assets/successimg.png";
 import tick from "../../assets/Tick.png";
 import Navbar from "../common/Navbar";
 import logo from "../../assets/logo.png";
+import { backgroundColours } from "@/lib/enums";
 
 const VerificationSuccess = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="bg-[#eaf8f2]  h-screen overflow-hidden">
+    <div className={`bg-[${backgroundColours.bgColour2}]  h-screen overflow-hidden`}>
        <div>
         <img
           src={logo}
