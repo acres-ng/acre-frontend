@@ -213,7 +213,7 @@ function Login() {
                       <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
                     </span>
                   ) : (
-                    "Sign In"
+                    "Log In"
                   )}
                 </button>
                 <p className="text-sm font-light text-gray-500">

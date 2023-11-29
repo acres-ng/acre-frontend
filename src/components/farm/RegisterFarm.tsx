@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import house from "../../assets/farm-house.png";
+
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import logo from "../../assets/logo.png";
-import location from "../../assets/farm-location.png";
-import anim from "../../assets/anim.png";
-import selection from "../../assets/selection.png";
-import Navbar from "../common/Navbar";
+
+import anim from "../../assets/create.png";
+import selection from "../../assets/pref.png";
+
 import { addFarm } from "@/services/farmService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -138,17 +138,15 @@ const RegisterFarm = () => {
 
   return (
     <div className="bg-[#eaf8f2] h-full">
+      <div>
+        <img
+          src={logo}
+          alt="acre logo"
+          className="absolute left-4 top-0 w-[120px]  flex flex-col md:ml-5 lg:mr-28 xl:mx-28"
+        />
+      </div>
 
-       <div>
-            <img
-              src={logo}
-              alt="acre logo"
-              className="absolute left-4 top-0 w-[120px]  flex flex-col md:ml-5 lg:mr-28 xl:mx-28"
-            />
-          </div>
-     
       <div className="grid grid-cols-1 sm:grid-cols-2">
-
         <section className="">
           <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto h-screen lg:py-0">
             <div className="w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0">
@@ -396,7 +394,9 @@ const RegisterFarm = () => {
                             <button
                               className="bg-green-500  w-full hover:bg-green-700 text-white  py-2 rounded-lg focus:outline-none focus:shadow-outline"
                               type="submit"
-                              onClick={() => navigate("/dashboard", { replace: true })}
+                              onClick={() =>
+                                navigate("/dashboard", { replace: true })
+                              }
                             >
                               Continue
                             </button>
@@ -414,52 +414,66 @@ const RegisterFarm = () => {
         {/* Right */}
         <div className="">
           {step === 1 ? (
-           <div className="hidden h-screen sm:flex justify-center items-center">
-           <div className=" mt-4 mb-4 w-full  relative">
-             <img
-               src={anim}
-               alt="Farmer"
-               className="h-[97vh] w-[49vw]  object-cover rounded-lg"
-               style={{ borderRadius: "20px" }}
-             />
-             <div className="w-[45vw] absolute bottom-4 left-6 right-4 bg-white bg-opacity-20 p-4 rounded-lg backdrop-filter backdrop-blur-md">
-               <h1 className="text-white text-lg font-bold">Helping you grow</h1>
-               <p className="text-white text-sm">
-                 Dive Back into Agricultural Excellence! Unlock New Growth
-                 Opportunities and Effortlessly Navigate Your Farm's Success with
-                 acre
-               </p>
-             </div>
-           </div>
-         </div>
-          ) : step === 2 ? (
-           
-
-<div className="hidden h-screen sm:flex justify-center items-center">
-<div className=" mt-4 mb-4 w-full  relative">
-<iframe  className="h-[97vh] w-[49vw]  object-cover rounded-lg" style={{ borderRadius: '15px' }}  src="https://maps.google.com/maps?width=500&amp;height=600&amp;hl=en&amp;q=33a,%20Beecroft%20Street,%20Lagos%20Island,%20Lagos,%20Nigeria.+(Acre)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/population/">Calculate population in area</a></iframe>
-
-</div>
-</div>
-          ) : (
-            <div className="hidden sm:flex justify-center items-center fixed top-0 right-0 bottom-0">
-            <div className="h-screen w-full  relative">
-              <img
-                src={selection}
-                alt="Farmer"
-                className="h-full w-[100vh] object-cover rounded-lg"
-                style={{ borderRadius: '20px' }}
-              />
-           
+            <div className="hidden h-screen sm:flex justify-center items-center">
+              <div className=" mt-4 mb-4 w-full  relative">
+                <img
+                  src={anim}
+                  alt="Farmer"
+                  className="h-[97vh] w-[49vw]  object-cover rounded-lg"
+                  style={{ borderRadius: "20px" }}
+                />
+                <div className="w-[45vw] absolute bottom-4 left-6 right-4 bg-white bg-opacity-20 p-4 rounded-lg backdrop-filter backdrop-blur-md">
+                  <h1 className="text-white text-lg font-bold">
+                    Helping you grow
+                  </h1>
+                  <p className="text-white text-sm">
+                    Dive Back into Agricultural Excellence! Unlock New Growth
+                    Opportunities and Effortlessly Navigate Your Farm's Success
+                    with acre
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
+          ) : step === 2 ? (
+            <div className="hidden h-screen sm:flex justify-center items-center">
+              <div className=" mt-4 mb-4 w-full  relative">
+                <iframe
+                  className="h-[97vh] w-[49vw]  object-cover rounded-lg"
+                  style={{ borderRadius: "15px" }}
+                  src="https://maps.google.com/maps?width=500&amp;height=600&amp;hl=en&amp;q=33a,%20Beecroft%20Street,%20Lagos%20Island,%20Lagos,%20Nigeria.+(Acre)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
+                >
+                  <a href="https://www.maps.ie/population/">
+                    Calculate population in area
+                  </a>
+                </iframe>
+              </div>
+            </div>
+          ) : (
+            <div className="hidden h-screen sm:flex justify-center items-center">
+              <div className=" mt-4 mb-4 w-full  relative">
+                <img
+                  src={selection}
+                  alt="Farmer"
+                  className="h-[97vh] w-[49vw]  object-cover rounded-lg"
+                  style={{ borderRadius: "20px" }}
+                />
+                <div className="w-[45vw] absolute bottom-4 left-6 right-4 bg-white bg-opacity-20 p-4 rounded-lg backdrop-filter backdrop-blur-md">
+                  <h1 className="text-white text-lg font-bold">
+                    Helping you grow
+                  </h1>
+                  <p className="text-white text-sm">
+                    Dive Back into Agricultural Excellence! Unlock New Growth
+                    Opportunities and Effortlessly Navigate Your Farm's Success
+                    with acre
+                  </p>
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </div>
-
     </div>
   );
 };
-
 
 export default RegisterFarm;
