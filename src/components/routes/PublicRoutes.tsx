@@ -6,6 +6,7 @@ import Otp from "../otp/Otp";
 import VerificationSuccess from "../success/VerificationSuccess";
 import RegisterFarm from "../farm/RegisterFarm";
 import Logout from "../logout/Logout";
+import Map from '../farm/Map'
 
 const PublicRoutes = () => {
   return (
@@ -18,6 +19,7 @@ const PublicRoutes = () => {
       <Route path="/success" element={<VerificationSuccess />} />
       <Route path="/add-farm" element={<RegisterFarm />} />
       <Route path="*" element={<Login />} />
+      <Route path="/map" element={<Map/>} />
       
     </Routes>
   );
