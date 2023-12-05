@@ -38,7 +38,7 @@ const step1Schema = z.object({
 });
 
 const step2Schema = z.object({
-  line_address1: z.string().min(1, "Enter a valid address"),
+  line_address1: z.string().min(1, "Enter a line address"),
   line_address2: z.string().optional(),
   country: z.string().min(1, "Enter a valid country"),
   state: z.string().min(1, "Enter a valid state"),
@@ -61,6 +61,32 @@ interface LatLng {
 const center: LatLng = { lat: 48.8584, lng: 2.2945 };
 
 const RegisterFarm = () => {
+  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
+
+
+  // Function to initialize Autocomplete
+  const onLoad = (autocomplete: google.maps.places.Autocomplete) => {
+    setAutocomplete(autocomplete);
+  };
+
+  // Function to handle place selection
+  const onPlaceChanged = () => {
+   if (autocomplete !== null) {
+    const place = autocomplete.getPlace();
+    if (!place.geometry || !place.geometry.location || !map) {
+      return;
+    }
+
+      const location = place.geometry.location;
+      const newCenter = { lat: location.lat(), lng: location.lng() };
+
+      // Set new center on the map
+      map.panTo(newCenter);
+      map.setZoom(15);
+
+      // Do other things as needed with the place data
+    }
+  };
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyCdpkVg4cZmmIzFPVyyTO7TCPZrVybZjUo",
     libraries: ["places"],
@@ -123,6 +149,7 @@ const RegisterFarm = () => {
         ...step3Data,
         // ...stepData, // Include step3Data
       };
+      console.log("formdata>>", finalData);
       try {
         const { data } = await addFarm(finalData);
 
@@ -286,8 +313,7 @@ const RegisterFarm = () => {
                                 Enter your farm's line address
                               </p>
                             </div>
-                            
-                            
+
                             <div className="my-2">
                               <label
                                 htmlFor="line_address1"
@@ -295,22 +321,23 @@ const RegisterFarm = () => {
                               >
                                 Line Address 1
                               </label>
-                              <Autocomplete>
-                                <input
-                                  type="text"
-                                  id="line_address1"
-                                  {...register("line_address1", {
-                                    required: "Farm name is required",
-                                  })}
-                                  ref={originRef}
-                                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                                />
+                              <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
+                              <input
+                                type="text"
+                                id="line_address1"
+                                {...register("line_address1", {
+                                  required: "Line Address 1 is required",
+                                })}
+                                // ref={originRef}
+                                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                              />
                               </Autocomplete>
-                              {/* {errors.line_address1 && (
+
+                              {errors.line_address1 && (
                                 <p className="text-red-500 text-sm">
                                   {errors.line_address1.message?.toString()}
                                 </p>
-                              )} */}
+                              )}
                             </div>
 
                             <div className="my-2">
@@ -320,41 +347,24 @@ const RegisterFarm = () => {
                               >
                                 Line Address 2
                               </label>
-                              <Autocomplete>
-                                <input
-                                  {...register("line_address2")}
-                                  ref={destinationRef}
-                                  type="text"
-                                  id="line_address2"
-                                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                                />
-                              </Autocomplete>
+
+                              <input
+                                {...register("line_address2")}
+                                // ref={destinationRef}
+                                type="text"
+                                id="line_address2"
+                                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                              />
+
                               {/* {errors.address2 && (
                                 <p className="text-red-500 text-sm">
                                   {errors.address2.message?.toString()}
                                 </p>
                               )} */}
                             </div>
-                            <ButtonGroup>
-                              <Button
-                                colorScheme="green"
-                                type="submit"
-                                onClick={calculateRoute}
-                                className="bg-green-500"
-                              >
-                                Calculate Route
-                              </Button>
-
-                              <IconButton
-                                aria-label="center back"
-                                icon={<FaTimes />}
-                                onClick={clearRoute}
-                              />
-                            </ButtonGroup>
-                            
-
                            
-                            <HStack
+
+                            {/* <HStack
                               spacing={4}
                               mt={4}
                               justifyContent="space-between"
@@ -372,7 +382,7 @@ const RegisterFarm = () => {
                                   }
                                 }}
                               />
-                            </HStack>
+                            </HStack> */}
 
                             <div className="flex flex-row gap-5 w-full">
                               <div className="w-full">
@@ -383,9 +393,9 @@ const RegisterFarm = () => {
                                   Country
                                 </label>
                                 <select
-                                  // {...register("country", {
-                                  //   required: "Country is required",
-                                  // })}
+                                  {...register("country", {
+                                    required: "Country is required",
+                                  })}
                                   id="country"
                                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                 >
@@ -433,7 +443,7 @@ const RegisterFarm = () => {
 
                               <button
                                 className="bg-green-500 my-2 w-full hover:bg-green-700 text-white  py-2 rounded-lg focus:outline-none focus:shadow-outline"
-                                type="submit"  onClick={nextStep}
+                                type="submit"
                               >
                                 Continue
                               </button>
@@ -515,9 +525,6 @@ const RegisterFarm = () => {
                             <button
                               className="bg-green-500  w-full hover:bg-green-700 text-white  py-2 rounded-lg focus:outline-none focus:shadow-outline"
                               type="submit"
-                              onClick={() =>
-                                navigate("/dashboard", { replace: true })
-                              }
                             >
                               Continue
                             </button>

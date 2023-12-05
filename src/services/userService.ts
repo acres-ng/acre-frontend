@@ -18,6 +18,8 @@ export function verifyOtp(data: Verify) {
 
 export function sendOtp(data: any) {
   return http.post(API_URL + "auth/send_otp", data);
+
+  
 }
 
 export default {
