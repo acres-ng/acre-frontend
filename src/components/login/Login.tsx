@@ -12,6 +12,7 @@ import { encryptData } from "@/lib/encrypt";
 import logo from "../../assets/logo.png";
 import useAuth from "../context/useAuth";
 import AuthContext from "../context/authContext";
+import { backgroundColours } from "@/lib/enums";
 
 interface User {
   login: string;
@@ -91,7 +92,7 @@ function Login() {
   };
 
   return (
-    <div className=" h-screen overflow-hidden bg-[#eaf8f2]">
+    <div className={` h-screen overflow-hidden bg-[${backgroundColours.bgColour2}]`}>
       <div>
         <img
           src={logo}

@@ -17,6 +17,7 @@ import { setCurrentUser } from "@/services/authService";
 import { BiSolidLock } from "react-icons/bi";
 import { IoCheckbox } from "react-icons/io5";
 
+
 const signUpSchema = z
   .object({
     firstname: z.string().min(1, "Enter a valid name"),
@@ -148,7 +149,7 @@ const Signup = () => {
   };
 
   return (
-    <div className=" bg-[#eaf8f2] lg:min-h-screen min-h-[110vh]">
+    <div className={` bg-[${backgroundColours.bgColour2}] lg:min-h-screen min-h-[110vh]  `}>
       <div>
         <img
           src={logo}
