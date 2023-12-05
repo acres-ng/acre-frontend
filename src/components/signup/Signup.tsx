@@ -16,6 +16,7 @@ import logo from "../../assets/logo.png";
 import { setCurrentUser } from "@/services/authService";
 import { BiSolidLock } from "react-icons/bi";
 import { IoCheckbox } from "react-icons/io5";
+import { backgroundColours } from "@/lib/enums";
 
 
 const signUpSchema = z
