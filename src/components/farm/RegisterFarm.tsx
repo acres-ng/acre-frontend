@@ -1,24 +1,44 @@
-import { useEffect, useState } from "react";
-import house from "../../assets/farm-house.png";
+import { useEffect, useState, useRef } from "react";
+
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import logo from "../../assets/logo.png";
-import location from "../../assets/farm-location.png";
-import anim from "../../assets/anim.png";
-import selection from "../../assets/selection.png";
-import Navbar from "../common/Navbar";
+
+import anim from "../../assets/create.png";
+import selection from "../../assets/pref.png";
+import Map from "./Map";
 import { addFarm } from "@/services/farmService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import authService from "@/services/authService";
+
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Grid,
+  HStack,
+  IconButton,
+  Input,
+  SkeletonText,
+  Text,
+} from "@chakra-ui/react";
+import { FaLocationArrow, FaTimes } from "react-icons/fa";
+import {
+  useJsApiLoader,
+  GoogleMap,
+  Marker,
+  Autocomplete,
+  DirectionsRenderer,
+} from "@react-google-maps/api";
 
 const step1Schema = z.object({
   farm_name: z.string().nonempty({ message: "Enter a valid farm name" }),
 });
 
 const step2Schema = z.object({
-  line_address1: z.string().min(1, "Enter a valid address"),
+  line_address1: z.string().min(1, "Enter a line address"),
   line_address2: z.string().optional(),
   country: z.string().min(1, "Enter a valid country"),
   state: z.string().min(1, "Enter a valid state"),
@@ -33,7 +53,45 @@ type TStep1Schema = z.infer<typeof step1Schema>;
 type TStep2Schema = z.infer<typeof step2Schema>;
 type TStep3Schema = z.infer<typeof step3Schema>;
 
+interface LatLng {
+  lat: number;
+  lng: number;
+}
+
+const center: LatLng = { lat: 48.8584, lng: 2.2945 };
+
 const RegisterFarm = () => {
+  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
+
+
+  // Function to initialize Autocomplete
+  const onLoad = (autocomplete: google.maps.places.Autocomplete) => {
+    setAutocomplete(autocomplete);
+  };
+
+  // Function to handle place selection
+  const onPlaceChanged = () => {
+   if (autocomplete !== null) {
+    const place = autocomplete.getPlace();
+    if (!place.geometry || !place.geometry.location || !map) {
+      return;
+    }
+
+      const location = place.geometry.location;
+      const newCenter = { lat: location.lat(), lng: location.lng() };
+
+      // Set new center on the map
+      map.panTo(newCenter);
+      map.setZoom(15);
+
+      // Do other things as needed with the place data
+    }
+  };
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: "AIzaSyCdpkVg4cZmmIzFPVyyTO7TCPZrVybZjUo",
+    libraries: ["places"],
+  });
+
   const [step, setStep] = useState(1);
   const [step1Data, setStep1Data] = useState({});
   const [step2Data, setStep2Data] = useState({});
@@ -91,6 +149,7 @@ const RegisterFarm = () => {
         ...step3Data,
         // ...stepData, // Include step3Data
       };
+      console.log("formdata>>", finalData);
       try {
         const { data } = await addFarm(finalData);
 
@@ -135,20 +194,60 @@ const RegisterFarm = () => {
       </div>
     );
   };
+  const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [directionsResponse, setDirectionsResponse] =
+    useState<google.maps.DirectionsResult | null>(null);
+  const [distance, setDistance] = useState<string>("");
+  const [duration, setDuration] = useState<string>("");
+
+  const originRef = useRef<HTMLInputElement>(null);
+  const destinationRef = useRef<HTMLInputElement>(null);
+
+  if (!isLoaded) {
+    return <SkeletonText />;
+  }
+
+  async function calculateRoute() {
+    if (
+      !originRef.current ||
+      !destinationRef.current ||
+      originRef.current.value === "" ||
+      destinationRef.current.value === ""
+    ) {
+      return;
+    }
+
+    const directionsService = new google.maps.DirectionsService();
+    const results = await directionsService.route({
+      origin: originRef.current.value,
+      destination: destinationRef.current.value,
+      travelMode: google.maps.TravelMode.DRIVING,
+    });
+
+    setDirectionsResponse(results);
+    setDistance(results.routes[0].legs[0].distance?.text || "");
+    setDuration(results.routes[0].legs[0].duration?.text || "");
+  }
+
+  function clearRoute() {
+    setDirectionsResponse(null);
+    setDistance("");
+    setDuration("");
+    if (originRef.current) originRef.current.value = "";
+    if (destinationRef.current) destinationRef.current.value = "";
+  }
 
   return (
     <div className="bg-[#eaf8f2] h-full">
+      <div>
+        <img
+          src={logo}
+          alt="acre logo"
+          className="absolute left-4 top-0 w-[120px]  flex flex-col md:ml-5 lg:mr-28 xl:mx-28"
+        />
+      </div>
 
-       <div>
-            <img
-              src={logo}
-              alt="acre logo"
-              className="absolute left-4 top-0 w-[120px]  flex flex-col md:ml-5 lg:mr-28 xl:mx-28"
-            />
-          </div>
-     
       <div className="grid grid-cols-1 sm:grid-cols-2">
-
         <section className="">
           <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto h-screen lg:py-0">
             <div className="w-full rounded-lg md:mt-0 sm:max-w-md xl:p-0">
@@ -199,6 +298,7 @@ const RegisterFarm = () => {
                           >
                             Continue
                           </button>
+                          {/* <Map /> */}
                         </>
                       )}
 
@@ -213,6 +313,7 @@ const RegisterFarm = () => {
                                 Enter your farm's line address
                               </p>
                             </div>
+
                             <div className="my-2">
                               <label
                                 htmlFor="line_address1"
@@ -220,14 +321,18 @@ const RegisterFarm = () => {
                               >
                                 Line Address 1
                               </label>
+                              <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
                               <input
                                 type="text"
                                 id="line_address1"
                                 {...register("line_address1", {
-                                  required: "Farm name is required",
+                                  required: "Line Address 1 is required",
                                 })}
+                                // ref={originRef}
                                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               />
+                              </Autocomplete>
+
                               {errors.line_address1 && (
                                 <p className="text-red-500 text-sm">
                                   {errors.line_address1.message?.toString()}
@@ -242,18 +347,42 @@ const RegisterFarm = () => {
                               >
                                 Line Address 2
                               </label>
+
                               <input
                                 {...register("line_address2")}
+                                // ref={destinationRef}
                                 type="text"
                                 id="line_address2"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                               />
+
                               {/* {errors.address2 && (
                                 <p className="text-red-500 text-sm">
                                   {errors.address2.message?.toString()}
                                 </p>
                               )} */}
                             </div>
+                           
+
+                            {/* <HStack
+                              spacing={4}
+                              mt={4}
+                              justifyContent="space-between"
+                            >
+                              <Text>Distance: {distance} </Text>
+                              <Text>Duration: {duration} </Text>
+                              <IconButton
+                                aria-label="center back"
+                                icon={<FaLocationArrow />}
+                                isRound
+                                onClick={() => {
+                                  if (map) {
+                                    map.panTo(center);
+                                    map.setZoom(15);
+                                  }
+                                }}
+                              />
+                            </HStack> */}
 
                             <div className="flex flex-row gap-5 w-full">
                               <div className="w-full">
@@ -273,11 +402,11 @@ const RegisterFarm = () => {
                                   <option value="">Select a country</option>
                                   <option value="Nigeria">Nigeria</option>
                                 </select>
-                                {errors.country && (
+                                {/* {errors.country && (
                                   <p className="text-red-500 text-sm">
                                     {errors.country.message?.toString()}
                                   </p>
-                                )}
+                                )} */}
                               </div>
 
                               <div className="w-full">
@@ -296,11 +425,11 @@ const RegisterFarm = () => {
                                   <option value="Adamawa">Adamawa</option>
                                   {/* Add more options for different countries as needed */}
                                 </select>
-                                {errors.state && (
+                                {/* {errors.state && (
                                   <p className="text-red-500 text-sm">
                                     {errors.state.message?.toString()}
                                   </p>
-                                )}
+                                )} */}
                               </div>
                             </div>
 
@@ -396,7 +525,6 @@ const RegisterFarm = () => {
                             <button
                               className="bg-green-500  w-full hover:bg-green-700 text-white  py-2 rounded-lg focus:outline-none focus:shadow-outline"
                               type="submit"
-                              onClick={() => navigate("/dashboard", { replace: true })}
                             >
                               Continue
                             </button>
@@ -414,52 +542,103 @@ const RegisterFarm = () => {
         {/* Right */}
         <div className="">
           {step === 1 ? (
-           <div className="hidden h-screen sm:flex justify-center items-center">
-           <div className=" mt-4 mb-4 w-full  relative">
-             <img
-               src={anim}
-               alt="Farmer"
-               className="h-[97vh] w-[49vw]  object-cover rounded-lg"
-               style={{ borderRadius: "20px" }}
-             />
-             <div className="w-[45vw] absolute bottom-4 left-6 right-4 bg-white bg-opacity-20 p-4 rounded-lg backdrop-filter backdrop-blur-md">
-               <h1 className="text-white text-lg font-bold">Helping you grow</h1>
-               <p className="text-white text-sm">
-                 Dive Back into Agricultural Excellence! Unlock New Growth
-                 Opportunities and Effortlessly Navigate Your Farm's Success with
-                 acre
-               </p>
-             </div>
-           </div>
-         </div>
-          ) : step === 2 ? (
-           
-
-<div className="hidden h-screen sm:flex justify-center items-center">
-<div className=" mt-4 mb-4 w-full  relative">
-<iframe  className="h-[97vh] w-[49vw]  object-cover rounded-lg" style={{ borderRadius: '15px' }}  src="https://maps.google.com/maps?width=500&amp;height=600&amp;hl=en&amp;q=33a,%20Beecroft%20Street,%20Lagos%20Island,%20Lagos,%20Nigeria.+(Acre)&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"><a href="https://www.maps.ie/population/">Calculate population in area</a></iframe>
-
-</div>
-</div>
-          ) : (
-            <div className="hidden sm:flex justify-center items-center fixed top-0 right-0 bottom-0">
-            <div className="h-screen w-full  relative">
-              <img
-                src={selection}
-                alt="Farmer"
-                className="h-full w-[100vh] object-cover rounded-lg"
-                style={{ borderRadius: '20px' }}
-              />
-           
+            <div className="hidden h-screen sm:flex justify-center items-center">
+              <div className=" mt-4 mb-4 w-full  relative">
+                <img
+                  src={anim}
+                  alt="Farmer"
+                  className="h-[97vh] w-[49vw]  object-cover rounded-lg"
+                  style={{ borderRadius: "20px" }}
+                />
+                <div className="w-[45vw] absolute bottom-4 left-6 right-4 bg-white bg-opacity-20 p-4 rounded-lg backdrop-filter backdrop-blur-md">
+                  <h1 className="text-white text-lg font-bold">
+                    Helping you grow
+                  </h1>
+                  <p className="text-white text-sm">
+                    Dive Back into Agricultural Excellence! Unlock New Growth
+                    Opportunities and Effortlessly Navigate Your Farm's Success
+                    with acre
+                  </p>
+                </div>
+              </div>
             </div>
-          </div>
+          ) : step === 2 ? (
+            <div className="hidden h-screen sm:flex justify-center items-center">
+              <div className=" mt-4 mb-4 w-full  relative">
+                <div className="h-[97vh] w-[49vw] object-cover rounded-lg">
+                  {/* Right side: Google Map Box */}
+                  <Grid templateColumns="1fr" h="100vh">
+                    <Box position="relative">
+                      <Box
+                        position="absolute"
+                        left={0}
+                        top={0}
+                        h="100%"
+                        w="100%"
+                      >
+                        <Box
+                          position="absolute"
+                          left={0}
+                          top={0}
+                          h="100%"
+                          w="100%"
+                        >
+                          {/* Google Map Box */}
+                          <GoogleMap
+                            center={center}
+                            zoom={15}
+                            mapContainerStyle={{
+                              width: "100%",
+                              height: "100%",
+                            }}
+                            options={{
+                              zoomControl: false,
+                              streetViewControl: false,
+                              mapTypeControl: false,
+                              fullscreenControl: false,
+                            }}
+                            onLoad={(map) => setMap(map as google.maps.Map)}
+                          >
+                            <Marker position={center} />
+                            {directionsResponse && (
+                              <DirectionsRenderer
+                                directions={directionsResponse}
+                              />
+                            )}
+                          </GoogleMap>
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Grid>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="hidden h-screen sm:flex justify-center items-center">
+              <div className=" mt-4 mb-4 w-full  relative">
+                <img
+                  src={selection}
+                  alt="Farmer"
+                  className="h-[97vh] w-[49vw]  object-cover rounded-lg"
+                  style={{ borderRadius: "20px" }}
+                />
+                <div className="w-[45vw] absolute bottom-4 left-6 right-4 bg-white bg-opacity-20 p-4 rounded-lg backdrop-filter backdrop-blur-md">
+                  <h1 className="text-white text-lg font-bold">
+                    Helping you grow
+                  </h1>
+                  <p className="text-white text-sm">
+                    Dive Back into Agricultural Excellence! Unlock New Growth
+                    Opportunities and Effortlessly Navigate Your Farm's Success
+                    with acre
+                  </p>
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </div>
-
     </div>
   );
 };
-
 
 export default RegisterFarm;

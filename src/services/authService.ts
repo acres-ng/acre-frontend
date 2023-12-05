@@ -1,6 +1,7 @@
 import { API_URL } from "@/config";
 import http from "./HttpService";
 import jwtDecode from "jwt-decode";
+import { boolean } from "zod";
 
 interface User {
   login: string;

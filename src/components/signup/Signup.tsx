@@ -16,8 +16,7 @@ import logo from "../../assets/logo.png";
 import { setCurrentUser } from "@/services/authService";
 import { BiSolidLock } from "react-icons/bi";
 import { IoCheckbox } from "react-icons/io5";
-import { useFormik } from "formik";
-import { backgroundColours } from "@/lib/enums";
+
 
 const signUpSchema = z
   .object({
@@ -39,6 +38,7 @@ type TSignUpSchema = z.infer<typeof signUpSchema>;
 
 const Signup = () => {
   const [serverError, setServerError] = useState<string | null>(null);
+  const [termsChecked, setTermsChecked] = useState(false); // State for checkbox
 
   const navigate = useNavigate();
 
@@ -65,6 +65,13 @@ const Signup = () => {
   } = useForm<TSignUpSchema>({ resolver: zodResolver(signUpSchema) });
 
   const onSubmit = async (values: FieldValues) => {
+    if (!termsChecked) {
+      toast.error(
+        "Please confirm that you've read the terms before signing up."
+      );
+      return; // Stop submission if terms are not checked
+    }
+
     if (
       !hasEightCharacters ||
       !hasOneNumber ||
@@ -89,25 +96,26 @@ const Signup = () => {
         setCurrentUser(data.data.customer);
         navigate(`/otp`, { replace: true });
       } else {
-        setServerError(
-          "An error occurred during registration, please try again."
-        ); // Handle other server errors
+        throw new Error("Registration failed."); // Throw an error for generic server error
       }
     } catch (error: any) {
-      toast.error(error?.response?.data?.message);
+      console.error("Error:", error); // Log the error object for debugging
+
+      let errorMessage = "An error occurred during registration.";
+
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        errorMessage = error.response.data.message;
+      }
+
+      // Ensure 'toast' from 'sonner' is correctly imported and initialized
+      toast.error(errorMessage);
+      setServerError(errorMessage); // Update serverError state to display error message
     }
   };
-
-  const formik = useFormik({
-    initialValues: {
-      fullName: "",
-      password: "",
-      email: "",
-    },
-    onSubmit: (values) => {
-      console.log("Form values:", values);
-    },
-  });
 
   // states for mananging validation
   const [hasEightCharacters, setHasEightCharacters] = useState(false);
@@ -137,7 +145,7 @@ const Signup = () => {
 
     // has eight characters
     setHasEightCharacters(value.length >= 8 ? true : false);
-    formik.setFieldValue("password", value);
+    setValue("password", value);
   };
 
   return (
@@ -205,6 +213,7 @@ const Signup = () => {
                     defaultCountry="NG"
                     countryCallingCodeEditable={false}
                     country="NG"
+                    
                     international
                     withCountryCallingCode
                     className="border appearance-none text-gray-700 bg-gray-50 border-gray-200 rounded py-2 px-1  focus:outline-none"
@@ -224,7 +233,7 @@ const Signup = () => {
                   </label>
                   <input
                     {...register("email", {
-                      required: "Email is required",
+                      // required: "Email is required",
                       pattern: {
                         value: /\S+@\S+\.\S+/,
                         message: "Enter a valid email address",
@@ -238,8 +247,8 @@ const Signup = () => {
                     <p className="text-red-500 text-sm">
                       {errors.email.message}
                     </p>
-                  )}
-                </div>
+                  )} 
+                </div> 
                 <div>
                   <label
                     htmlFor="password"
@@ -264,7 +273,7 @@ const Signup = () => {
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
                   <div>
-                    {formik.values.password.length > 0 && (
+                    {getValues()?.password?.length > 0 && (
                       <div>
                         <div
                           className={`flex flex-row gap-x-3 items-center my-2 ${
@@ -313,6 +322,7 @@ const Signup = () => {
                       </div>
                     )}
                   </div>
+
                   {errors.password && (
                     <p className="text-red-500 text-sm">
                       {errors.password.message}
@@ -352,16 +362,15 @@ const Signup = () => {
                       aria-describedby="terms"
                       type="checkbox"
                       className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                      onChange={(e) => setTermsChecked(e.target.checked)}
+                      checked={termsChecked} // Add checked attribute to sync with state
                     />
                   </div>
                   <div className="ml-3 text-sm">
-                    <label
-                      htmlFor="terms"
-                      className="font-light text-gray-500 "
-                    >
+                    <label htmlFor="terms" className="font-light text-gray-500">
                       I agree to the{" "}
                       <a
-                        className="font-medium text-gray-600 hover:underline "
+                        className="font-medium text-gray-600 hover:underline"
                         href="#"
                       >
                         <span className="text-green-500">
@@ -372,9 +381,10 @@ const Signup = () => {
                     </label>
                   </div>
                 </div>
+
                 <button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !termsChecked} // Disable button if terms are not checked
                   className="w-full text-white bg-green-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
                 >
                   {isSubmitting ? (
@@ -385,6 +395,15 @@ const Signup = () => {
                     "Create account"
                   )}
                 </button>
+                <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+                  Already have an account?{" "}
+                  <Link
+                    to="/login"
+                    className="font-medium text-green-600 hover:underline dark:text-primary-500"
+                  >
+                    Login
+                  </Link>
+                </p>
                 {/* <div className="flex items-center justify-center dark:bg-gray-800">
                   <button className="px-4 py-2 border flex gap-2 w-full border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150 items-center justify-center">
                     <span className="flex items-center justify-center">
@@ -405,33 +424,31 @@ const Signup = () => {
 
         {/* Right Side */}
         <div className="h-screen hidden md:flex sm:hidden relative">
-  <div className=" w-full relative">
-    <div className="relative  ">
-      <img
-        src={regimg}
-        alt="Farmer"
-        className=" fixed h-[97vh] w-[49vw] mt-[10px] object-cover rounded-lg"
-        style={{ borderRadius: "20px" }}
-      />
-      <div className="fixed w-[45%] bottom-6 right-9 bg-white bg-opacity-20 p-4 rounded-lg backdrop-filter backdrop-blur-md">
-        <h1 className="text-white text-lg font-bold">Cultivate Success With Acre</h1>
-        <p className="text-white text-sm ">
-          Transform your farming experience with our intuitive livestock and crop
-          management app. Track your farm activities, cultivate crops, raise
-          livestock, and craft feeds/rations for maximum productivity!
-        </p>
-      </div>
-    </div>
-  </div>
-</div>
-
-
+          <div className=" w-full relative">
+            <div className="relative  ">
+              <img
+                src={regimg}
+                alt="Farmer"
+                className=" fixed h-[97vh] w-[49vw] mt-[10px] object-cover rounded-lg"
+                style={{ borderRadius: "20px" }}
+              />
+              <div className="fixed w-[45%] bottom-6 right-9 bg-white bg-opacity-20 p-4 rounded-lg backdrop-filter backdrop-blur-md">
+                <h1 className="text-white text-lg font-bold">
+                  Cultivate Success With Acre
+                </h1>
+                <p className="text-white text-sm ">
+                  Transform your farming experience with our intuitive livestock
+                  and crop management app. Track your farm activities, cultivate
+                  crops, raise livestock, and craft feeds/rations for maximum
+                  productivity!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
 
 export default Signup;
-
-
-

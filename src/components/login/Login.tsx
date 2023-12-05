@@ -1,4 +1,4 @@
-import authService from "@/services/authService";
+import authService, { setCurrentUser } from "@/services/authService";
 import { sendOtp, verifyOtp } from "@/services/userService";
 import React, { FormEvent, useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
@@ -75,28 +75,16 @@ function Login() {
       ) {
         if (response.data?.farms.length >= 1) {
           const loginUser = authService.getCurrentUser();
-          console.log("Here");
           if (loginUser) {
             authContext.setUser(loginUser);
             navigate("/");
           }
         } else {
-          console.log("Else");
           navigate("/add-farm");
         }
       } else {
-        if (response.data?.customer?.primary_contact === "email") {
-          navigate(
-            `/otp?contact=${response.data?.customer?.email}&t=${response.data?.customer?.primary_contact}`
-          );
-        } else {
-          navigate(
-            `/otp?contact=${response.data?.customer?.phone}&t=${response?.data?.customer?.primary_contact}`,
-            {
-              replace: true,
-            }
-          );
-        }
+        setCurrentUser(response.data?.customer);
+        navigate("/otp");
       }
     } catch (error: any) {
       toast.error(error?.response?.data?.message);
@@ -214,7 +202,7 @@ function Login() {
                       <span className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></span>
                     </span>
                   ) : (
-                    "Sign In"
+                    "Log In"
                   )}
                 </button>
                 <p className="text-sm font-light text-gray-500">

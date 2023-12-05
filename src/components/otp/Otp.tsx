@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import OtpInput from "react-otp-input";
 import logo from "../../assets/logo.png";
 import Navbar from "../common/Navbar";
+import { useLocation} from "react-router";
 import { getCurrentUser, getOTP } from "@/services/authService";
 
 const Otp = () => {
@@ -34,24 +35,41 @@ const Otp = () => {
   const customerContactType = currentUser?.primary_contact; // email or phone
   const customerContact = currentUser[customerContactType];
 
-  useEffect(() => {
-    const fetchOTP = async () => {
-      try {
-        setLoading(true);
-        const response = await getOTP({ contact: customerContact });
+  const location = useLocation();
+
+
+
+  const fetchOTP = async () => {
+    try {
+      setLoading(true);
+      const response = await getOTP({ contact: customerContact });
+      if (response?.data?.status === "success") {
         setTimer({
           minutes: Math.floor(response?.data / 60),
           seconds: response?.data % 60,
         });
         setShowResendButton(false);
         setShowTimer(true);
-      } catch (error: any) {
-        console.error("Error fetching OTP:", error);
-      } finally {
-        setLoading(false);
+          }
+          
+     
+    } catch (error: any) {
+      console.error("Error fetching OTP:", error);
+      const time = error?.response?.data?.data
+      if (!isNaN(time)) {
+        setTimer({
+          minutes: Math.floor(time / 60),
+          seconds: time % 60,
+        });
+        setShowResendButton(false);
+        setShowTimer(true);
       }
-    };
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     if (customerContact) {
       fetchOTP();
     }
@@ -59,13 +77,14 @@ const Otp = () => {
 
   useEffect(() => {
     let timerInterval: NodeJS.Timeout;
-
+  
     if (timer.minutes === 0 && timer.seconds === 0) {
       setShowResendButton(true);
       setShowTimer(false);
     } else {
       setShowResendButton(false);
-
+      setShowTimer(true);
+  
       timerInterval = setInterval(() => {
         setTimer((prevTimer) => {
           if (prevTimer.seconds === 0) {
@@ -79,11 +98,12 @@ const Otp = () => {
         });
       }, 1000);
     }
-
+  
     return () => {
       clearInterval(timerInterval);
     };
   }, [timer]);
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -129,7 +149,7 @@ const Otp = () => {
   const handleResend = async () => {
     try {
       setLoading(true);
-      const response = await sendOtp({ contact: customerContact });
+      const response = await getOTP({ contact: customerContact });
       if (response?.data?.status === "success") {
         toast.success(response.data.message);
         setTimer({
@@ -149,6 +169,7 @@ const Otp = () => {
     } finally {
       setLoading(false);
     }
+      await fetchOTP()
   };
 
   return (
@@ -210,35 +231,31 @@ const Otp = () => {
                     />
                   </div>
                   <div className="mb-4 text-center text-gray-500 text-xs">
-                    {customerContact && showTimer && (
-                      <p className="py-5">
-                        Didn't receive any code? Resend code in{" "}
-                        {`${timer.minutes
-                          .toString()
-                          .padStart(2, "0")}:${timer.seconds
-                          .toString()
-                          .padStart(2, "0")}`}{" "}
-                        minutes
-                      </p>
-                    )}
-                    {showResendButton && (
-                      <p
-                        className={`pb-3 cursor-pointer ${
-                          loading ? "opacity-50" : ""
-                        }`}
-                        onClick={() => handleResend()}
-                      >
-                        Resend code
-                      </p>
-                    )}
-                    <button
-                      type="submit"
-                      onClick={customerContact}
-                      className="bg-green-500 cursor-pointer hover-bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline "
-                    >
-                      Continue
-                    </button>
-                  </div>
+        {showTimer && customerContact && (
+          <p className="py-5">
+            Didn't receive any code? Resend code in{" "}
+            {`${timer.minutes.toString().padStart(2, "0")}:${timer.seconds
+              .toString()
+              .padStart(2, "0")}`}{" "}
+            minutes
+          </p>
+        )}
+        {showResendButton && (
+          <p
+            className={`pb-3 cursor-pointer ${loading ? "opacity-50" : ""}`}
+            onClick={() => handleResend()}
+          >
+            Resend code
+          </p>
+        )}
+        <button
+          type="submit"
+          onClick={customerContact}
+          className="bg-green-500 cursor-pointer hover-bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline"
+        >
+          Continue
+        </button>
+      </div>
                 </form>
               </div>
             </div>
