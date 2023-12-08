@@ -7,11 +7,13 @@ import VerificationSuccess from "../success/VerificationSuccess";
 import RegisterFarm from "../farm/RegisterFarm";
 import Logout from "../logout/Logout";
 import Map from '../farm/Map'
+import Dashboard from "../dashboard/Dashboard";
+import Layout from "../common/Layout";
 
 const PublicRoutes = () => {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route path="*" element={<Layout />} />
       <Route path="/login" element={<Login />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="/signup" element={<Signup />} />

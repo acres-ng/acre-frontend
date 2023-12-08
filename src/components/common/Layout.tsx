@@ -7,16 +7,18 @@ import RegisterFarm from "../farm/RegisterFarm";
 import Livestock from "../livestock/Livestock";
 import Add from "../livestock/Add";
 import LeftLayout from "./LeftLayout";
+// import Side from "./sidebar/layout";
 
 type Props = {
   children: React.ReactNode;
 };
 const Layout = () => {
   return (
-    <div className="hidden md:block">
+    <div className=" md:block">
       <div className="bg-white">
         <div className="grid lg:grid-cols-5">
-          <Sidebar />
+          {/* <Side/>   */}
+          <Sidebar/> 
           <main className="col-span-3 lg:border-l pt-5 bg-green-50 h-full">
             <Routes>
               <Route path="/">
