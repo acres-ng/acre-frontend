@@ -61,32 +61,63 @@ interface LatLng {
 const center: LatLng = { lat: 48.8584, lng: 2.2945 };
 
 const RegisterFarm = () => {
-  const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
-
+  const [autocomplete, setAutocomplete] =
+    useState<google.maps.places.Autocomplete | null>(null);
 
   // Function to initialize Autocomplete
   const onLoad = (autocomplete: google.maps.places.Autocomplete) => {
     setAutocomplete(autocomplete);
   };
 
-  // Function to handle place selection
+  const [formData, setFormData] = useState({
+    country: "",
+    state: "",
+  });
+
   const onPlaceChanged = () => {
-   if (autocomplete !== null) {
-    const place = autocomplete.getPlace();
-    if (!place.geometry || !place.geometry.location || !map) {
-      return;
-    }
+    if (autocomplete !== null) {
+      const place = autocomplete.getPlace();
+      if (!place.geometry || !place.geometry.location || !map) {
+        return;
+      }
 
       const location = place.geometry.location;
       const newCenter = { lat: location.lat(), lng: location.lng() };
+
+      const geocodeValue = `${location.lat()},${location.lng()}`;
+
+      // Update step2Data with the geocode value
+      setStep2Data({
+        ...step2Data,
+        geocode: geocodeValue,
+      });
 
       // Set new center on the map
       map.panTo(newCenter);
       map.setZoom(15);
 
-      // Do other things as needed with the place data
+      const addressComponents = place.address_components;
+      let updatedCountry = "";
+      let updatedState = "";
+
+      if (addressComponents) {
+        for (const component of addressComponents) {
+          if (component.types.includes("country")) {
+            updatedCountry = component.long_name;
+          } else if (component.types.includes("administrative_area_level_1")) {
+            updatedState = component.long_name;
+          }
+        }
+      }
+
+      // Update the state with the extracted country and state values
+      setFormData({
+        country: updatedCountry,
+        state: updatedState,
+      });
     }
   };
+
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: "AIzaSyCdpkVg4cZmmIzFPVyyTO7TCPZrVybZjUo",
     libraries: ["places"],
@@ -136,7 +167,7 @@ const RegisterFarm = () => {
       if (step === 1) {
         setStep1Data(stepData);
       } else if (step === 2) {
-        setStep2Data(stepData);
+        setStep2Data({ ...step2Data, ...stepData });
       } else if (step === 3) {
         setStep3Data(stepData);
       }
@@ -147,7 +178,6 @@ const RegisterFarm = () => {
         ...step1Data,
         ...step2Data,
         ...step3Data,
-        // ...stepData, // Include step3Data
       };
       console.log("formdata>>", finalData);
       try {
@@ -194,6 +224,7 @@ const RegisterFarm = () => {
       </div>
     );
   };
+
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [directionsResponse, setDirectionsResponse] =
     useState<google.maps.DirectionsResult | null>(null);
@@ -321,18 +352,19 @@ const RegisterFarm = () => {
                               >
                                 Line Address 1
                               </label>
-                              <Autocomplete onLoad={onLoad} onPlaceChanged={onPlaceChanged}>
-                              <input
-                                type="text"
-                                id="line_address1"
-                                {...register("line_address1", {
-                                  required: "Line Address 1 is required",
-                                })}
-                                // ref={originRef}
-                                className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                              />
+                              <Autocomplete
+                                onLoad={onLoad}
+                                onPlaceChanged={onPlaceChanged}
+                              >
+                                <input
+                                  type="text"
+                                  id="line_address1"
+                                  {...register("line_address1", {
+                                    required: "Line Address 1 is required",
+                                  })}
+                                  className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                                />
                               </Autocomplete>
-
                               {errors.line_address1 && (
                                 <p className="text-red-500 text-sm">
                                   {errors.line_address1.message?.toString()}
@@ -362,7 +394,6 @@ const RegisterFarm = () => {
                                 </p>
                               )} */}
                             </div>
-                           
 
                             {/* <HStack
                               spacing={4}
@@ -397,6 +428,13 @@ const RegisterFarm = () => {
                                     required: "Country is required",
                                   })}
                                   id="country"
+                                  value={formData.country}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      country: e.target.value,
+                                    })
+                                  }
                                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                 >
                                   <option value="">Select a country</option>
@@ -419,6 +457,13 @@ const RegisterFarm = () => {
                                 <select
                                   {...register("state")}
                                   id="state"
+                                  value={formData.state}
+                                  onChange={(e) =>
+                                    setFormData({
+                                      ...formData,
+                                      state: e.target.value,
+                                    })
+                                  }
                                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                 >
                                   <option value="">Select a state</option>
