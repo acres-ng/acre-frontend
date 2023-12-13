@@ -6,7 +6,7 @@ const Logout = () => {
   const navigate = useNavigate();
   useEffect(() => {
     authService.logout();
-    navigate("/", { replace: true });
+    navigate("/login", { replace: true });
   }, []);
 
   return null;

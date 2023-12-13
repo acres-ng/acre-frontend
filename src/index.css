@@ -57,3 +57,45 @@
     @apply bg-background text-foreground;
   }
 }
+
+.custom-scrollbar::-webkit-scrollbar,
+.rc-table-fixed-header .rc-table-body::-webkit-scrollbar {
+  @apply w-1.5 bg-transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track,
+.rc-table-content::-webkit-scrollbar-track,
+.rc-table-fixed-header .rc-table-body::-webkit-scrollbar-track {
+  @apply bg-transparent shadow-none;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb,
+.rc-table-content::-webkit-scrollbar-thumb,
+.rc-table-fixed-header .rc-table-body::-webkit-scrollbar-thumb {
+  @apply rounded-sm bg-transparent;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb,
+.rc-table-content:hover::-webkit-scrollbar-thumb,
+.rc-table-fixed-header .rc-table-body:hover::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-300;
+}
+
+.custom-scrollbar.scrollbar-no-auto-hide::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-300;
+}
+
+.custom-scrollbar-x::-webkit-scrollbar,
+.rc-table-content::-webkit-scrollbar,
+.rc-table-fixed-header .rc-table-body::-webkit-scrollbar {
+  @apply h-1.5;
+}
+
+.custom-scrollbar-none::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+.faded-button {
+  opacity: 0.5; 
+}
+

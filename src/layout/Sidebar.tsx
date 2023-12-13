@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
-import { ScrollArea } from "../ui/scroll-area";
+import { Button } from "../components/ui/button";
+import { ScrollArea } from "../components/ui/scroll-area";
 import logo from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 import authService, { getCurrentUser } from "@/services/authService";
@@ -12,8 +12,9 @@ export default function Sidebar({ className }: SidebarProps) {
 
   const handleLogout = () => {
     authService.logout();
-    window.location.reload();
+    window.location.replace("/login");
   };
+
   return (
     <div className={cn("pb-12", className)}>
       <div className="space-y-6 py-6">
@@ -64,6 +65,7 @@ export default function Sidebar({ className }: SidebarProps) {
                 </svg>
                 Livestock
               </Button>
+              
             </Link>
             <Button variant="ghost" className="w-full justify-start">
               <svg

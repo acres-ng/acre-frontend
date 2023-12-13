@@ -4,12 +4,12 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from "../components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 const LeftLayout = () => {
   return (
-    <div className="h-screen bg-white">
+    <div className="h-screen fixed bg-white">
       <div className=""></div>
       <div className="bg-green-50 rounded-lg shadow-sm  nmd py-8 m-2 p-3">
         <h3 className="text-lg font-bold leading-tight text-green-900 my-5">

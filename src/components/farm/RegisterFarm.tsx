@@ -1,16 +1,17 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import logo from "../../assets/logo.png";
-
+import { FaLocationDot } from "react-icons/fa6";
 import anim from "../../assets/create.png";
 import selection from "../../assets/pref.png";
-import Map from "./Map";
+
 import { addFarm } from "@/services/farmService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { setCurrentUser } from "@/services/authService";
 import authService from "@/services/authService";
 
 import {
@@ -32,9 +33,15 @@ import {
   Autocomplete,
   DirectionsRenderer,
 } from "@react-google-maps/api";
+import AuthContext from "../context/authContext";
 
 const step1Schema = z.object({
-  farm_name: z.string().nonempty({ message: "Enter a valid farm name" }),
+  farm_name: z
+    .string()
+    .nonempty({ message: "Enter a valid farm name" })
+    .refine((value) => !/\s/.test(value), {
+      message: "Farm name cannot contain whitespace",
+    }),
 });
 
 const step2Schema = z.object({
@@ -61,9 +68,11 @@ interface LatLng {
 const center: LatLng = { lat: 48.8584, lng: 2.2945 };
 
 const RegisterFarm = () => {
+  
+
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete | null>(null);
-
+  const authContext = useContext(AuthContext);
   // Function to initialize Autocomplete
   const onLoad = (autocomplete: google.maps.places.Autocomplete) => {
     setAutocomplete(autocomplete);
@@ -73,6 +82,9 @@ const RegisterFarm = () => {
     country: "",
     state: "",
   });
+
+  const [markerPosition, setMarkerPosition] = useState<LatLng | null>(null);
+  3;
 
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
@@ -85,6 +97,11 @@ const RegisterFarm = () => {
       const newCenter = { lat: location.lat(), lng: location.lng() };
 
       const geocodeValue = `${location.lat()},${location.lng()}`;
+      const latitude = place.geometry.location.lat();
+      const longitude = place.geometry.location.lng();
+
+      // Set marker position based on the entered address
+      setMarkerPosition({ lat: latitude, lng: longitude });
 
       // Update step2Data with the geocode value
       setStep2Data({
@@ -179,15 +196,25 @@ const RegisterFarm = () => {
         ...step2Data,
         ...step3Data,
       };
-      console.log("formdata>>", finalData);
       try {
         const { data } = await addFarm(finalData);
-
+        console.log("register>>>", data);
         if (data?.status === "success") {
+          const farmUser = authService.getCurrentUser();
+          const newUser = {
+            ...farmUser,
+            farms: [
+              {
+                id: data?.data?.id,
+                name: data?.data?.farm_name,
+              },
+            ],
+          };
+          authService.setCurrentUser(newUser);
+          authContext.setUser(newUser);
+          console.log("User>>", newUser);
           toast.success(data?.message);
-          navigate(`/login`, {
-            replace: true,
-          });
+          navigate("/");
         }
       } catch (error: any) {
         toast.error(error?.response?.data?.message);
@@ -226,10 +253,9 @@ const RegisterFarm = () => {
   };
 
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [directionsResponse, setDirectionsResponse] =
-    useState<google.maps.DirectionsResult | null>(null);
-  const [distance, setDistance] = useState<string>("");
-  const [duration, setDuration] = useState<string>("");
+  const [directionsResponse, setDirectionsResponse] = useState<google.maps.DirectionsResult | null>(null);
+  
+ 
 
   const originRef = useRef<HTMLInputElement>(null);
   const destinationRef = useRef<HTMLInputElement>(null);
@@ -256,17 +282,10 @@ const RegisterFarm = () => {
     });
 
     setDirectionsResponse(results);
-    setDistance(results.routes[0].legs[0].distance?.text || "");
-    setDuration(results.routes[0].legs[0].duration?.text || "");
+   
   }
 
-  function clearRoute() {
-    setDirectionsResponse(null);
-    setDistance("");
-    setDuration("");
-    if (originRef.current) originRef.current.value = "";
-    if (destinationRef.current) destinationRef.current.value = "";
-  }
+  
 
   return (
     <div className="bg-[#eaf8f2] h-full">
@@ -311,9 +330,14 @@ const RegisterFarm = () => {
                             <input
                               {...register("farm_name", {
                                 required: "Farm name is required",
+                                pattern: {
+                                  value: /^\S+$/,
+                                  message:
+                                    "Farm name cannot contain whitespace",
+                                },
                               })}
                               id="name"
-                              type="farm_name"
+                              type="text"
                               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             />
                             {errors.farm_name && (
@@ -427,7 +451,7 @@ const RegisterFarm = () => {
                                   {...register("country", {
                                     required: "Country is required",
                                   })}
-                                  id="country"
+                                  id="getCountry"
                                   value={formData.country}
                                   onChange={(e) =>
                                     setFormData({
@@ -456,7 +480,7 @@ const RegisterFarm = () => {
                                 </label>
                                 <select
                                   {...register("state")}
-                                  id="state"
+                                  id="getState"
                                   value={formData.state}
                                   onChange={(e) =>
                                     setFormData({
@@ -468,7 +492,8 @@ const RegisterFarm = () => {
                                 >
                                   <option value="">Select a state</option>
                                   <option value="Adamawa">Adamawa</option>
-                                  {/* Add more options for different countries as needed */}
+                                  <option value="Lagos">Lagos</option>
+                                  {/*  Add more options for different countries as needed */}
                                 </select>
                                 {/* {errors.state && (
                                   <p className="text-red-500 text-sm">
@@ -523,7 +548,7 @@ const RegisterFarm = () => {
                               id="currency"
                               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5"
                             >
-                              <option value="">Select a currency</option>
+                              <option value="">NGN (Nigeria Naira)</option>
                               <option value="Nigeria">Nigeria</option>
                             </select>
                             {errors.currency && (
@@ -548,7 +573,7 @@ const RegisterFarm = () => {
                               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5"
                             >
                               <option value="">
-                                Select a measuring system
+                                Metric - (mg, g, kg, mm, ml, km)
                               </option>
                               <option value="grams">Grams</option>
                             </select>
@@ -644,7 +669,12 @@ const RegisterFarm = () => {
                             }}
                             onLoad={(map) => setMap(map as google.maps.Map)}
                           >
-                            <Marker position={center} />
+                            {markerPosition && (
+                              <Marker
+                                position={markerPosition}
+                               
+                              />
+                            )}
                             {directionsResponse && (
                               <DirectionsRenderer
                                 directions={directionsResponse}
