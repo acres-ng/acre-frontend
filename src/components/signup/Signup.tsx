@@ -18,12 +18,16 @@ import { BiSolidLock } from "react-icons/bi";
 import { IoCheckbox } from "react-icons/io5";
 import { backgroundColours } from "@/lib/enums";
 
-
 const signUpSchema = z
   .object({
     firstname: z.string().min(1, "Enter a valid name"),
     email: z.string().email("Email is required"),
-    password: z.string().min(8, "Password must be at least 8 characters long"),
+    password: z
+      .string()
+      .min(8, "Password must be at least 8 characters long")
+      .refine((password) => !/\s/.test(password), {
+        message: "Password should not contain whitespace",
+      }),
     confirmPassword: z.string().min(1, "Confirm Password is required"), // Make it required
     phone: z.string().refine(isValidPhoneNumber, {
       message: "Please enter a valid phone number",
@@ -83,6 +87,7 @@ const Signup = () => {
       toast.error("Please complete the password requirements.");
       return; // Stop submission if criteria are not met
     }
+
     const cleanedPhoneNumber = values.phone.replace(/\s+/g, "");
 
     const cleanedValues = {
@@ -91,10 +96,8 @@ const Signup = () => {
     };
 
     try {
-      const { data } = await userService.register(cleanedValues);
-
+      const data = await userService.register(cleanedValues);
       if (data?.status === "success") {
-        setCurrentUser(data.data.customer);
         navigate(`/otp`, { replace: true });
       } else {
         throw new Error("Registration failed."); // Throw an error for generic server error
@@ -124,9 +127,11 @@ const Signup = () => {
   const [hasUpperCase, setHasUpperCase] = useState(false);
   const [hasLowerCase, setHasLowerCase] = useState(false);
   const [hasOneNumber, setHasOneNumber] = useState(false);
+  const [hasWhitespace, setHasWhitespace] = useState(false);
 
   const handlePasswordChange = (e: any) => {
     const value = e.target.value;
+    const hasWhitespace = /\s/.test(value);
 
     // has special characters
     const hasSpecialCharacterTest = /[!@#$%^&*()_+{}\[\]:;<>,.?~\\]/;
@@ -144,13 +149,17 @@ const Signup = () => {
     const hasOneNumberTest = /\d+/;
     setHasOneNumber(hasOneNumberTest.test(value));
 
+    setHasWhitespace(hasWhitespace);
+
     // has eight characters
     setHasEightCharacters(value.length >= 8 ? true : false);
     setValue("password", value);
   };
 
   return (
-    <div className={` bg-[${backgroundColours.bgColour2}] lg:min-h-screen min-h-[110vh]  `}>
+    <div
+      className={` bg-[${backgroundColours.bgColour2}] lg:min-h-screen min-h-[110vh]  `}
+    >
       <div>
         <img
           src={logo}
@@ -214,7 +223,6 @@ const Signup = () => {
                     defaultCountry="NG"
                     countryCallingCodeEditable={false}
                     country="NG"
-                    
                     international
                     withCountryCallingCode
                     className="border appearance-none text-gray-700 bg-gray-50 border-gray-200 rounded py-2 px-1  focus:outline-none"
@@ -248,8 +256,8 @@ const Signup = () => {
                     <p className="text-red-500 text-sm">
                       {errors.email.message}
                     </p>
-                  )} 
-                </div> 
+                  )}
+                </div>
                 <div>
                   <label
                     htmlFor="password"
@@ -262,67 +270,77 @@ const Signup = () => {
                     {...register("password", {
                       required: "Password is required",
                       minLength: {
-                        value: 6,
-                        message: "Password must be at least 6 characters long",
+                        value: 8,
+                        message: "Password must be at least 8 characters long",
                       },
                     })}
                     type="password"
                     name="password"
                     id="password"
                     onChange={handlePasswordChange}
-                    // placeholder="••••••••"
                     className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   />
-                  <div>
-                    {getValues()?.password?.length > 0 && (
-                      <div>
+                  {getValues()?.password?.length > 0 && (
+                    <div>
+                      {hasWhitespace && (
                         <div
-                          className={`flex flex-row gap-x-3 items-center my-2 ${
-                            hasEightCharacters
-                              ? "text-green-600"
-                              : "text-gray-600"
-                          }`}
+                          className={`flex flex-row gap-x-3 items-center my-2 text-red-600`}
+                        >
+                          <IoCheckbox />
+                          <p>Password should not contain whitespace</p>
+                        </div>
+                      )}
+                      {!hasEightCharacters && (
+                        <div
+                          className={`flex flex-row gap-x-3 items-center my-2 text-gray-600`}
                         >
                           <IoCheckbox />
                           <p>At least 8 characters</p>
                         </div>
+                      )}
+                      {!hasOneNumber && (
                         <div
-                          className={`flex flex-row gap-x-3 items-center my-2 ${
-                            hasOneNumber ? "text-green-600" : "text-gray-600"
-                          }`}
+                          className={`flex flex-row gap-x-3 items-center my-2 text-gray-600`}
                         >
                           <IoCheckbox />
                           <p>Contains at least one number</p>
                         </div>
+                      )}
+                      {!hasSpecialCharacter && (
                         <div
-                          className={`flex flex-row gap-x-3 items-center my-2 ${
-                            hasSpecialCharacter
-                              ? "text-green-600"
-                              : "text-gray-600"
-                          }`}
+                          className={`flex flex-row gap-x-3 items-center my-2 text-gray-600`}
                         >
                           <IoCheckbox />
                           <p>Contains a special character</p>
                         </div>
+                      )}
+                      {!hasUpperCase && (
                         <div
-                          className={`flex flex-row gap-x-3 items-center my-2 ${
-                            hasUpperCase ? "text-green-600" : "text-gray-600"
-                          }`}
+                          className={`flex flex-row gap-x-3 items-center my-2 text-gray-600`}
                         >
                           <IoCheckbox />
                           <p>Contains uppercase letter</p>
                         </div>
+                      )}
+                      {!hasLowerCase && (
                         <div
-                          className={`flex flex-row gap-x-3 items-center my-2 ${
-                            hasLowerCase ? "text-green-600" : "text-gray-600"
-                          }`}
+                          className={`flex flex-row gap-x-3 items-center my-2 text-gray-600`}
                         >
                           <IoCheckbox />
                           <p>Contains lowercase letter</p>
                         </div>
-                      </div>
-                    )}
-                  </div>
+                      )}
+                      {hasEightCharacters &&
+                        hasOneNumber &&
+                        hasSpecialCharacter &&
+                        hasUpperCase &&
+                        hasLowerCase && (
+                          <p className="text-green-600 text-sm">
+                            Password meets all criteria
+                          </p>
+                        )}
+                    </div>
+                  )}
 
                   {errors.password && (
                     <p className="text-red-500 text-sm">
@@ -330,6 +348,7 @@ const Signup = () => {
                     </p>
                   )}
                 </div>
+
                 <div>
                   <label
                     htmlFor="confirm-password"
@@ -386,7 +405,9 @@ const Signup = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting || !termsChecked} // Disable button if terms are not checked
-                  className="w-full text-white bg-green-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center "
+                  className={`w-full text-white bg-green-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ${
+                    !termsChecked ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
                   {isSubmitting ? (
                     <span className="flex items-center">

@@ -5,7 +5,7 @@ import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { Separator } from "../ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import { BarChart, Calendar as CalendarIcon } from "lucide-react";
-import Sidebar from "../common/Sidebar";
+import Sidebar from "../../layout/Sidebar";
 import { Input } from "../ui/input";
 import {
   Select,
@@ -32,6 +32,9 @@ import { getFarmById } from "@/services/farmService";
 import { getCurrentUser } from "@/services/authService";
 import BarCharts from "../charts/BarCharts";
 import PieCharts from "../charts/PieCharts";
+import SearchWidget from "../search/search";
+// import Header from "../common/sidebar/header";
+
 
 type Farm = {
   id: string;
@@ -46,6 +49,7 @@ export default function Dashboard() {
   const [date, setDate] = useState<Date>();
   const [farms, setFarms] = useState<Farm>();
   const user = getCurrentUser();
+ console.log("user>>", user)
 
   useEffect(() => {
     const fetchFarms = async () => {
@@ -56,13 +60,17 @@ export default function Dashboard() {
   }, []);
 
   return (
+    <>
+    {/* <Header/> */}
     <div className="h-full px-4 py-6 lg:px-8">
       <div className="h-full space-y-6">
         <div className="space-between flex items-center">
           <div className="flex w-2/5">
-            <div className="flex w-full max-w-lg items-center space-x-2">
+            <SearchWidget/>
+            
+            {/* <div className="flex w-full max-w-lg items-center space-x-2">
               <Input type="text" placeholder="Search" />
-            </div>
+            </div> */}
           </div>
           <div className="flex ml-auto mr-4">
             <Select>
@@ -349,5 +357,7 @@ export default function Dashboard() {
         </div>
       </div>
     </div>
+    </>
+    
   );
 }

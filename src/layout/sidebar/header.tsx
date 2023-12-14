@@ -2,9 +2,6 @@
 // import { Link } from "react-router-dom";
 // import RingBellSolidIcon from './icons/ring-bell-solid';
 // import NotificationDropdown from '@/layouts/notification-dropdown';
-// import MessagesDropdown from '@/layouts/messages-dropdown';
-// import ChatSolidIcon from '@/components/icons/chat-solid';
-// import SettingsButton from '@/components/settings/settings-button';
 // import { ActionIcon } from 'rizzui';
 // import ProfileMenu from '@/layouts/profile-menu';
 // import { Badge } from 'rizzui';
@@ -29,28 +26,14 @@
   
 //   return (
 //     <div className="ms-auto grid shrink-0 grid-cols-4 items-center gap-2 text-gray-700 xs:gap-3 xl:gap-4">
-//       {/* <MessagesDropdown>
-//         <ActionIcon
-//           aria-label="Messages"
-//           variant="text"
-//           className="relative h-[34px] w-[34px] shadow backdrop-blur-md dark:bg-gray-100 md:h-9 md:w-9"
-//         >
-//           <ChatSolidIcon className="h-[18px] w-auto" />
-//           <Badge
-//             renderAsDot
-//             color="success"
-//             enableOutlineRing
-//             className="absolute right-2.5 top-2.5 -translate-y-1/3 translate-x-1/2"
-//           />
-//         </ActionIcon>
-//       </MessagesDropdown> */}
+//      <RingBellSolidIcon className="h-[18px] w-auto" />
 //       {/* <NotificationDropdown>
 //         <ActionIcon
 //           aria-label="Notification"
 //           variant="text"
 //           className="relative h-[34px] w-[34px] shadow backdrop-blur-md dark:bg-gray-100 md:h-9 md:w-9"
 //         >
-//           <RingBellSolidIcon className="h-[18px] w-auto" />
+          
 //           <Badge
 //             renderAsDot
 //             color="warning"
@@ -58,9 +41,9 @@
 //             className="absolute right-2.5 top-2.5 -translate-y-1/3 translate-x-1/2"
 //           />
 //         </ActionIcon>
-//       </NotificationDropdown> */}
-//       {/* <SettingsButton />
-//       <ProfileMenu /> */}
+//       </NotificationDropdown> 
+//       */}
+//       {/* <ProfileMenu /> */}
       
 //     </div>
 //   );
@@ -87,7 +70,7 @@
 //   return (
 //     <header
 //       className={cn(
-//         'sticky top-0 z-50 flex items-center bg-gray-0/80 px-4 py-4 backdrop-blur-xl dark:bg-gray-50/50 md:px-5 lg:px-6 2xl:py-5 3xl:px-8 4xl:px-10',
+//         'sticky top-0 z-50 flex items-center  px-4 py-4 backdrop-blur-xl dark:bg-gray-50/50 md:px-5 lg:px-6 2xl:py-5 3xl:px-8 4xl:px-10',
 //         ((isMounted && windowScroll.y) as number) > 2 ? 'card-shadow' : ''
 //       )}
 //     >
@@ -114,7 +97,8 @@
 //         >
 //           <img src={logo} alt="acre logo" className="h-10 w-auto" />
 //         </Link>
-//         {/* <SearchWidget /> */}
+//          {/* <SearchWidget /> */}
+        
 //       </div>
 //       {showSidebar && (
 //         <>

@@ -77,13 +77,12 @@ function Login() {
           const loginUser = authService.getCurrentUser();
           if (loginUser) {
             authContext.setUser(loginUser);
-            navigate("/");
           }
+          navigate("/");
         } else {
           navigate("/add-farm");
         }
       } else {
-        setCurrentUser(response.data?.customer);
         navigate("/otp");
       }
     } catch (error: any) {
@@ -92,7 +91,9 @@ function Login() {
   };
 
   return (
-    <div className={` h-screen overflow-hidden bg-[${backgroundColours.bgColour2}]`}>
+    <div
+      className={` h-screen overflow-hidden bg-[${backgroundColours.bgColour2}]`}
+    >
       <div>
         <img
           src={logo}

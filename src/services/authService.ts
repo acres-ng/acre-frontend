@@ -1,7 +1,5 @@
 import { API_URL } from "@/config";
 import http from "./HttpService";
-import jwtDecode from "jwt-decode";
-import { boolean } from "zod";
 
 interface User {
   login: string;
@@ -9,7 +7,7 @@ interface User {
   login_type: string;
 }
 
-interface Token {
+export interface Token {
   token: string;
   customer: {
     profile_id: string;
@@ -24,7 +22,7 @@ interface Token {
   }[];
 }
 
-const tokenKey: string = "user";
+export const tokenKey: string = "user";
 const apiUrl = API_URL + "auth/login";
 
 export function getJwt() {
@@ -38,9 +36,23 @@ export function getJwt() {
   }
 }
 
-http.setJwt(getJwt());
+// http.setJwt(getJwt());
 
 export async function login(user: User) {
+  const { data } = await http.post(apiUrl, user);
+  localStorage.setItem(
+    tokenKey,
+    JSON.stringify({
+      token: data?.data?.token,
+      customer: data?.data?.customer,
+      farms: data?.data?.farms || [],
+    })
+  );
+  http.setJwt(getJwt());
+  return data;
+}
+
+export async function farmUser(user: User) {
   const { data } = await http.post(apiUrl, user);
   localStorage.setItem(
     tokenKey,
@@ -67,17 +79,16 @@ export function getCurrentUser() {
   }
 }
 
-export function setCurrentUser(data:string) {
+export function setCurrentUser(data: any) {
   try {
     localStorage.setItem(tokenKey, JSON.stringify(data));
-
   } catch (error) {
     return null;
   }
 }
 
 // Example function to decode the JWT
-const decodeToken = (token: string) => {
+export const decodeToken = (token: string) => {
   try {
     const decoded = JSON.parse(atob(token.split(".")[1]));
     return decoded;
@@ -87,7 +98,7 @@ const decodeToken = (token: string) => {
   }
 };
 
-export async function getOTP(payload: { contact: string; }) {
+export async function getOTP(payload: { contact: string }) {
   const { data } = await http.post(`${API_URL}auth/send_otp`, payload);
   return data;
 }
@@ -99,6 +110,8 @@ export function logout() {
 export default {
   login,
   getJwt,
+  setCurrentUser,
   getCurrentUser,
+  farmUser,
   logout,
 };
