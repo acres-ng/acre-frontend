@@ -374,7 +374,7 @@ const RegisterFarm = () => {
                                 htmlFor="line_address1"
                                 className="block mb-2 text-sm font-medium text-gray-900 "
                               >
-                                Line Address 1
+                                What is the nearest landmark to your farm?
                               </label>
                               <Autocomplete
                                 onLoad={onLoad}
@@ -401,7 +401,7 @@ const RegisterFarm = () => {
                                 htmlFor="line_address2"
                                 className="block mb-2 text-sm font-medium text-gray-900 "
                               >
-                                Line Address 2
+                                What is your farm’s exact address?
                               </label>
 
                               <input
