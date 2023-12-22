@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, useContext } from "react";
-
+import { State } from "country-state-city";
+import { Country as CountryType } from "country-state-city";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,6 +36,11 @@ import {
 } from "@react-google-maps/api";
 import AuthContext from "../context/authContext";
 
+interface Option {
+  value: string;
+  displayValue: string;
+}
+
 const step1Schema = z.object({
   farm_name: z
     .string()
@@ -68,8 +74,6 @@ interface LatLng {
 const center: LatLng = { lat: 48.8584, lng: 2.2945 };
 
 const RegisterFarm = () => {
-  
-
   const [autocomplete, setAutocomplete] =
     useState<google.maps.places.Autocomplete | null>(null);
   const authContext = useContext(AuthContext);
@@ -82,6 +86,25 @@ const RegisterFarm = () => {
     country: "",
     state: "",
   });
+
+  const countryData: Option[] = CountryType.getAllCountries().map(
+    (country) => ({
+      value: country.name,
+      displayValue: `${country.name} - ${country.isoCode}`,
+    })
+  );
+
+  const getStateData = (countryCode: string) => {
+    const states = State.getStatesOfCountry(countryCode).map((state) => ({
+      value: state.name,
+      displayValue: `${state.name} - ${state.isoCode}`,
+    }));
+
+    return states;
+  };
+
+  const countryCode = "NG"; // Example country code for the United States
+  const stateData = getStateData(countryCode);
 
   const [markerPosition, setMarkerPosition] = useState<LatLng | null>(null);
   3;
@@ -135,11 +158,24 @@ const RegisterFarm = () => {
     }
   };
 
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyCdpkVg4cZmmIzFPVyyTO7TCPZrVybZjUo",
-    libraries: ["places"],
-  });
+  
 
+// const apiKey = process.env.REACT_APP_API_KEY;
+
+
+// const googleMapsApiKey = apiKey || '';
+
+
+// const { isLoaded } = useJsApiLoader({
+//   googleMapsApiKey,
+//   libraries: ["places"],
+// });
+const { isLoaded } = useJsApiLoader({
+  googleMapsApiKey: "AIzaSyCdpkVg4cZmmIzFPVyyTO7TCPZrVybZjUo",
+  libraries: ["places"],
+});
+
+  
   const [step, setStep] = useState(1);
   const [step1Data, setStep1Data] = useState({});
   const [step2Data, setStep2Data] = useState({});
@@ -253,9 +289,8 @@ const RegisterFarm = () => {
   };
 
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [directionsResponse, setDirectionsResponse] = useState<google.maps.DirectionsResult | null>(null);
-  
- 
+  const [directionsResponse, setDirectionsResponse] =
+    useState<google.maps.DirectionsResult | null>(null);
 
   const originRef = useRef<HTMLInputElement>(null);
   const destinationRef = useRef<HTMLInputElement>(null);
@@ -282,10 +317,7 @@ const RegisterFarm = () => {
     });
 
     setDirectionsResponse(results);
-   
   }
-
-  
 
   return (
     <div className="bg-[#eaf8f2] h-full">
@@ -374,7 +406,7 @@ const RegisterFarm = () => {
                                 htmlFor="line_address1"
                                 className="block mb-2 text-sm font-medium text-gray-900 "
                               >
-                                What is the nearest landmark to your farm?
+                                Line Address 1
                               </label>
                               <Autocomplete
                                 onLoad={onLoad}
@@ -401,7 +433,7 @@ const RegisterFarm = () => {
                                 htmlFor="line_address2"
                                 className="block mb-2 text-sm font-medium text-gray-900 "
                               >
-                                What is your farm’s exact address?
+                                Line Address 2
                               </label>
 
                               <input
@@ -461,9 +493,13 @@ const RegisterFarm = () => {
                                   }
                                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                 >
-                                  <option value="">Select a country</option>
-                                  <option value="Nigeria">Nigeria</option>
+                                  {countryData.map((option, index) => (
+                                    <option key={index} value={option.value}>
+                                      {option.displayValue}
+                                    </option>
+                                  ))}
                                 </select>
+
                                 {/* {errors.country && (
                                   <p className="text-red-500 text-sm">
                                     {errors.country.message?.toString()}
@@ -490,10 +526,11 @@ const RegisterFarm = () => {
                                   }
                                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                 >
-                                  <option value="">Select a state</option>
-                                  <option value="Adamawa">Adamawa</option>
-                                  <option value="Lagos">Lagos</option>
-                                  {/*  Add more options for different countries as needed */}
+                                   {stateData.map((option, index) => (
+                                    <option key={index} value={option.value}>
+                                      {option.displayValue}
+                                    </option>
+                                  ))}
                                 </select>
                                 {/* {errors.state && (
                                   <p className="text-red-500 text-sm">
@@ -670,10 +707,7 @@ const RegisterFarm = () => {
                             onLoad={(map) => setMap(map as google.maps.Map)}
                           >
                             {markerPosition && (
-                              <Marker
-                                position={markerPosition}
-                               
-                              />
+                              <Marker position={markerPosition} />
                             )}
                             {directionsResponse && (
                               <DirectionsRenderer
