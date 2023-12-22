@@ -19,9 +19,19 @@ import { IoCheckbox } from "react-icons/io5";
 import { backgroundColours } from "@/lib/enums";
 
 const signUpSchema = z
-  .object({
-    firstname: z.string().min(1, "Enter a valid name"),
-    email: z.string().email("Email is required"),
+.object({
+  firstname: z
+    .string()
+    .min(1, "Enter a valid name")
+    .refine((value) => !/\s/.test(value), {
+      message: "Name should not contain whitespace",
+    }),
+    email: z
+      .string()
+      .email("Enter a valid email address")
+      .refine((value) => !/\s/.test(value), {
+        message: "Email should not contain whitespace",
+      }),
     password: z
       .string()
       .min(8, "Password must be at least 8 characters long")
@@ -196,6 +206,11 @@ const Signup = () => {
                   <input
                     {...register("firstname", {
                       required: "Name is required",
+                      pattern: {
+                        value: /^\S+$/,
+                        message:
+                          " name cannot contain whitespace",
+                      },
                     })}
                     type="text"
                     name="firstname"
