@@ -1,4 +1,5 @@
 import { routes } from "./config/routes";
+
 import { DUMMY_ID } from "./config/constants";
 import { GrTransaction } from "react-icons/gr";
 import { GiCow } from "react-icons/gi";
@@ -47,19 +48,20 @@ export const menuItems = [
     dropdownItems: [
      
       {
-        name: "Edit Product",
-        href: routes.eCommerce.ediProduct(DUMMY_ID),
+        name: "All Livestock",
+        href: routes.livestock.dashboard,
+        
       },
       {
-        name: "Categories",
+        name: "Feeding",
         href: routes.eCommerce.categories,
       },
       {
-        name: "Create Category",
+        name: "Health",
         href: routes.eCommerce.createCategory,
       },
       {
-        name: "Edit Category",
+        name: "Housing",
         href: routes.eCommerce.editCategory(DUMMY_ID),
       },
     ],

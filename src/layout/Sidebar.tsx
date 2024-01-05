@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { Button } from "../components/ui/button";
 import { ScrollArea } from "../components/ui/scroll-area";
-import logo from "../../assets/logo.png";
+// import logo from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 import authService, { getCurrentUser } from "@/services/authService";
 
@@ -18,11 +18,11 @@ export default function Sidebar({ className }: SidebarProps) {
   return (
     <div className={cn("pb-12", className)}>
       <div className="space-y-6 py-6">
-        <div className="px-3 py-5">
+        <div className="px-1 py-5">
           <div className="pb-10">
-            <Link to={"/"}>
+            {/* <Link to={"/"}>
               <img src={logo} alt="acre logo" className="h-10 w-auto" />
-            </Link>
+            </Link> */}
           </div>
           <div className="space-y-1">
             <Link to={"/"} className="justify-start">

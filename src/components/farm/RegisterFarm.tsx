@@ -8,7 +8,7 @@ import logo from "../../assets/logo.png";
 import { FaLocationDot } from "react-icons/fa6";
 import anim from "../../assets/create.png";
 import selection from "../../assets/pref.png";
-
+import axios from "axios";
 import { addFarm } from "@/services/farmService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -105,9 +105,47 @@ const RegisterFarm = () => {
 
   const countryCode = "NG"; // Example country code for the United States
   const stateData = getStateData(countryCode);
-
   const [markerPosition, setMarkerPosition] = useState<LatLng | null>(null);
-  3;
+
+  
+
+  const fetchWeatherData = async (latitude: number, longitude: number) => {
+    const apiKey = "bd4a1fbaf5d51f9418c5e582e4b0fffa";
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
+  
+    try {
+      const response = await axios.get(apiUrl);
+      const weatherData = response.data;
+  
+      const temperature = weatherData.main.temp;
+      const windSpeed = weatherData.wind.speed;
+      const humidity = weatherData.main.humidity;
+      const rain = weatherData.rain ? weatherData.rain["1h"] : 0; // Rain in last hour (if available)
+      const pressure = weatherData.main.pressure;
+  
+      // Extracting time information
+      const timestamp = weatherData.dt * 1000; // Convert UNIX timestamp to milliseconds
+      const dateObject = new Date(timestamp);
+      const day = dateObject.toLocaleString("en-US", { weekday: "long" });
+      const date = dateObject.getDate();
+      const year = dateObject.getFullYear();
+  
+      console.log("Weather Information:");
+      console.log(`Temperature: ${temperature}°C`);
+      console.log(`Wind Speed: ${windSpeed} m/s`);
+      console.log(`Humidity: ${humidity}%`);
+      console.log(`Rain (last hour): ${rain} mm`);
+      console.log(`Pressure: ${pressure} hPa`);
+      console.log(`Day: ${day}`);
+      console.log(`Date: ${date}`);
+      console.log(`Year: ${year}`);
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+    }
+  };
+  
+  
+  
 
   const onPlaceChanged = () => {
     if (autocomplete !== null) {
@@ -122,6 +160,7 @@ const RegisterFarm = () => {
       const geocodeValue = `${location.lat()},${location.lng()}`;
       const latitude = place.geometry.location.lat();
       const longitude = place.geometry.location.lng();
+      fetchWeatherData(latitude, longitude);
 
       // Set marker position based on the entered address
       setMarkerPosition({ lat: latitude, lng: longitude });
@@ -156,6 +195,8 @@ const RegisterFarm = () => {
         state: updatedState,
       });
     }
+
+   
   };
 
   
