@@ -1,6 +1,9 @@
 // import { PlusCircledIcon } from "@radix-ui/react-icons"
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
+import Bar from "../charts/Bar"
+import Finance from "../charts/FinanceChart"
+import Pie from "../charts/Pie";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { Separator } from "../ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
@@ -89,6 +92,8 @@ export default function Dashboard() {
             </Select>
 
             <div className="flex flex-row gap-5 justify-center items-center">
+
+              
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -111,6 +116,8 @@ export default function Dashboard() {
                 />
                 <AvatarFallback>AB</AvatarFallback>
               </Avatar>
+
+
             </div>
           </div>
         </div>
@@ -328,17 +335,28 @@ export default function Dashboard() {
                     </CardContent>
                   </Card>
                 </div>
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+
+                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 3xl:gap-8">
+                <Bar/>
+                <Pie />
+                </div>
+
+                <Finance/>
+                
+               
+                {/* <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 3xl:gap-8">
                   <Card className="col-span-4">
                     <p className="text-gray-400 pl-7 text-sm py-4">Livestock</p>
                     <CardHeader>
                       <CardTitle>Average Weight (KG)</CardTitle>
                     </CardHeader>
                     <CardContent className="pl-2">
-                      {/* <Overview /> */}
+                     
                       <BarCharts />
                     </CardContent>
+                    
                   </Card>
+                  
 
                   <Card className="col-span-3 shadow-md border-0">
                     <p className="text-gray-400 pl-7 text-sm py-4">Livestock</p>
@@ -350,7 +368,7 @@ export default function Dashboard() {
                       <PieCharts />
                     </CardContent>
                   </Card>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
