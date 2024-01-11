@@ -54,15 +54,15 @@ export const menuItems = [
       },
       {
         name: "Feeding",
-        href: routes.eCommerce.categories,
+        href: routes.livestock.feeding,
       },
       {
         name: "Health",
-        href: routes.eCommerce.createCategory,
+        href: routes.livestock.health,
       },
       {
         name: "Housing",
-        href: routes.eCommerce.editCategory(DUMMY_ID),
+        href: routes.livestock.housing,
       },
     ],
   },

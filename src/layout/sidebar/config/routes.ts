@@ -6,6 +6,9 @@ export const routes = {
     livestock: {
       dashboard: '/livestock/list',
       products: '/livestock/add',
+      feeding: '/livestock/feed',
+      health: '/livestock/health',
+      housing: '/livestock/house',
     },
 
     eCommerce: {

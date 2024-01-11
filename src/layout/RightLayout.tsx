@@ -1,3 +1,5 @@
+
+import { useEffect, useState } from 'react';
 import { Card, CardContent } from "../components/ui/card";
 import { RiWindyLine } from 'react-icons/ri';
 import { BiCloudRain } from 'react-icons/bi';
@@ -5,11 +7,42 @@ import { IoBarbellOutline } from 'react-icons/io5';
 import { WiHumidity } from 'react-icons/wi';
 import Tasks from "./Tasks";
 
+
+interface WeatherData {
+  temperature: number;
+  windSpeed: number;
+  humidity: number;
+  pressure: number;
+  rain: number;
+  iconUrl: string; 
+}
+
 const LeftLayout = () => {
+
+  const [weatherData, setWeatherData] = useState<WeatherData | null>(null);
+
+
+  useEffect(() => {
+    // Retrieve weather data from localStorage
+    const storedWeatherData = localStorage.getItem('weatherData');
+    if (storedWeatherData) {
+      const parsedWeatherData = JSON.parse(storedWeatherData);
+      setWeatherData(parsedWeatherData);
+    }
+  }, []);
+
+  // const getIconUrl = (iconCode: string) => {
+  //   return `https://openweathermap.org/img/w/${iconCode}.png`;
+  // };
+
+
+
+
+
   return (
-    <div className="fixed  ">
+    <div className="fixed end-0">
       <div className=" ">
-        <div className="bg-[#CCE6DA] rounded-lg shadow-sm p-6  m-4 h-full">
+        <div className="bg-[#CCE6DA] rounded-lg shadow-sm p-6   h-full">
           <h3 className="text-lg font-bold leading-tight text-green-900 ">
             Whether
           </h3>
@@ -28,12 +61,17 @@ const LeftLayout = () => {
             </div>
 
             {/* Weather details */}
-            <div className="flex justify-center items-center mt-2">
-              <span className="text-lg text-gray-500">
+            {weatherData && (
+              <div className="flex justify-center items-center mt-2">
                 {/* Display weather icon and temperature */}
-                🌙 25°C
-              </span>
-            </div>
+                <span role="img" aria-label="weather-icon" className="mr-2">
+                {/* <img src={getIconUrl(weatherData.iconCode)} alt="weather-icon" /> */}
+                </span>
+                <span className="text-lg text-gray-500">
+                  {weatherData.temperature}°C
+                </span>
+              </div>
+            )}
           </CardContent>
 
           {/* Additional small cards */}
@@ -49,7 +87,9 @@ const LeftLayout = () => {
         </div>
        
       </div>
-      <p className="text-sm font-medium">10 km/h</p>
+      {weatherData && (
+                <p className="text-sm font-medium">{weatherData.windSpeed} km/h</p>
+              )}
     </CardContent>
   </Card>
 
@@ -63,7 +103,9 @@ const LeftLayout = () => {
         </div>
         
       </div>
-      <p className="text-sm font-medium">65%</p>
+      {weatherData && (
+                <p className="text-sm font-medium">{weatherData.humidity} km/h</p>
+              )}
     </CardContent>
   </Card>
 
@@ -77,7 +119,9 @@ const LeftLayout = () => {
         </div>
        
       </div>
-      <p className="text-sm font-medium">06:30 AM</p>
+      {weatherData && (
+                <p className="text-sm font-medium">{weatherData.pressure} km/h</p>
+              )}
     </CardContent>
   </Card>
 
@@ -91,13 +135,15 @@ const LeftLayout = () => {
         </div>
         
       </div>
-      <p className="text-sm font-medium">06:45 PM</p>
+      {weatherData && (
+                <p className="text-sm font-medium">{weatherData.rain} km/h</p>
+              )}
     </CardContent>
   </Card>
 </div>
         </div>
       </div>
-      <div className="w-full h-full">
+      <div className=" h-full">
         <Tasks />
       </div>
     </div>
@@ -105,3 +151,19 @@ const LeftLayout = () => {
 };
 
 export default LeftLayout;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

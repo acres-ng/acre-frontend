@@ -36,8 +36,9 @@ import { getCurrentUser } from "@/services/authService";
 import BarCharts from "../charts/BarCharts";
 import PieCharts from "../charts/PieCharts";
 import SearchWidget from "../search/search";
+import LeftLayout from "@/layout/RightLayout";
 // import Header from "../common/sidebar/header";
-
+import DashCard from "./DashCard"
 
 type Farm = {
   id: string;
@@ -65,8 +66,11 @@ export default function Dashboard() {
   return (
     <>
     {/* <Header/> */}
-    <div className="h-full px-4 py-6 lg:px-8">
-      <div className="h-full space-y-6">
+    <div className=" lg:px-8 grid grid-cols-10 ">
+
+
+      <div className="h-full space-y-6  lg:col-span-7 col-span-12">
+        
         <div className="space-between flex items-center">
           <div className="flex w-2/5">
             <SearchWidget/>
@@ -78,15 +82,18 @@ export default function Dashboard() {
           <div className="flex ml-auto mr-4">
             <Select>
               <SelectTrigger className="w-[280px] bg-primary text-white">
-                <SelectValue placeholder="Abdulsalam's Idris farms" />
+               
+                <p className="font-bold text-gray-700 text-lg tracking-tight">
+                  {farms?.farm_name}
+                </p>
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  {/* {farms?.map((farm: any, idx: number) => (
+                   {/* {farms?.map((farm: any, idx: number) => (
                         <SelectItem key={idx} value={farm.id}>
                           {farm.farm_name}
                         </SelectItem>
-                      ))} */}
+                      ))}  */}
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -161,7 +168,7 @@ export default function Dashboard() {
               </div>
 
               <div className="space-y-10">
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                {/* <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                   <Card className="border-0 bg-white">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <svg
@@ -219,6 +226,7 @@ export default function Dashboard() {
                       <CardTitle className="text-sm font-medium text-gray-400">
                         Total Livestocks
                       </CardTitle>
+                      
                     </CardHeader>
                     <CardContent>
                       <div className="text-lg font-bold">100</div>
@@ -334,7 +342,8 @@ export default function Dashboard() {
                       <div className="text-lg font-bold">N 200,000</div>
                     </CardContent>
                   </Card>
-                </div>
+                </div> */}
+                <DashCard />
 
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 3xl:gap-8">
                 <Bar/>
@@ -370,10 +379,22 @@ export default function Dashboard() {
                   </Card>
                 </div> */}
               </div>
+
+
+              
             </div>
           </div>
         </div>
+
+        
       </div>
+
+
+       <div className="lg:col-span-3 w-[50%] ">
+        <LeftLayout />
+     </div>
+
+      
     </div>
     </>
     
