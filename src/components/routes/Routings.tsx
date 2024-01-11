@@ -11,6 +11,9 @@ import Layout from "../../layout/Layout";
 
 import Livestock from "../livestock/Livestock";
 import Add from "../livestock/Add";
+import Feeding from "../livestock/Feeding";
+import Health from "../livestock/Health";
+import Housing from "../livestock/Housing";
 
 const PublicRoutes = () => {
   return (
@@ -24,14 +27,14 @@ const PublicRoutes = () => {
           </Layout>
         }
       />
-      <Route
+      {/* <Route
         path="/"
         element={
           <Layout>
             <Dashboard />
           </Layout>
         }
-      />
+      /> */}
       
 
       <Route path="/livestock">
@@ -51,6 +54,31 @@ const PublicRoutes = () => {
             </Layout>
           }
         />
+        <Route
+          path="feed"
+          element={
+            <Layout>
+              <Feeding />
+            </Layout>
+          }
+        />
+         <Route
+          path="health"
+          element={
+            <Layout>
+              <Health />
+            </Layout>
+          }
+        />
+        <Route
+          path="house"
+          element={
+            <Layout>
+              <Housing />
+            </Layout>
+          }
+        />
+
       </Route>
 
       {/* <---- End of Protected Routes ---> */}

@@ -13,7 +13,7 @@ import regimg from "../../assets/regimg.png";
 import { toast } from "sonner";
 import { encryptData } from "@/lib/encrypt";
 import logo from "../../assets/logo.png";
-import { setCurrentUser } from "@/services/authService";
+
 import { BiSolidLock } from "react-icons/bi";
 import { IoCheckbox } from "react-icons/io5";
 import { backgroundColours } from "@/lib/enums";
@@ -23,7 +23,7 @@ const signUpSchema = z
   firstname: z
     .string()
     .min(1, "Enter a valid name")
-    .refine((value) => !/\s/.test(value), {
+    .refine((value) => !/^\s*$/.test(value), {
       message: "Name should not contain whitespace",
     }),
     email: z
