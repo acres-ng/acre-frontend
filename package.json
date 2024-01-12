@@ -43,7 +43,7 @@
     "@radix-ui/react-toggle": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.0.7",
     "@react-google-maps/api": "^2.19.2",
-    "@rollup/rollup-darwin-arm64": "^4.9.5",
+    "@rollup/wasm-node": "^4.9.5",
     "@ubilabs/google-maps-react-hooks": "^2.0.2",
     "antd": "^5.11.4",
     "axios": "^1.6.2",
