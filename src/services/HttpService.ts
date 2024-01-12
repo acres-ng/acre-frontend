@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getJwt } from "./userService";
 
 let isAlertShown = false; // Add a flag to track if the alert has been shown
 
@@ -21,15 +22,17 @@ axios.interceptors.response.use(
   }
 );
 
-function setJwt(jwt: any) {
-  axios.defaults.headers.common["Authorization"] = `Bearer ${jwt}`;
-}
+const instance = axios.create({
+  headers:{
+    Authorization: `Bearer ${getJwt()}`,
+  }
+});
 
 export default {
-  get: axios.get,
-  post: axios.post,
-  put: axios.put,
-  patch: axios.patch,
-  delete: axios.delete,
-  setJwt,
+  get: instance.get,
+  post: instance.post,
+  put: instance.put,
+  patch: instance.patch,
+  delete: instance.delete,
+  
 };

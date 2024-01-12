@@ -39,6 +39,7 @@ import AuthContext from "../context/authContext";
 interface Option {
   value: string;
   displayValue: string;
+  iso: string | undefined;
 }
 
 const step1Schema = z.object({
@@ -71,7 +72,7 @@ interface LatLng {
   lng: number;
 }
 
-const center: LatLng = { lat: 48.8584, lng: 2.2945 };
+const center: LatLng = { lat:8.887692191562305, lng: 7.184876852041654 };
 
 const RegisterFarm = () => {
   const [autocomplete, setAutocomplete] =
@@ -90,268 +91,60 @@ const RegisterFarm = () => {
   const countryData: Option[] = CountryType.getAllCountries().map(
     (country) => ({
       value: country.name,
-      displayValue: `${country.name} - ${country.isoCode}`,
+      displayValue: `${country.name}`,
+      iso: `${country.isoCode}`,
     })
   );
 
-  const getStateData = () => {
-    const states = State.getAllStates().map((state) => ({
-      value: state.name,
-      displayValue: `${state.name} - ${state.isoCode}`,
+  const getStateData = (countryCode: string) => {
+    const states = State.getStatesOfCountry(countryCode).map((state) => ({
+      value: `${state.name}`,
+      displayValue: `${state.name}`,
+      iso: `${state.isoCode}`,
     }));
-  
     return states;
   };
-  
-  const handleCountryChange = (countryCode: string) => {
-    // Update state data based on the selected country code
-    const stateData = getStateData();
-    console.log("Selected Country Code:", countryCode);
-    console.log("State Data:", stateData);
-  
-    // Handle state change corresponding to the country code
-    handleStateChange(countryCode);
-  };
-  
-  const handleStateChange = (countryCode: string) => {
-    const stateData = getStateData();
-  
-    console.log("Handling State Change for Country Code:", countryCode);
-    console.log("New State Data:", stateData);
-  };
-  
-  const countryCodes = ["TZ", "US", "NG", "GB", "JP", "CA", "AU"];
-  const countryCode =
-    countryCodes[Math.floor(Math.random() * countryCodes.length)];
-  const stateData = getStateData();
-  handleCountryChange(countryCode);
-  
-  const [markerPosition, setMarkerPosition] = useState<LatLng | null>(null);
-
-
-  // interface WeatherData {
-  //   main: {
-  //     temp: number;
-  //     humidity: number;
-  //     pressure: number;
-  //   };
-  //   wind: {
-  //     speed: number;
-  //   };
-  //   rain?: {
-  //     "1h": number;
-  //   };
-  //   dt: number;
-  // }
-
-  
-
-  // const extractWeatherData = (weatherData: WeatherData) => {
-  //   const temperature = weatherData.main.temp;
-  //   const windSpeed = weatherData.wind.speed;
-  //   const humidity = weatherData.main.humidity;
-  //   const rain = weatherData.rain ? weatherData.rain["1h"] : 0; // Rain in last hour (if available)
-  //   const pressure = weatherData.main.pressure;
-
-  //   // Extracting time information
-  //   const timestamp = weatherData.dt * 1000; // Convert UNIX timestamp to milliseconds
-  //   const dateObject = new Date(timestamp);
-  //   const day = dateObject.toLocaleString("en-US", { weekday: "long" });
-  //   const date = dateObject.getDate();
-  //   const year = dateObject.getFullYear();
-
-  //   return {
-  //     temperature,
-  //     windSpeed,
-  //     humidity,
-  //     rain,
-  //     pressure,
-  //     day,
-  //     date,
-  //     year,
-  //   };
-  // };
-
-  // const storeWeatherDataInLocalStorage = (weatherData: any) => {
-  //   localStorage.setItem("weatherData", JSON.stringify(weatherData));
-  // };
-
-  // const fetchWeatherData = async (latitude: number, longitude: number) => {
-  //   const apiKey = import.meta.env.VITE_APP_OPENWEATHERMAP_API_KEY;
-  //   // const apiKey = "import.meta.env.OPENWEATHERMAP_API_KEY";
-  //   const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${apiKey}&units=metric`;
-  
-
-  //   try {
-  //     const response = await axios.get(apiUrl);
-  //     const weatherData = response.data;
-
-  //     const extractedData = extractWeatherData(weatherData);
-  //     storeWeatherDataInLocalStorage(extractedData);
-
-  //     // Logging weather information
-  //     console.log("Weather Information:");
-  //     console.log(`Temperature: ${extractedData.temperature}°C`);
-  //     console.log(`Wind Speed: ${extractedData.windSpeed} m/s`);
-  //     console.log(`Humidity: ${extractedData.humidity}%`);
-  //     console.log(`Rain (last hour): ${extractedData.rain} mm`);
-  //     console.log(`Pressure: ${extractedData.pressure} hPa`);
-  //     console.log(`Day: ${extractedData.day}`);
-  //     console.log(`Date: ${extractedData.date}`);
-  //     console.log(`Year: ${extractedData.year}`);
-
-  //     return extractedData; // Return extracted data after processing
-  //   } catch (error) {
-  //     console.error("Error fetching weather data:", error);
-  //     throw error; // Re-throw the error to handle it where the function is called
-  //   }
-  // };
-
-  // const onPlaceChanged = async () => {
-  //   if (autocomplete === null) return;
-  
-  //   const place = autocomplete.getPlace();
-  //   if (!place.geometry || !place.geometry.location || !map) return;
-  
-  //   const location = place.geometry.location;
-  //   const newCenter = { lat: location.lat(), lng: location.lng() };
-  //   const geocodeValue = `${location.lat()},${location.lng()}`;
-  //   const latitude = location.lat();
-  //   const longitude = location.lng();
-  
-  //   try {
-  //     const response = await fetchWeatherData(latitude, longitude);
-  
-  //     // Extract address components
-  //     const addressComponents = place.address_components;
-  //     let updatedCountry = "";
-  //     let updatedState = "";
-  //     if (addressComponents) {
-  //       for (const component of addressComponents) {
-  //         if (component.types.includes("country")) {
-  //           updatedCountry = component.long_name;
-  //         } else if (component.types.includes("administrative_area_level_1")) {
-  //           updatedState = component.long_name;
-  //         }
-  //       }
-  //     }
-  
-  //     // Set marker position based on the entered address
-  //     setMarkerPosition(newCenter);
-  
-  //     // Extract weather data
-
-  
-  //     // Update step2Data state with extracted weather data
-  //     setStep2Data({
-  //       ...step2Data,
-  //       geocode: geocodeValue,
-  //       weatherData: response,
-  //     });
-  
-  //     // Set new center on the map
-  //     map.panTo(newCenter);
-  //     map.setZoom(15);
-  
-  //     // Update the state with the extracted country and state values
-  //     setFormData({
-  //       country: updatedCountry,
-  //       state: updatedState,
-  //     });
-  //   } catch (error) {
-  //     console.error("Error in onPlaceChanged:", error);
-  //   }
-  // };
-  
-  
 
 
 
-  interface WeatherData {
-    main: {
-      temp: number;
-      humidity: number;
-      pressure: number;
-    };
-    wind: {
-      speed: number;
-    };
-    rain?: {
-      "1h": number;
-    };
-    dt: number;
-  }
-  
-  const extractWeatherData = (weatherData: WeatherData) => {
-    const temperature = weatherData.main.temp;
-    const windSpeed = weatherData.wind.speed;
-    const humidity = weatherData.main.humidity;
-    const rain = weatherData.rain ? weatherData.rain["1h"] : 0; // Rain in the last hour (if available)
-    const pressure = weatherData.main.pressure;
-  
-    // Extracting time information
-    const timestamp = weatherData.dt * 1000; // Convert UNIX timestamp to milliseconds
-    const dateObject = new Date(timestamp);
-    const day = dateObject.toLocaleString("en-US", { weekday: "long" });
-    const date = dateObject.getDate();
-    const year = dateObject.getFullYear();
-  
-    return {
-      temperature,
-      windSpeed,
-      humidity,
-      rain,
-      pressure,
-      day,
-      date,
-      year,
-    };
-  };
-  
-  const storeWeatherDataInLocalStorage = (weatherData: any) => {
-    localStorage.setItem("weatherData", JSON.stringify(weatherData));
-  };
-  
-  const fetchWeatherDataByGeocode = async (geocode: string) => {
-    const apiKey = import.meta.env.VITE_APP_OPENWEATHERMAP_API_KEY;
-    // const apiKey = "import.meta.env.OPENWEATHERMAP_API_KEY";
-    const apiUrl = `https://cors-anywhere.herokuapp.com/https://api.openweathermap.org/data/2.5/weather?${geocode}&appid=${apiKey}&units=metric`;
-  
-    try {
-      const response = await axios.get(apiUrl);
-      const weatherData = response.data;
-  
-      const extractedData = extractWeatherData(weatherData);
-      storeWeatherDataInLocalStorage(extractedData);
-  
-      // Logging weather information
-      console.log("Weather Information:");
-      console.log(`Temperature: ${extractedData.temperature}°C`);
-      console.log(`Wind Speed: ${extractedData.windSpeed} m/s`);
-      console.log(`Humidity: ${extractedData.humidity}%`);
-      console.log(`Rain (last hour): ${extractedData.rain} mm`);
-      console.log(`Pressure: ${extractedData.pressure} hPa`);
-      console.log(`Day: ${extractedData.day}`);
-      console.log(`Date: ${extractedData.date}`);
-      console.log(`Year: ${extractedData.year}`);
-  
-      return extractedData; // Return extracted data after processing
-    } catch (error) {
-      console.error("Error fetching weather data:", error);
-      throw error; // Re-throw the error to handle it where the function is called
+  const populateStateSelect = (country: string, selected?: string) => {
+    const countryCode = country ? country : formData.country;
+    const stateData = getStateData(countryCode);
+    const stateSelect = document.getElementById(
+      "getState"
+    ) as HTMLSelectElement;
+
+    // Clear existing options
+    stateSelect.innerHTML = "";
+
+    // Generate options for each state
+    for(const state of stateData){
+      const option = document.createElement("option");
+      option.value = state.value;
+      option.text = state.displayValue;
+
+      if (selected && state.value === selected) {
+        option.selected = true;
+      }
+      stateSelect.appendChild(option);
+
     }
   };
-  
+
+  const stateData = getStateData("AF");
+
+  const [markerPosition, setMarkerPosition] = useState<LatLng | null>(null);
+
   const onPlaceChanged = async () => {
     if (autocomplete === null) return;
-  
+
     const place = autocomplete.getPlace();
     if (!place.geometry || !place.geometry.location || !map) return;
-  
+
     const location = place.geometry.location;
     const newCenter = { lat: location.lat(), lng: location.lng() };
-    const geocodeValue = `lat=${location.lat()}&lon=${location.lng()}`;
-  
+    const geocodeValue = `${location.lat()}, ${location.lng()}`;
+
     // Extract address components
     const addressComponents = place.address_components;
     let updatedCountry = "";
@@ -359,33 +152,31 @@ const RegisterFarm = () => {
     if (addressComponents) {
       for (const component of addressComponents) {
         if (component.types.includes("country")) {
-          updatedCountry = component.long_name;
+          updatedCountry = component.short_name;
         } else if (component.types.includes("administrative_area_level_1")) {
           updatedState = component.long_name;
         }
       }
     }
-  
+
     // Set marker position based on the entered address
     setMarkerPosition(newCenter);
-  
+
     // Update the state with the extracted country and state values
+    populateStateSelect(updatedCountry, updatedState);
     setFormData({
       country: updatedCountry,
       state: updatedState,
     });
-  
+
     // Fetch weather data using the obtained geocode
     try {
-      const response = await fetchWeatherDataByGeocode(geocodeValue);
-  
       // Update step2Data state with extracted weather data
       setStep2Data({
         ...step2Data,
         geocode: geocodeValue,
-        weatherData: response,
       });
-  
+
       // Set new center on the map
       map.panTo(newCenter);
       map.setZoom(15);
@@ -393,13 +184,9 @@ const RegisterFarm = () => {
       console.error("Error in onPlaceChanged:", error);
     }
   };
-  
-
-
-
 
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyCdpkVg4cZmmIzFPVyyTO7TCPZrVybZjUo",
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAP_API_KEY,
     libraries: ["places"],
   });
 
@@ -461,6 +248,7 @@ const RegisterFarm = () => {
       };
       try {
         const { data } = await addFarm(finalData);
+        
         console.log("register>>>", data);
         if (data?.status === "success") {
           const farmUser = authService.getCurrentUser();
@@ -633,7 +421,7 @@ const RegisterFarm = () => {
                                 htmlFor="line_address1"
                                 className="block mb-2 text-sm font-medium text-gray-900 "
                               >
-                                Line Address 1
+                                What is the nearest landmark to your farm?
                               </label>
                               <Autocomplete
                                 onLoad={onLoad}
@@ -660,7 +448,7 @@ const RegisterFarm = () => {
                                 htmlFor="line_address2"
                                 className="block mb-2 text-sm font-medium text-gray-900 "
                               >
-                                Line Address 2
+                                What is your farm’s exact address?
                               </label>
 
                               <input
@@ -712,16 +500,17 @@ const RegisterFarm = () => {
                                   })}
                                   id="getCountry"
                                   value={formData.country}
-                                  onChange={(e) =>
+                                  onChange={(e) => {
                                     setFormData({
                                       ...formData,
                                       country: e.target.value,
-                                    })
-                                  }
+                                    });
+                                    populateStateSelect(e.target.value);
+                                  }}
                                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                 >
                                   {countryData.map((option, index) => (
-                                    <option key={index} value={option.value}>
+                                    <option key={index} value={option.iso}>
                                       {option.displayValue}
                                     </option>
                                   ))}
@@ -812,9 +601,7 @@ const RegisterFarm = () => {
                               id="currency"
                               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5"
                             >
-                               <option value="">NGN (Nigeria Naira)</option>
-                              <option value="Nigeria">Nigeria</option>
-                             
+                              <option value="NGN">NGN (Nigeria Naira)</option>
                             </select>
                             {errors.currency && (
                               <p className="text-red-500 text-sm">
@@ -837,11 +624,9 @@ const RegisterFarm = () => {
                               id="measuring_system"
                               className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-green-600 focus:border-green-600 block w-full p-2.5"
                             >
-                              <option value="">
+                              <option value="metric">
                                 Metric - (mg, g, kg, mm, ml, km)
                               </option>
-                              <option value="grams">Grams</option>
-                             
                             </select>
                             {errors.measuring_system && (
                               <p className="text-red-500 text-sm">

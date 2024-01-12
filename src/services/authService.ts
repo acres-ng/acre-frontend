@@ -1,5 +1,8 @@
 import { API_URL } from "@/config";
 import http from "./HttpService";
+import { userLocalKey } from "./userService";
+
+const apiUrl = API_URL + "auth/login";
 
 interface User {
   login: string;
@@ -22,53 +25,36 @@ export interface Token {
   }[];
 }
 
-export const tokenKey: string = "user";
-const apiUrl = API_URL + "auth/login";
-
-export function getJwt() {
-  const storedDataString = localStorage.getItem(tokenKey);
-
-  if (storedDataString !== null) {
-    const storedData = JSON.parse(storedDataString);
-    if (storedData && storedData.token) {
-      return storedData.token;
-    }
-  }
-}
-
-// http.setJwt(getJwt());
-
 export async function login(user: User) {
   const { data } = await http.post(apiUrl, user);
   localStorage.setItem(
-    tokenKey,
+    userLocalKey,
     JSON.stringify({
       token: data?.data?.token,
       customer: data?.data?.customer,
       farms: data?.data?.farms || [],
     })
   );
-  http.setJwt(getJwt());
+
   return data;
 }
 
 export async function farmUser(user: User) {
   const { data } = await http.post(apiUrl, user);
   localStorage.setItem(
-    tokenKey,
+    userLocalKey,
     JSON.stringify({
       token: data?.data?.token,
       customer: data?.data?.customer,
       farms: data?.data?.farms,
     })
   );
-  http.setJwt(getJwt());
   return data;
 }
 
 export function getCurrentUser() {
   try {
-    const storedDataString = localStorage.getItem(tokenKey);
+    const storedDataString = localStorage.getItem(userLocalKey);
 
     if (storedDataString !== null) {
       const storedData = JSON.parse(storedDataString);
@@ -81,7 +67,7 @@ export function getCurrentUser() {
 
 export function setCurrentUser(data: any) {
   try {
-    localStorage.setItem(tokenKey, JSON.stringify(data));
+    localStorage.setItem(userLocalKey, JSON.stringify(data));
   } catch (error) {
     return null;
   }
@@ -104,12 +90,12 @@ export async function getOTP(payload: { contact: string }) {
 }
 
 export function logout() {
-  return localStorage.removeItem(tokenKey);
+  return localStorage.removeItem(userLocalKey);
 }
 
 export default {
+  userLocalKey,
   login,
-  getJwt,
   setCurrentUser,
   getCurrentUser,
   farmUser,

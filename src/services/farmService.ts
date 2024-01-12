@@ -1,5 +1,6 @@
 import http from "./HttpService";
 import { API_URL } from "@/config";
+import { getUserLocal, setUserLocal } from "./userService";
 
 const apiUrl = API_URL + "farms";
 
@@ -16,8 +17,10 @@ type Farm = {
   state: string;
 };
 
-export function addFarm(data: any) {
-  return http.post(apiUrl, data);
+
+export async function addFarm(formData: any) {
+  return http.post(apiUrl, formData);
+ 
 }
 
 export function verifyOtp(data: Verify) {
@@ -30,4 +33,8 @@ export function sendOtp(data: any) {
 
 export function getFarmById(id: number) {
   return http.get(API_URL + "farms/" + id);
+}
+
+export function getActiveFarm(){
+  return getUserLocal().farms[0];
 }

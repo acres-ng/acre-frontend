@@ -1,11 +1,11 @@
 import React from 'react'
 import { CardContent, CardHeader, CardTitle } from '../ui/card'
 import { API_URL } from "@/config";
-
-
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import {Card} from 'antd'; // Import your Card component
+import { getActiveFarm } from '@/services/farmService';
+import { getJwt } from '@/services/userService';
 
 function DashCard() {
   const [livestockCount, setLivestockCount] = useState(0);
@@ -15,9 +15,10 @@ function DashCard() {
 
   useEffect(() => {
 
-    axios.get('https://acre-staging.herokuapp.com/api/v1/farms/54/dashboard/tasks?assignee=1&status=inProgress', {
+const userActiveFarmId = getActiveFarm().id
+    axios.get(`${API_URL}farms/${userActiveFarmId}/dashboard/tasks`, {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${getJwt()}`,
       },
     })
       .then(response => {

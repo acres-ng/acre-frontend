@@ -1,8 +1,8 @@
 // import { PlusCircledIcon } from "@radix-ui/react-icons"
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
-import Bar from "../charts/Bar"
-import Finance from "../charts/FinanceChart"
+import Bar from "../charts/Bar";
+import Finance from "../charts/FinanceChart";
 import Pie from "../charts/Pie";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { Separator } from "../ui/separator";
@@ -31,14 +31,17 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Calendar } from "../ui/calendar";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
-import { getFarmById } from "@/services/farmService";
+import { getActiveFarm, getFarmById } from "@/services/farmService";
 import { getCurrentUser } from "@/services/authService";
 import BarCharts from "../charts/BarCharts";
 import PieCharts from "../charts/PieCharts";
 import SearchWidget from "../search/search";
 import LeftLayout from "@/layout/RightLayout";
 // import Header from "../common/sidebar/header";
-import DashCard from "./DashCard"
+import DashCard from "./DashCard";
+import HttpService from "@/services/HttpService";
+import { getUserLocal } from "@/services/userService";
+import axios from "axios";
 
 type Farm = {
   id: string;
@@ -49,126 +52,203 @@ type Farm = {
   country: string;
 };
 
+interface WeatherData {
+  main: {
+    temp: number;
+    humidity: number;
+    pressure: number;
+  };
+  wind: {
+    speed: number;
+  };
+  rain?: {
+    "1h": number;
+  };
+  date: string;
+  icon: string;
+  description: string;
+}
+
 export default function Dashboard() {
   const [date, setDate] = useState<Date>();
   const [farms, setFarms] = useState<Farm>();
   const user = getCurrentUser();
- console.log("user>>", user)
+  console.log("user>>", user);
+  
+
+  const fetchWeatherDataByGeocode = async (geocode: string) => {
+    const today = new Date().toLocaleDateString();
+    const weatherDataExists = localStorage.getItem("weatherData");
+    if (
+      !weatherDataExists ||
+      (weatherDataExists && JSON.parse(weatherDataExists).date < today)
+    ) {
+      const geocodeSplit = geocode.split(", ");
+      const geocodeFormatted = `lat=${geocodeSplit[0]}&lon=${geocodeSplit[1]}`;
+      const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
+      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?${geocodeFormatted}&appid=${apiKey}&units=metric`;
+      try {
+        const response = await axios.get(apiUrl);
+        const weatherData = response.data;
+
+        const extractedData = extractWeatherData(weatherData);
+        storeWeatherDataInLocalStorage(extractedData);
+
+        // Logging weather information
+        console.log("Weather Information:");
+        console.log(`Temperature: ${extractedData.temperature}°C`);
+        console.log(`Wind Speed: ${extractedData.windSpeed} m/s`);
+        console.log(`Humidity: ${extractedData.humidity}%`);
+        console.log(`Rain (last hour): ${extractedData.rain} mm`);
+        console.log(`Pressure: ${extractedData.pressure} hPa`);
+
+        return extractedData; // Return extracted data after processing
+      } catch (error) {
+        console.error("Error fetching weather data:", error);
+        throw error; // Re-throw the error to handle it where the function is called
+      }
+    }
+  };
+
+  const extractWeatherData = (weatherData: any) => {
+    const temperature = weatherData.main.temp;
+    const windSpeed = weatherData.wind.speed;
+    const humidity = weatherData.main.humidity;
+    const rain = weatherData.rain ? weatherData.rain["1h"] : 0; // Rain in the last hour (if available)
+    const pressure = weatherData.main.pressure;
+    const date = new Date().toLocaleDateString();
+    const icon = weatherData.weather[0].icon;
+    const description = weatherData.weather[0].description;
+
+    return {
+      temperature,
+      windSpeed,
+      humidity,
+      rain,
+      pressure,
+      date,
+      icon,
+      description,
+    };
+  };
+
+  const storeWeatherDataInLocalStorage = (weatherData: any) => {
+    localStorage.setItem("weatherData", JSON.stringify(weatherData));
+  };
 
   useEffect(() => {
     const fetchFarms = async () => {
       const response = await getFarmById(user?.farms[0]?.id);
       setFarms(response?.data?.data);
     };
+    const getWeather = async () => {
+      await fetchWeatherDataByGeocode(getActiveFarm().geocode);
+    };
+
     fetchFarms();
+    getWeather();
   }, []);
 
   return (
     <>
-    {/* <Header/> */}
-    <div className=" lg:px-8 grid grid-cols-10 ">
+      {/* <Header/> */}
+      <div className=" lg:px-8 grid grid-cols-10 ">
+        <div className="h-full space-y-6  lg:col-span-7 col-span-12">
+          <div className="space-between flex items-center">
+            <div className="flex w-2/5">
+              <SearchWidget />
 
-
-      <div className="h-full space-y-6  lg:col-span-7 col-span-12">
-        
-        <div className="space-between flex items-center">
-          <div className="flex w-2/5">
-            <SearchWidget/>
-            
-            {/* <div className="flex w-full max-w-lg items-center space-x-2">
+              {/* <div className="flex w-full max-w-lg items-center space-x-2">
               <Input type="text" placeholder="Search" />
             </div> */}
-          </div>
-          <div className="flex ml-auto mr-4">
-            <Select>
-              <SelectTrigger className="w-[280px] bg-primary text-white">
-               
-                <p className="font-bold text-gray-700 text-lg tracking-tight">
-                  {farms?.farm_name}
-                </p>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                   {/* {farms?.map((farm: any, idx: number) => (
+            </div>
+            <div className="flex ml-auto mr-4">
+              <Select>
+                <SelectTrigger className="w-[280px] bg-primary text-white">
+                  <p className="font-bold text-gray-700 text-lg tracking-tight">
+                    {farms?.farm_name}
+                  </p>
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {/* {farms?.map((farm: any, idx: number) => (
                         <SelectItem key={idx} value={farm.id}>
                           {farm.farm_name}
                         </SelectItem>
                       ))}  */}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
 
-            <div className="flex flex-row gap-5 justify-center items-center">
+              <div className="flex flex-row gap-5 justify-center items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
+                  />
+                </svg>
 
-              
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
-                />
-              </svg>
-
-              <Avatar>
-                <AvatarImage
-                  src="https://github.com/shadcn.png"
-                  alt="@shadcn"
-                />
-                <AvatarFallback>AB</AvatarFallback>
-              </Avatar>
-
-
+                <Avatar>
+                  <AvatarImage
+                    src="https://github.com/shadcn.png"
+                    alt="@shadcn"
+                  />
+                  <AvatarFallback>AB</AvatarFallback>
+                </Avatar>
+              </div>
             </div>
           </div>
-        </div>
-        {/* main content */}
-        <div className="border-none p-0 outline-none">
-          <div className="flex items-center justify-between">
-            <div className="space-y-10">
-              <div className="">
-                <p className="font-light text-gray-500 text-lg ">Welcome to</p>
-                <p className="font-bold text-gray-700 text-lg tracking-tight">
-                  {farms?.farm_name}
-                </p>
-                <p className="font-light text-gray-500 text-sm">
-                  {`${farms?.line_address1}, ${farms?.state}`}
-                </p>
-              </div>
-
-              <div className="">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant={"default"}
-                      className={cn(
-                        "w-auto justify-start text-left font-normal",
-                        !date && "text-white"
-                      )}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4 text-white" />
-                      {date ? format(date, "PPP") : <span>Pick a date</span>}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0">
-                    <Calendar
-                      mode="single"
-                      selected={date}
-                      onSelect={setDate}
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-
+          {/* main content */}
+          <div className="border-none p-0 outline-none">
+            <div className="flex items-center justify-between">
               <div className="space-y-10">
-                {/* <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <div className="">
+                  <p className="font-light text-gray-500 text-lg ">
+                    Welcome to
+                  </p>
+                  <p className="font-bold text-gray-700 text-lg tracking-tight">
+                    {farms?.farm_name}
+                  </p>
+                  <p className="font-light text-gray-500 text-sm">
+                    {`${farms?.line_address1}, ${farms?.state}`}
+                  </p>
+                </div>
+
+                <div className="">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"default"}
+                        className={cn(
+                          "w-auto justify-start text-left font-normal",
+                          !date && "text-white"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4 text-white" />
+                        {date ? format(date, "PPP") : <span>Pick a date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={date}
+                        onSelect={setDate}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+
+                <div className="space-y-10">
+                  {/* <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                   <Card className="border-0 bg-white">
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <svg
@@ -343,17 +423,16 @@ export default function Dashboard() {
                     </CardContent>
                   </Card>
                 </div> */}
-                <DashCard />
+                  <DashCard />
 
-                <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 3xl:gap-8">
-                <Bar/>
-                <Pie />
-                </div>
+                  <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 3xl:gap-8">
+                    <Bar />
+                    <Pie />
+                  </div>
 
-                <Finance/>
-                
-               
-                {/* <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 3xl:gap-8">
+                  <Finance />
+
+                  {/* <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 3xl:gap-8">
                   <Card className="col-span-4">
                     <p className="text-gray-400 pl-7 text-sm py-4">Livestock</p>
                     <CardHeader>
@@ -378,25 +457,16 @@ export default function Dashboard() {
                     </CardContent>
                   </Card>
                 </div> */}
+                </div>
               </div>
-
-
-              
             </div>
           </div>
         </div>
 
-        
+        <div className="lg:col-span-3 w-[50%] ">
+          <LeftLayout />
+        </div>
       </div>
-
-
-       <div className="lg:col-span-3 w-[50%] ">
-        <LeftLayout />
-     </div>
-
-      
-    </div>
     </>
-    
   );
 }
