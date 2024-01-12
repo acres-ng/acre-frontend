@@ -47,10 +47,6 @@ jobs:
           keys:
             - node_modules-{{ checksum "package.json" }}
           # Install dependencies
-      # - run:
-      #     name: Install Rollup for linux
-      #     command: |
-      #       npm i @rollup/rollup-linux-x64-gnu
       - run:
           name: Install Node.js dependencies
           command: npm install
