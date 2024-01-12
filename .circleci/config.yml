@@ -50,7 +50,7 @@ jobs:
       - run:
           name: Install Rollup for linux
           command: |
-            npm i @rollup/rollup-android-arm64
+            npm i @rollup/rollup-darwin-arm64
       - run:
           name: Install Node.js dependencies
           command: npm install
