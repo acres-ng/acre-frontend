@@ -2,8 +2,8 @@ import http from "./HttpService";
 import { API_URL } from "@/config";
 
 const apiUrl = API_URL + "auth/register";
-export const userLocalKey = 'user';
-
+export const userLocalKey = "user";
+export const weatherLocalKey = "weatherData";
 
 interface Verify {
   contact: string;
@@ -12,13 +12,12 @@ interface Verify {
 
 export function getJwt() {
   const storedDataString = localStorage.getItem(userLocalKey);
-
   if (storedDataString !== null) {
     const storedData = JSON.parse(storedDataString);
     if (storedData && storedData.token) {
       return storedData.token;
     }
-  }
+  } 
 }
 
 export async function register(user: any) {
@@ -49,7 +48,7 @@ export function getUserLocal() {
   }
 }
 
-export function setUserLocal(user:any) {
+export function setUserLocal(user: any) {
   localStorage.setItem(userLocalKey, JSON.stringify(user));
 }
 

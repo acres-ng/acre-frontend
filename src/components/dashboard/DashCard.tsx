@@ -1,11 +1,12 @@
-import React from 'react'
-import { CardContent, CardHeader, CardTitle } from '../ui/card'
+import React from "react";
+import { CardContent, CardHeader, CardTitle } from "../ui/card";
 import { API_URL } from "@/config";
-import { useEffect, useState } from 'react';
-import axios from 'axios';
-import {Card} from 'antd'; // Import your Card component
-import { getActiveFarm } from '@/services/farmService';
-import { getJwt } from '@/services/userService';
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { Card } from "antd"; // Import your Card component
+import { getActiveFarm } from "@/services/farmService";
+import { getJwt } from "@/services/userService";
+import http from "@/services/HttpService";
 
 function DashCard() {
   const [livestockCount, setLivestockCount] = useState(0);
@@ -14,14 +15,10 @@ function DashCard() {
   const [totalRevenue, setTotalRevenue] = useState(0);
 
   useEffect(() => {
-
-const userActiveFarmId = getActiveFarm().id
-    axios.get(`${API_URL}farms/${userActiveFarmId}/dashboard/tasks`, {
-      headers: {
-        Authorization: `Bearer ${getJwt()}`,
-      },
-    })
-      .then(response => {
+    const userActiveFarmId = getActiveFarm().id;
+    http
+      .get(`${API_URL}farms/${userActiveFarmId}/dashboard/tasks`, http.getDefaultOptions())
+      .then((response) => {
         const { data } = response.data;
         const totalLivestock = data.livestock.total_count || 0;
         const totalMortality = data.mortality.total_count || 0;
@@ -32,11 +29,10 @@ const userActiveFarmId = getActiveFarm().id
         setBirthCount(totalBirths);
         setTotalRevenue(revenue);
       })
-      .catch(error => {
-        console.error('Error fetching data:', error);
+      .catch((error) => {
+        console.error("Error fetching data:", error);
       });
-  }, []); 
-
+  }, []);
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -61,7 +57,6 @@ const userActiveFarmId = getActiveFarm().id
         </CardContent>
       </Card>
 
-
       <Card className="border-0 bg-white">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <svg
@@ -81,7 +76,6 @@ const userActiveFarmId = getActiveFarm().id
           <div className="text-lg font-bold">{mortalityCount}</div>
         </CardContent>
       </Card>
-
 
       <Card className="border-0 bg-white">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -103,8 +97,6 @@ const userActiveFarmId = getActiveFarm().id
         </CardContent>
       </Card>
 
-
-
       <Card className="border-0 bg-white">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <svg
@@ -124,9 +116,6 @@ const userActiveFarmId = getActiveFarm().id
           <div className="text-lg font-bold">${totalRevenue}</div>
         </CardContent>
       </Card>
-
-
-
     </div>
   );
 }

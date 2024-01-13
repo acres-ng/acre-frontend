@@ -9,7 +9,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import anim from "../../assets/create.png";
 import selection from "../../assets/pref.png";
 import axios from "axios";
-import { addFarm } from "@/services/farmService";
+import { addFarm, getActiveFarm } from "@/services/farmService";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { setCurrentUser } from "@/services/authService";
@@ -72,7 +72,7 @@ interface LatLng {
   lng: number;
 }
 
-const center: LatLng = { lat:8.887692191562305, lng: 7.184876852041654 };
+const center: LatLng = { lat: 8.887692191562305, lng: 7.184876852041654 };
 
 const RegisterFarm = () => {
   const [autocomplete, setAutocomplete] =
@@ -105,8 +105,6 @@ const RegisterFarm = () => {
     return states;
   };
 
-
-
   const populateStateSelect = (country: string, selected?: string) => {
     const countryCode = country ? country : formData.country;
     const stateData = getStateData(countryCode);
@@ -118,7 +116,7 @@ const RegisterFarm = () => {
     stateSelect.innerHTML = "";
 
     // Generate options for each state
-    for(const state of stateData){
+    for (const state of stateData) {
       const option = document.createElement("option");
       option.value = state.value;
       option.text = state.displayValue;
@@ -127,7 +125,6 @@ const RegisterFarm = () => {
         option.selected = true;
       }
       stateSelect.appendChild(option);
-
     }
   };
 
@@ -248,7 +245,6 @@ const RegisterFarm = () => {
       };
       try {
         const { data } = await addFarm(finalData);
-        
         console.log("register>>>", data);
         if (data?.status === "success") {
           const farmUser = authService.getCurrentUser();
@@ -265,6 +261,9 @@ const RegisterFarm = () => {
           authContext.setUser(newUser);
           console.log("User>>", newUser);
           toast.success(data?.message);
+          const getWeather = async () => {
+            await fetchWeatherDataByGeocode(getActiveFarm().geocode);
+          };
           navigate("/");
         }
       } catch (error: any) {

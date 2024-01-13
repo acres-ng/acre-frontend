@@ -22,11 +22,17 @@ axios.interceptors.response.use(
   }
 );
 
-const instance = axios.create({
-  headers:{
-    Authorization: `Bearer ${getJwt()}`,
-  }
-});
+export const getDefaultOptions = (jwt?:string) => {
+  const token = jwt ?? getJwt();
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      Accept: "application/json",
+    },
+  };
+};
+
+const instance = axios.create(getDefaultOptions());
 
 export default {
   get: instance.get,
@@ -34,5 +40,5 @@ export default {
   put: instance.put,
   patch: instance.patch,
   delete: instance.delete,
-  
+  getDefaultOptions,
 };
