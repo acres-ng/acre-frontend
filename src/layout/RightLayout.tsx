@@ -7,8 +7,7 @@ import { WiHumidity } from "react-icons/wi";
 import Tasks from "./Tasks";
 import { weatherLocalKey } from "@/services/userService";
 import { fetchWeatherDataByGeocode } from "@/services/weatherService";
-import { getActiveFarm } from "@/services/farmService";
-import { set } from "date-fns";
+import { getActiveFarm, getFarmLocalTime } from "@/services/farmService";
 
 interface WeatherData {
   temperature: number;
@@ -28,8 +27,6 @@ const RightBar = () => {
     date: "",
     time: "",
   });
-
- 
 
   const getIconUrl = (iconCode: string) => {
     return `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
@@ -52,26 +49,22 @@ const RightBar = () => {
     };
 
     // get weather from api
-    fetchWeatherDataByGeocode(getActiveFarm().geocode).then((data) => {
-      parsedWeatherData = data
-      ??  weatherEmptyState;
-    date = data
-      ? parsedWeatherData.date
-      : new Date().toLocaleDateString();
-    time = data
-      ? parsedWeatherData.time
-      : new Date().toLocaleTimeString();
+    fetchWeatherDataByGeocode(getActiveFarm().geocode)
+      .then((data) => {
+        parsedWeatherData = data ?? weatherEmptyState;
+        date = data ? parsedWeatherData.date : new Date().toLocaleDateString();
+        time = data ? parsedWeatherData.time : new Date().toLocaleTimeString();
 
-      setWeatherData(parsedWeatherData);
-      setToday({
-        date: date,
-        time: time,
+        setWeatherData(parsedWeatherData);
+        setToday({
+          date: date,
+          time: getFarmLocalTime(),
+        });
+        localStorage.setItem(weatherLocalKey, JSON.stringify(data));
+      })
+      .catch((error) => {
+        console.error("Error fetching weather data:", error);
       });
-      localStorage.setItem(weatherLocalKey, JSON.stringify(data));
-    }).catch((error) => {
-      console.error("Error fetching weather data:", error);
-    });
-    
   }, []);
 
   return (

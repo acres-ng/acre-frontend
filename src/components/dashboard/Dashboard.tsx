@@ -40,41 +40,33 @@ import RightBar from "@/layout/RightLayout";
 // import Header from "../common/sidebar/header";
 import DashCard from "./DashCard";
 import { AcreLoader } from "../ui/acreLoader";
+import { Farm } from "@/constants/types";
 
-type Farm = {
-  id: string;
-  farm_name: string;
-  line_address1: string;
-  line_address2: string;
-  state: string;
-  country: string;
-};
-
-
-
-
-
-export default function Dashboard() {
-  const [isLoading, setIsLoading] = useState(true);
+const Dashboard = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [date, setDate] = useState<Date>();
   const [farms, setFarms] = useState<Farm>();
   const user = getCurrentUser();
-
+  
   useEffect(() => {
-    // fetch farms
     const fetchFarms = async () => {
       const response = await getFarmById(user?.farms[0]?.id);
-      setFarms(response?.data?.data);
+      const farm:Farm = {
+        id: response.data.id,
+        farm_name: response.data.farm_name,
+        line_address1: response.data.line_address1,
+        line_address2: response.data.line_address2,
+        country: response.data.country,
+        state:response.data.state,
+        geocode: response.data.geocode,
+      }
+
+      setFarms(farm);
     };
 
-    // fetch all dashboard endpoints
-    const fetchDashboardData = async () => {
-      await fetchFarms();
-      setIsLoading(false);
-    };
-
-    // get dashboard data
-    fetchDashboardData();
+    fetchFarms().then(()=>{
+      setIsLoading(false)
+    })
   }, []);
 
   return (
@@ -399,3 +391,5 @@ export default function Dashboard() {
     </>
   );
 }
+
+export default Dashboard;

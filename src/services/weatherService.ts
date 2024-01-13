@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getActiveFarm } from "./farmService";
-import { getStateByCodeAndCountry } from "country-state-city/lib/state";
 import { Country } from "country-state-city";
+import { weatherLocalKey } from "./userService";
 
 interface WeatherData {
   main: {
@@ -23,7 +23,7 @@ interface WeatherData {
 
 export async function fetchWeatherDataByGeocode(geocode: string) {
   const today = new Date().toLocaleDateString();
-  const weatherDataExists = localStorage.getItem("weatherData");
+  const weatherDataExists = localStorage.getItem(weatherLocalKey);
   if (
     !weatherDataExists ||
     (weatherDataExists && JSON.parse(weatherDataExists).date < today)
@@ -49,7 +49,7 @@ export async function fetchWeatherDataByGeocode(geocode: string) {
 }
 
 const extractWeatherData = (weatherData: any) => {
-  const temperature = weatherData.main.temp;
+  const temperature = Math.floor(weatherData.main.temp);
   const windSpeed = weatherData.wind.speed;
   const humidity = weatherData.main.humidity;
   const rain = weatherData.rain ? weatherData.rain["1h"] : 0; // Rain in the last hour (if available)

@@ -18,17 +18,15 @@ const Otp = () => {
   const [timer, setTimer] = useState({ minutes: 0, seconds: 0 });
   const [showTimer, setShowTimer] = useState(true);
   const [loading, setLoading] = useState(false);
-
   const navigate = useNavigate();
-
   const currentUser = getCurrentUser();
   const customerContactType = currentUser?.customer?.primary_contact; // email or phone
   const customerContact = currentUser?.customer?.[customerContactType];
-
-  const fetchOTP = async () => {
+  const [sendOtp, setSendOtp] = useState(false);
+  const fetchOTP = async (toastError =false) => {
     try {
       setLoading(true);
-      const response = await getOTP({ contact: customerContact });
+      const { response } = await getOTP({ contact: customerContact });
       if (response?.status === "success") {
         setTimer({
           minutes: Math.floor(response?.data / 60),
@@ -39,6 +37,9 @@ const Otp = () => {
       }
     } catch (error: any) {
       console.error("Error fetching OTP:", error);
+      if(toastError){
+        toast.error(error?.response?.data?.message);
+      }
       const time = error?.response?.data?.data;
       if (!isNaN(time)) {
         setTimer({
@@ -53,16 +54,18 @@ const Otp = () => {
     }
   };
 
+
   useEffect(() => {
-    if (customerContact) {
+    if (sendOtp && customerContact) {
       fetchOTP();
     }
-  }, [customerContact]);
+    setSendOtp(true);
+  }, [sendOtp]);
 
   useEffect(() => {
     let timerInterval: NodeJS.Timeout;
 
-    if (timer.minutes === 0 && timer.seconds === 0) {
+    if (timer.minutes === 0 && timer.seconds === 0 ) {
       setShowResendButton(true);
       setShowTimer(false);
     } else {
@@ -86,7 +89,7 @@ const Otp = () => {
     return () => {
       clearInterval(timerInterval);
     };
-  }, [timer]);
+  }, [timer, sendOtp]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -98,7 +101,6 @@ const Otp = () => {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
     if (otpCode.length !== 6) {
       toast.error("OTP code must be six characters long");
       return;
@@ -130,7 +132,7 @@ const Otp = () => {
   };
 
   const handleResend = async () => {
-    await fetchOTP();
+    await fetchOTP(true);
   };
 
   return (
@@ -215,7 +217,6 @@ const Otp = () => {
                     )}
                     <button
                       type="submit"
-                      onClick={customerContact}
                       className="bg-green-500 cursor-pointer hover-bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline"
                     >
                       Continue

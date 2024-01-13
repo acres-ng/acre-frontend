@@ -82,66 +82,65 @@ const RegisterFarm = () => {
   const onLoad = (autocomplete: google.maps.places.Autocomplete) => {
     setAutocomplete(autocomplete);
   };
-
-  const [formData, setFormData] = useState({
+  const [farmAddress, setCountryAndState] = useState({
     country: "",
     state: "",
   });
+  const [isLoading, setLoader] = useState(false);
 
-  const countryData: Option[] = CountryType.getAllCountries().map(
-    (country) => ({
+  const getCountries = (selectedCountry?: string) => {
+    return CountryType.getAllCountries().map((country, index) => ({
       value: country.name,
       displayValue: `${country.name}`,
       iso: `${country.isoCode}`,
-    })
-  );
+      selected:
+        selectedCountry && selectedCountry == country.isoCode
+          ? true
+          : index == 0
+          ? true
+          : false,
+    }));
+  };
+  const [countryData, setCountryData] = useState(getCountries());
 
-  const getStateData = (countryCode: string) => {
+  const getStateData = (countryCode: string, selected?: string) => {
     const states = State.getStatesOfCountry(countryCode).map((state) => ({
       value: `${state.name}`,
       displayValue: `${state.name}`,
       iso: `${state.isoCode}`,
+      selected: selected === state.name ? true : false,
     }));
     return states;
   };
 
-  const populateStateSelect = (country: string, selected?: string) => {
-    const countryCode = country ? country : formData.country;
-    const stateData = getStateData(countryCode);
-    const stateSelect = document.getElementById(
-      "getState"
-    ) as HTMLSelectElement;
-
-    // Clear existing options
-    stateSelect.innerHTML = "";
-
-    // Generate options for each state
-    for (const state of stateData) {
-      const option = document.createElement("option");
-      option.value = state.value;
-      option.text = state.displayValue;
-
-      if (selected && state.value === selected) {
-        option.selected = true;
-      }
-      stateSelect.appendChild(option);
-    }
-  };
-
-  const stateData = getStateData("AF");
-
+  const [statesData, setStateData] = useState(getStateData("AF"));
   const [markerPosition, setMarkerPosition] = useState<LatLng | null>(null);
+
+  /**
+   *  populates the state dropdown with valid states for selected country
+   */
+  const populateStateSelect = (country: string, selectState?: string) => {
+    const countryCode = country ?? farmAddress.country;
+    const stateData = getStateData(countryCode, selectState);
+    const stateExists = stateData.filter(
+      (state) => state.value === selectState
+    )[0];
+    const selectedState =
+      selectState && stateExists ? selectState : stateData[0].value;
+    setStateData(stateData);
+    setCountryAndState({
+      country: countryCode,
+      state: selectedState,
+    });
+  };
 
   const onPlaceChanged = async () => {
     if (autocomplete === null) return;
-
     const place = autocomplete.getPlace();
     if (!place.geometry || !place.geometry.location || !map) return;
-
     const location = place.geometry.location;
     const newCenter = { lat: location.lat(), lng: location.lng() };
     const geocodeValue = `${location.lat()}, ${location.lng()}`;
-
     // Extract address components
     const addressComponents = place.address_components;
     let updatedCountry = "";
@@ -155,25 +154,20 @@ const RegisterFarm = () => {
         }
       }
     }
-
-    // Set marker position based on the entered address
-    setMarkerPosition(newCenter);
-
-    // Update the state with the extracted country and state values
+    //selects country in the dropdown
+    setCountryData(getCountries(updatedCountry));
+    //populates and selects state for the updatedCountry in the dropdown
     populateStateSelect(updatedCountry, updatedState);
-    setFormData({
+    // sets marker
+    setMarkerPosition(newCenter);
+    // sets updated address data
+    setStep2Data({
+      geocode: geocodeValue,
       country: updatedCountry,
       state: updatedState,
     });
 
-    // Fetch weather data using the obtained geocode
     try {
-      // Update step2Data state with extracted weather data
-      setStep2Data({
-        ...step2Data,
-        geocode: geocodeValue,
-      });
-
       // Set new center on the map
       map.panTo(newCenter);
       map.setZoom(15);
@@ -193,14 +187,7 @@ const RegisterFarm = () => {
   const [step3Data, setStep3Data] = useState({});
 
   const navigate = useNavigate();
-
   const user = authService.getCurrentUser();
-
-  useEffect(() => {
-    if (!user) {
-      navigate("/login");
-    }
-  }, [user]);
 
   const {
     handleSubmit,
@@ -221,6 +208,7 @@ const RegisterFarm = () => {
   };
 
   const prevStep = () => {
+    setLoader(false); //enable submit button in step3
     if (step > 1) {
       setStep(step - 1);
     }
@@ -231,21 +219,25 @@ const RegisterFarm = () => {
       if (step === 1) {
         setStep1Data(stepData);
       } else if (step === 2) {
-        setStep2Data({ ...step2Data, ...stepData });
+        const step2merge = {
+          ...stepData,
+          ...step2Data,
+        };
+        setStep2Data(step2merge);
       } else if (step === 3) {
         setStep3Data(stepData);
       }
       nextStep();
     } else {
       // Submit the final data to the server
-      const finalData = {
+      const payload = {
         ...step1Data,
         ...step2Data,
         ...step3Data,
       };
       try {
-        const { data } = await addFarm(finalData);
-        console.log("register>>>", data);
+        setLoader(true); //disables the submit button after click
+        const { data } = await addFarm(payload);
         if (data?.status === "success") {
           const farmUser = authService.getCurrentUser();
           const newUser = {
@@ -254,16 +246,14 @@ const RegisterFarm = () => {
               {
                 id: data?.data?.id,
                 name: data?.data?.farm_name,
+                country: data?.data?.country,
+                geocode: data?.data?.geocode,
               },
             ],
           };
           authService.setCurrentUser(newUser);
           authContext.setUser(newUser);
-          console.log("User>>", newUser);
           toast.success(data?.message);
-          const getWeather = async () => {
-            await fetchWeatherDataByGeocode(getActiveFarm().geocode);
-          };
           navigate("/");
         }
       } catch (error: any) {
@@ -309,10 +299,6 @@ const RegisterFarm = () => {
   const originRef = useRef<HTMLInputElement>(null);
   const destinationRef = useRef<HTMLInputElement>(null);
 
-  if (!isLoaded) {
-    return <SkeletonText />;
-  }
-
   async function calculateRoute() {
     if (
       !originRef.current ||
@@ -331,6 +317,28 @@ const RegisterFarm = () => {
     });
 
     setDirectionsResponse(results);
+  }
+
+  /**
+   * USE EFFECT
+   */
+  useEffect(() => {
+    if (!user) {
+      navigate("/login");
+    }
+  }, [
+    user,
+    step1Data,
+    step2Data,
+    step3Data,
+    statesData,
+    farmAddress,
+    countryData,
+    navigate,
+  ]);
+
+  if (!isLoaded) {
+    return <SkeletonText />;
   }
 
   return (
@@ -498,10 +506,10 @@ const RegisterFarm = () => {
                                     required: "Country is required",
                                   })}
                                   id="getCountry"
-                                  value={formData.country}
+                                  value={farmAddress.country}
                                   onChange={(e) => {
-                                    setFormData({
-                                      ...formData,
+                                    setCountryAndState({
+                                      ...farmAddress,
                                       country: e.target.value,
                                     });
                                     populateStateSelect(e.target.value);
@@ -509,7 +517,11 @@ const RegisterFarm = () => {
                                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                 >
                                   {countryData.map((option, index) => (
-                                    <option key={index} value={option.iso}>
+                                    <option
+                                      key={index}
+                                      value={option.iso}
+                                      selected={option.selected}
+                                    >
                                       {option.displayValue}
                                     </option>
                                   ))}
@@ -532,17 +544,21 @@ const RegisterFarm = () => {
                                 <select
                                   {...register("state")}
                                   id="getState"
-                                  value={formData.state}
+                                  value={farmAddress.state}
                                   onChange={(e) =>
-                                    setFormData({
-                                      ...formData,
+                                    setCountryAndState({
+                                      ...farmAddress,
                                       state: e.target.value,
                                     })
                                   }
                                   className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
                                 >
-                                  {stateData.map((option, index) => (
-                                    <option key={index} value={option.value}>
+                                  {statesData.map((option, index) => (
+                                    <option
+                                      key={index}
+                                      value={option.value}
+                                      selected={option.selected}
+                                    >
                                       {option.displayValue}
                                     </option>
                                   ))}
@@ -645,6 +661,7 @@ const RegisterFarm = () => {
                             <button
                               className="bg-green-500  w-full hover:bg-green-700 text-white  py-2 rounded-lg focus:outline-none focus:shadow-outline"
                               type="submit"
+                              disabled={isLoading}
                             >
                               Continue
                             </button>
