@@ -1,6 +1,6 @@
 import { API_URL } from "@/config";
 import http from "./HttpService";
-import { userLocalKey } from "./userService";
+import { getJwt, userLocalKey, weatherLocalKey } from "./userService";
 
 const apiUrl = API_URL + "auth/login";
 
@@ -27,15 +27,18 @@ export interface Token {
 
 export async function login(user: User) {
   const { data } = await http.post(apiUrl, user);
-  localStorage.setItem(
-    userLocalKey,
-    JSON.stringify({
-      token: data?.data?.token,
-      customer: data?.data?.customer,
-      farms: data?.data?.farms || [],
-    })
-  );
+   const setItems= async ()  => {
+    localStorage.setItem(
+      userLocalKey,
+      JSON.stringify({
+        token: data?.data?.token,
+        customer: data?.data?.customer,
+        farms: data?.data?.farms || [],
+      })
+    );
+  }
 
+  await setItems()
   return data;
 }
 
@@ -90,7 +93,13 @@ export async function getOTP(payload: { contact: string }) {
 }
 
 export function logout() {
-  return localStorage.removeItem(userLocalKey);
+  const keysToRemove = [userLocalKey, weatherLocalKey];
+  const removeItems = () => {
+    keysToRemove.forEach((key) => {
+      localStorage.removeItem(key);
+    });
+  };
+  return removeItems();
 }
 
 export default {

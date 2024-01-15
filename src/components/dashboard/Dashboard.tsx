@@ -36,124 +36,45 @@ import { getCurrentUser } from "@/services/authService";
 import BarCharts from "../charts/BarCharts";
 import PieCharts from "../charts/PieCharts";
 import SearchWidget from "../search/search";
-import LeftLayout from "@/layout/RightLayout";
+import RightBar from "@/layout/RightLayout";
 // import Header from "../common/sidebar/header";
 import DashCard from "./DashCard";
-import HttpService from "@/services/HttpService";
-import { getUserLocal } from "@/services/userService";
-import axios from "axios";
+import { AcreLoader } from "../ui/acreLoader";
+import { Farm } from "@/constants/types";
 
-type Farm = {
-  id: string;
-  farm_name: string;
-  line_address1: string;
-  line_address2: string;
-  state: string;
-  country: string;
-};
-
-interface WeatherData {
-  main: {
-    temp: number;
-    humidity: number;
-    pressure: number;
-  };
-  wind: {
-    speed: number;
-  };
-  rain?: {
-    "1h": number;
-  };
-  date: string;
-  icon: string;
-  description: string;
-}
-
-export default function Dashboard() {
+const Dashboard = () => {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [date, setDate] = useState<Date>();
   const [farms, setFarms] = useState<Farm>();
   const user = getCurrentUser();
-  console.log("user>>", user);
   
-
-  const fetchWeatherDataByGeocode = async (geocode: string) => {
-    const today = new Date().toLocaleDateString();
-    const weatherDataExists = localStorage.getItem("weatherData");
-    if (
-      !weatherDataExists ||
-      (weatherDataExists && JSON.parse(weatherDataExists).date < today)
-    ) {
-      const geocodeSplit = geocode.split(", ");
-      const geocodeFormatted = `lat=${geocodeSplit[0]}&lon=${geocodeSplit[1]}`;
-      const apiKey = import.meta.env.VITE_OPENWEATHER_API_KEY;
-      const apiUrl = `https://api.openweathermap.org/data/2.5/weather?${geocodeFormatted}&appid=${apiKey}&units=metric`;
-      try {
-        const response = await axios.get(apiUrl);
-        const weatherData = response.data;
-
-        const extractedData = extractWeatherData(weatherData);
-        storeWeatherDataInLocalStorage(extractedData);
-
-        // Logging weather information
-        console.log("Weather Information:");
-        console.log(`Temperature: ${extractedData.temperature}°C`);
-        console.log(`Wind Speed: ${extractedData.windSpeed} m/s`);
-        console.log(`Humidity: ${extractedData.humidity}%`);
-        console.log(`Rain (last hour): ${extractedData.rain} mm`);
-        console.log(`Pressure: ${extractedData.pressure} hPa`);
-
-        return extractedData; // Return extracted data after processing
-      } catch (error) {
-        console.error("Error fetching weather data:", error);
-        throw error; // Re-throw the error to handle it where the function is called
-      }
-    }
-  };
-
-  const extractWeatherData = (weatherData: any) => {
-    const temperature = weatherData.main.temp;
-    const windSpeed = weatherData.wind.speed;
-    const humidity = weatherData.main.humidity;
-    const rain = weatherData.rain ? weatherData.rain["1h"] : 0; // Rain in the last hour (if available)
-    const pressure = weatherData.main.pressure;
-    const date = new Date().toLocaleDateString();
-    const icon = weatherData.weather[0].icon;
-    const description = weatherData.weather[0].description;
-
-    return {
-      temperature,
-      windSpeed,
-      humidity,
-      rain,
-      pressure,
-      date,
-      icon,
-      description,
-    };
-  };
-
-  const storeWeatherDataInLocalStorage = (weatherData: any) => {
-    localStorage.setItem("weatherData", JSON.stringify(weatherData));
-  };
-
   useEffect(() => {
     const fetchFarms = async () => {
       const response = await getFarmById(user?.farms[0]?.id);
-      setFarms(response?.data?.data);
-    };
-    const getWeather = async () => {
-      await fetchWeatherDataByGeocode(getActiveFarm().geocode);
+      const farm:Farm = {
+        id: response.data.id,
+        farm_name: response.data.farm_name,
+        line_address1: response.data.line_address1,
+        line_address2: response.data.line_address2,
+        country: response.data.country,
+        state:response.data.state,
+        geocode: response.data.geocode,
+      }
+
+      setFarms(farm);
     };
 
-    fetchFarms();
-    getWeather();
+    fetchFarms().then(()=>{
+      setIsLoading(false)
+    })
   }, []);
 
   return (
     <>
+      {isLoading ? <AcreLoader /> : Dashboard}
       {/* <Header/> */}
       <div className=" lg:px-8 grid grid-cols-10 ">
-        <div className="h-full space-y-6  lg:col-span-7 col-span-12">
+        <div className="h-full space-y-6 lg:col-span-7 col-span-12">
           <div className="space-between flex items-center">
             <div className="flex w-2/5">
               <SearchWidget />
@@ -463,10 +384,12 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="lg:col-span-3 w-[50%] ">
-          <LeftLayout />
+        <div className="lg:col-span-3 w-[50%]">
+          <RightBar />
         </div>
       </div>
     </>
   );
 }
+
+export default Dashboard;

@@ -13,6 +13,8 @@ import logo from "../../assets/logo.png";
 import useAuth from "../context/useAuth";
 import AuthContext from "../context/authContext";
 import { backgroundColours } from "@/lib/enums";
+import { fetchWeatherDataByGeocode } from "../dashboard/Dashboard";
+import { getActiveFarm } from "@/services/farmService";
 
 interface User {
   login: string;
@@ -74,9 +76,9 @@ function Login() {
         response.data?.is_verified === true
       ) {
         if (response.data?.farms.length >= 1) {
-          const loginUser = authService.getCurrentUser();
+          const loginUser = await authService.getCurrentUser();
           if (loginUser) {
-            authContext.setUser(loginUser);
+            await authContext.setUser(loginUser);
           }
           navigate("/");
         } else {
