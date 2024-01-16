@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Routings from "./components/routes/Routings";
 import AuthContext from "./components/context/authContext";
+import GlobalDrawer from '../src/layout/sidebar/GlobalDrawer';
 
 interface User {
   token: string;
@@ -25,6 +26,7 @@ function App() {
   return (
     <AuthContext.Provider value={{ user, setUser }}>
       <Router>
+      <GlobalDrawer />
         <Routings />
       </Router>
     </AuthContext.Provider>

@@ -68,9 +68,9 @@ const RightBar = () => {
   }, []);
 
   return (
-    <div className="fixed end-4">
-      <div className=" ">
-        <div className="bg-[#CCE6DA] rounded-lg shadow-sm p-6   h-full">
+    <div className="fixed hidden end-0 top-0 col-span-4 z-50 xl:block   2xl:w-[30rem]    ">
+      <div className="">
+      <div className=" flex flex-col px-6 py-2 overflow-hidden bg-[#CCE6DA] rounded-xl shadow-lg duration-300 hover:shadow-2xl ">
           <h3 className="text-lg font-bold leading-tight text-green-900 ">
             Weather
           </h3>
@@ -99,7 +99,7 @@ const RightBar = () => {
                       alt="weather-icon"
                     />
                   </span>
-                  <span className="text-lg text-gray-500">
+                  <span className="text-xl text-[#006D38]">
                     {weatherData.temperature}°C
                   </span>
                 </div>
@@ -116,7 +116,7 @@ const RightBar = () => {
 
           <div className="grid grid-cols-2 gap-2 mt-4 justify-center">
             {/* Card 1 - Wind */}
-            <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-md shadow-md">
+            <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow-md  overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA]  duration-300 hover:shadow-2xl ">
               <CardContent>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
@@ -133,7 +133,7 @@ const RightBar = () => {
             </Card>
 
             {/* Card 2 - Humidity */}
-            <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-md shadow-md">
+            <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow-md  overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA]  duration-300 hover:shadow-2xl ">
               <CardContent>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
@@ -150,7 +150,7 @@ const RightBar = () => {
             </Card>
 
             {/* Card 3 - Sunrise */}
-            <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-md shadow-md">
+            <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow-md  overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA]  duration-300 hover:shadow-2xl ">
               <CardContent>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
@@ -167,7 +167,7 @@ const RightBar = () => {
             </Card>
 
             {/* Card 4 - Sunset */}
-            <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-md shadow-md">
+            <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow-md  overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA]  duration-300 hover:shadow-2xl ">
               <CardContent>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
@@ -183,7 +183,7 @@ const RightBar = () => {
           </div>
         </div>
       </div>
-      <div className=" h-full">
+      <div className=" h-full mt-8">
         <Tasks />
       </div>
     </div>

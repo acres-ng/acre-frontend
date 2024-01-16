@@ -10,58 +10,34 @@ export default function Members({ className }: { className?: string }) {
   return (
     <div className="">
       
-      <WidgetCard title="" headerClassName="hidden" className="p-0 lg:p-0">
+      <WidgetCard title="" headerClassName="hidden" className="p-0 lg:p-0 ">
       <Title
         as="h3"
-        className="mb-3 text-lg lg:text-lg font-semibold text-gray-900 xl:text-xl 2xl:mb-5"
+        className="my-3 pt-3 ml-4 text-lg lg:text-lg font-semibold text-gray-900 xl:text-xl 2xl:mb-5"
       >
-        Tasks
+         Tasks
       </Title>
         <SimpleBar style={{ maxHeight: 450 }}>
-          {/* <div className="p-5 lg:p-7">
-            <div className="-me-2 grid gap-4 @sm:gap-5">
-              {members.map((member) => (
-                <div
-                  key={member.name + member.id}
-                  className="flex items-start pe-2"
-                >
-                  <div className="relative me-3 h-12 w-12 shrink-0 overflow-hidden rounded-full bg-gray-100 @sm:h-12 @sm:w-12">
-                    <img
-                      src={member.thumbnail}
-                      alt={member.name}
-                     
-                      sizes="(max-width: 768px) 100vw"
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="flex w-full items-center justify-between gap-2">
-                    <div>
-                      <Text className="text-sm font-semibold text-gray-900 dark:text-gray-700 2xl:text-base">
-                        {member.name}
-                      </Text>
-                      <Text className="text-gray-500">{member.email}</Text>
-                    </div>
-                    <div
-                      className={cn(
-                        'flex h-10 w-10 items-center justify-center rounded-full',
-                        member.fill
-                      )}
-                    >
-                      <FaTrophy className={cn('h-6 w-6', member.color)} />
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div> */}
+
 
 <div className="flex items-center justify-center mb-4">
-  <button className="bg-gray-200 hover:bg-gray-100 text-[#7C7D7D] font-bold py-2 px-4 rounded-lg mr-28 shadow-lg">
-    Status
-  </button>
-  <button className="bg-gray-200 hover:bg-gray-100 text-[#7C7D7D] font-bold py-2 px-4 rounded-lg shadow-lg">
-    Assignee
-  </button>
+<div className="relative inline-flex mr-4">
+  <svg className="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 412 232"><path d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.762-9.763 25.592 0 35.355l181 181c9.763 9.763 25.592 9.763 35.355 0l181-181c9.762-9.763 9.762-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z" fill="#648299" fill-rule="nonzero"/></svg>
+  <select className="border border-gray-300 rounded-lg text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none">
+    <option>Status</option>
+    <option>Option 1</option>
+    <option>Option 2</option>
+  </select>
+</div>
+
+<div className="relative inline-flex">
+  <svg className="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 412 232"><path d="M206 171.144L42.678 7.822c-9.763-9.763-25.592-9.763-35.355 0-9.763 9.762-9.763 25.592 0 35.355l181 181c9.763 9.763 25.592 9.763 35.355 0l181-181c9.762-9.763 9.762-25.592 0-35.355-9.763-9.763-25.592-9.763-35.355 0L206 171.144z" fill="#648299" fill-rule="nonzero"/></svg>
+  <select className="border border-gray-300 rounded-lg text-gray-600 h-10 pl-5 pr-10 bg-white hover:border-gray-400 focus:outline-none appearance-none">
+    <option>Assignee</option>
+    <option>Option 1</option>
+    <option>Option 2</option>
+  </select>
+</div>
 </div>
 
 
