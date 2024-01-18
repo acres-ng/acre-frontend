@@ -44,6 +44,7 @@ import { Farm } from "@/constants/types";
 import { useWindowScroll } from "../hooks/use-window-scroll";
 import { useIsMounted } from "../hooks/use-is-mounted";
 import HamburgerButton from "@/layout/sidebar/hamburger-button";
+import NotificationDialog from "./NotificationDialog";
 
 const Dashboard = () => {
  
@@ -78,7 +79,7 @@ const Dashboard = () => {
       {isLoading ? <AcreLoader /> : Dashboard}
       {/* <Header/> */}
       <div className=" pt-20  ">
-        <div className="h-full space-y-2       w-full    xl:w-[60rem] 2xl:ms-12 2xl:w-[calc(100%-288px)] ">
+        <div className="h-full space-y-2       w-full    xl:w-[calc(100%-188px)]  2xl:ms-12 2xl:w-[calc(100%-288px)] ">
        
           {/* main content */}
           <div className="border-none p-0 outline-none">
@@ -95,6 +96,7 @@ const Dashboard = () => {
                     {`${farms?.line_address1}, ${farms?.state}`}
                   </p>
                 </div>
+                <NotificationDialog   className=" "/>
 
                 <div className="">
                   <Popover>

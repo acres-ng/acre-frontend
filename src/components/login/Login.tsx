@@ -13,7 +13,7 @@ import logo from "../../assets/logo.png";
 import useAuth from "../context/useAuth";
 import AuthContext from "../context/authContext";
 import { backgroundColours } from "@/lib/enums";
-import { fetchWeatherDataByGeocode } from "../dashboard/Dashboard";
+// import { fetchWeatherDataByGeocode } from "../dashboard/Dashboard";
 import { getActiveFarm } from "@/services/farmService";
 
 interface User {
