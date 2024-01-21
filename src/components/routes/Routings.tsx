@@ -14,6 +14,10 @@ import Add from "../livestock/Add";
 import Feeding from "../livestock/Feeding";
 import Health from "../livestock/Health";
 import Housing from "../livestock/Housing";
+import Layyout from "@/layout/sidebar/layyout";
+import InventoryList from "../livestock/InventoryList";
+import Rations from "../livestock/Rations";
+import RecipeBuilder from "../livestock/RecipeBuilder";
 
 const PublicRoutes = () => {
   return (
@@ -22,9 +26,9 @@ const PublicRoutes = () => {
       <Route
         path="/"
         element={
-          <Layout>
+          <Layyout>
             <Dashboard />
-          </Layout>
+          </Layyout>
         }
       />
       {/* <Route
@@ -78,6 +82,20 @@ const PublicRoutes = () => {
             </Layout>
           }
         />
+
+<Route
+          path="house"
+          element={
+            <Layout>
+               <InventoryList />
+            </Layout>
+          }
+        />
+
+
+
+    
+ 
 
       </Route>
 

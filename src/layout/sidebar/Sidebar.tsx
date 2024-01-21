@@ -10,11 +10,14 @@ import { menuItems } from "./menu-items";
 import logo from "@/assets/logo.png";
 import authService, { getCurrentUser } from "@/services/authService";
 import { Button } from "@/components/ui/button";
+import HamburgerButton from "./hamburger-button";
+
 
 export default function Sidebar({ className }: { className?: string }) {
+
   const location = useLocation();
   const pathname = location.pathname;
-
+  
   const user = getCurrentUser();
   const handleLogout = () => {
     authService.logout();
@@ -23,11 +26,13 @@ export default function Sidebar({ className }: { className?: string }) {
   return (
     <aside
       className={cn(
-        "fixed bottom-0 start-0 z-50 h-full w-[215px] border-e-2 border-gray-100 bg-white dark:bg-gray-100/50 2xl:w-72",
+        "fixed bottom-0 start-0 z-50 h-full w-[215px] border-e-2 border-gray-100 bg-white dark:bg-gray-100/50 2xl:w-[14rem]",
         className
       )}
     >
       <div className="sticky top-0 z-40 bg-gray-0/10 px-6 pb-5 pt-5 dark:bg-gray-100/5 2xl:px-8 2xl:pt-6">
+    
+      
         <Link to={"/"} aria-label="Site Logo">
           <img src={logo} alt="acre logo" className="h-10 w-auto" />
         </Link>

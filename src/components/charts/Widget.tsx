@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { ForwardedRef, forwardRef } from 'react';
 
 const widgetCardClasses = {
-  base: 'border border-gray-200 bg-gray-0 p-5 bg-gray-50 lg:p-7',
+  base: 'border-lg border-[#F5F8F4] bg-gray-0 p-5 bg-gray-50 lg:p-7',
   rounded: {
     sm: 'rounded-sm',
     DEFAULT: 'rounded-lg',
