@@ -49,9 +49,9 @@ const Header = () => {
     }, []);
   
   return (
-    <div className='fixed w-full '> 
+    <div className=' w-full '> 
         <header  className={cn(
-        'sticky top-0 z-50 flex items-center bg-gray-100 px-4 py-4 backdrop-blur-xl dark:bg-gray-50/50 md:px-5 lg:px-0 2xl:py-5 3xl:px-8 4xl:px-10',
+        'fixed top-0 z-50 flex items-center  px-4 py-4 backdrop-blur-xl dark:bg-gray-50/50 md:px-5 lg:px-0 2xl:py-5 3xl:px-8 4xl:px-10',
         ((isMounted && windowScroll.y) as number) > 2 ? 'card-shadow' : ''
       )}>
 <div className="space-between flex items-center">
@@ -65,7 +65,7 @@ const Header = () => {
 
             <div className="flex    ml-[10rem]">
               <Select>
-                <SelectTrigger className="w-[280px] bg-primary text-white">
+                <SelectTrigger className="w-[220px] bg-[#CCE6DA] text-white">
                   <p className="font-bold text-gray-700 text-lg tracking-tight">
                     {farms?.farm_name}
                   </p>

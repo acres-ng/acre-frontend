@@ -68,118 +68,151 @@ const RightBar = () => {
   }, []);
 
   return (
-    <div className="fixed hidden end-0 top-0 col-span-4 z-50 xl:block xl:w-[20rem]   2xl:w-[30rem]    ">
+    <div className="fixed hidden end-0 top-0 col-span-4 z-50 xl:block xl:w-[20rem]   2xl:w-[30rem]         ">
       <div className="">
       <div className=" flex flex-col px-6 py-2 overflow-hidden bg-[#CCE6DA] rounded-xl shadow-lg duration-300 hover:shadow-2xl ">
-          <h3 className="text-lg font-bold leading-tight text-green-900 ">
+          <h3 className="text-3xl pt-4 font-bold text-[#2E5946] ">
             Weather
           </h3>
-          <CardContent className="p-2">
             {/* Date and time */}
-            <div className="flex justify-between items-center mt-2">
-              <span className="text-xs text-gray-500">
+
+          <div className="flex  justify-between items-center mt-2">
+              <span className=" font-medium text-base leading-6 text-[#7C7D7D]">
                 {/* Display day, date, and year */}
                 {todayDate.date}
               </span>
 
-              <span className="text-xs text-gray-500">
+              <span className="font-medium text-base leading-6 text-[#7C7D7D]">
                 {/* Display time */}
                 {todayDate.time}
               </span>
             </div>
+          
+          
+           
 
             {/* Weather details */}
+            <div className="">
             {weatherData && (
-              <div>
-                <div className="flex justify-center items-center mt-2">
-                  {/* Display weather icon and temperature */}
-                  <span role="img" aria-label="weather-icon" className="mr-2">
-                    <img
-                      src={getIconUrl(weatherData.icon)}
-                      alt="weather-icon"
-                    />
-                  </span>
-                  <span className="text-xl text-[#006D38]">
-                    {weatherData.temperature}°C
-                  </span>
-                </div>
-                <div className="flex justify-center items-center">
-                  <span className="text-md text-gray-500">
-                    {weatherData.description}
-                  </span>
-                </div>
-              </div>
+
+
+
+<div>
+<div className="flex  mt-2">
+  {/* Display weather icon and temperature */}
+  <span role="img" aria-label="weather-icon" >
+    <img
+      src={getIconUrl(weatherData.icon)}
+      alt="weather-icon"
+      className="ml-4  w-[120px] h-18"
+    />
+  </span>
+  <span className="text-[40px] text-[#006D38] font-semibold">
+    {weatherData.temperature}°C
+  </span>
+</div>
+<div className="flex justify-center mt-[-40px] items-center">
+  <h2 className="text-[16px] text-[#006D38] ml-16 font-medium ">
+    {weatherData.description}
+  </h2>
+</div>
+</div>
+           
+  //  <div className="flex flex-col items-center">
+  //   <div className="flex space-x-4">
+  //     <span role="img" aria-label="weather-icon " >
+  //       <img src={getIconUrl(weatherData.icon)} alt="weather-icon"  />
+  //     </span>
+  //     <span className="text-3xl text-[#006D38] mt-5 font-semibold">{weatherData.temperature}°C</span>
+  //   </div>
+  //   <h2 className="text-[16px] text-[#006D38] font-medium mt-1">
+  //     {weatherData.description}
+  //   </h2>
+  // </div>
+   
+    
+    
+
             )}
-          </CardContent>
+
+            </div>
+        
+          
 
           {/* Additional small cards */}
 
-          <div className="grid grid-cols-2 gap-2 mt-4 justify-center">
+          <div className="grid grid-cols-2 gap-4 my-4  justify-center">
             {/* Card 1 - Wind */}
-            <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow-md  overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA]  duration-300 hover:shadow-2xl ">
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <RiWindyLine className="mr-2" />
-                    <p className="text-xs text-gray-500">Wind</p>
-                  </div>
-                </div>
-                {weatherData && (
-                  <p className="text-sm font-medium">
-                    {weatherData.windSpeed} m/s
-                  </p>
-                )}
-              </CardContent>
-            </Card>
+            <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow-md overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA] duration-300 hover:shadow-2xl">
+  <div className="flex h-[65px] flex-col items-center justify-center ">
+    <div className="flex gap-2 items-center">
+      <span>
+        <RiWindyLine className="" />
+      </span>
+      <p className="text-xs text-gray-500">Wind</p>
+    </div>
+    {weatherData && (
+      <p className="text-sm font-medium pt-2">
+        {weatherData.windSpeed} m/s
+      </p>
+    )}
+  </div>
+</Card>
+
 
             {/* Card 2 - Humidity */}
-            <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow-md  overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA]  duration-300 hover:shadow-2xl ">
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <WiHumidity className="mr-2" />
-                    <p className="text-xs text-gray-500">Humidity</p>
-                  </div>
-                </div>
-                {weatherData && (
-                  <p className="text-sm font-medium">
-                    {weatherData.humidity} %
-                  </p>
-                )}
-              </CardContent>
-            </Card>
+            <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow-md overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA] duration-300 hover:shadow-2xl">
+  <div className="flex flex-col  h-[65px] items-center justify-center ">
+    <div className="flex gap-2 items-center">
+      <span>
+        <WiHumidity className="" />
+      </span>
+      <p className="text-xs text-gray-500">humidity</p>
+    </div>
+    {weatherData && (
+      <p className="text-sm font-medium pt-2">
+        {weatherData.humidity} m/s
+      </p>
+    )}
+  </div>
+</Card>
+
+
 
             {/* Card 3 - Sunrise */}
-            <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow-md  overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA]  duration-300 hover:shadow-2xl ">
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <IoBarbellOutline className="mr-2" />
-                    <p className="text-xs text-gray-500">Pressure</p>
-                  </div>
-                </div>
-                {weatherData && (
-                  <p className="text-sm font-medium">
-                    {weatherData.pressure} hPa
-                  </p>
-                )}
-              </CardContent>
-            </Card>
+            <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow-md overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA] duration-300 hover:shadow-2xl">
+  <div className="flex flex-col  h-[65px] items-center justify-center ">
+    <div className="flex gap-2 items-center">
+      <span>
+        <IoBarbellOutline className="" />
+      </span>
+      <p className="text-xs text-gray-500">pressure</p>
+    </div>
+    {weatherData && (
+      <p className="text-sm font-medium pt-2">
+        {weatherData.pressure} m/s
+      </p>
+    )}
+  </div>
+</Card>
 
             {/* Card 4 - Sunset */}
-            <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow-md  overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA]  duration-300 hover:shadow-2xl ">
-              <CardContent>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <BiCloudRain className="mr-2" />
-                    <p className="text-xs text-gray-500">Rain</p>
-                  </div>
-                </div>
-                {weatherData && (
-                  <p className="text-sm font-medium">{weatherData.rain} %</p>
-                )}
-              </CardContent>
-            </Card>
+            <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow-md overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA] duration-300 hover:shadow-2xl">
+  <div className="flex flex-col  h-[65px] items-center justify-center ">
+    <div className="flex gap-2 items-center">
+      <span>
+        <BiCloudRain className="" />
+      </span>
+      <p className="text-xs text-gray-500">rain</p>
+    </div>
+    {weatherData && (
+      <p className="text-sm font-medium pt-2">
+        {weatherData.rain} m/s
+      </p>
+    )}
+  </div>
+</Card>
+            
           </div>
         </div>
       </div>

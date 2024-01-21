@@ -23,7 +23,7 @@ function DashCard() {
   useEffect(() => {
     const userActiveFarmId = getActiveFarm().id;
     http
-      .get(`${API_URL}farms/${userActiveFarmId}/dashboard/tasks`, http.getDefaultOptions())
+      .get(`${API_URL}farms/${userActiveFarmId}/dashboard/basic`, http.getDefaultOptions())
       .then((response) => {
         const { data } = response.data;
         const totalLivestock = data.livestock.total_count || 0;

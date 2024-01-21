@@ -12,6 +12,8 @@ import PencilIcon from '@/components/icons/pencil';
 import AvatarCard from '@/components/ui/avatar-card';
 import DateCell from '@/components/ui/date-cell';
 import DeletePopover from './delete-popover';
+ import { CiSquareMinus } from "react-icons/ci";
+ import { CiSquarePlus } from "react-icons/ci";
 
 function getStatusBadge(status: User['status']) {
   switch (status) {
@@ -75,41 +77,42 @@ export const getColumns = ({
           checked={checkedItems.length === data.length}
           className="cursor-pointer"
         />
-        User ID
+       Feed Name/ID
       </div>
     ),
     dataIndex: 'checked',
     key: 'checked',
     width: 30,
     render: (_: any, row: User) => (
-      <div className="inline-flex ps-4">
+      <div className="inline-flex ps-2">
         <Checkbox
           className="cursor-pointer"
           checked={checkedItems.includes(row.id)}
           {...(onChecked && { onChange: () => onChecked(row.id) })}
-          label={`#${row.id}`}
+          label={`${row.id}`}
         />
       </div>
     ),
   },
   {
-    title: <HeaderCell title="Name" />,
+    title: <HeaderCell title="Livestock Type" />,
     dataIndex: 'fullName',
     key: 'fullName',
-    width: 250,
+    width: 150,
     hidden: 'fullName',
     render: (_: string, user: User) => (
       <AvatarCard
+      className='ps-'
         src={user.avatar}
         name={user.fullName}
-        description={user.email}
+        
       />
     ),
   },
   {
     title: (
       <HeaderCell
-        title="Role"
+        title="Unit Weight"
         sortable
         ascending={
           sortConfig?.direction === 'asc' && sortConfig?.key === 'role'
@@ -119,51 +122,53 @@ export const getColumns = ({
     onHeaderCell: () => onHeaderCellClick('role'),
     dataIndex: 'role',
     key: 'role',
-    width: 250,
+    width: 150,
     render: (role: string) => role,
   },
   {
     title: (
       <HeaderCell
-        title="Created"
+        title="Price per Unit"
         sortable
         ascending={
-          sortConfig?.direction === 'asc' && sortConfig?.key === 'createdAt'
+          sortConfig?.direction === 'asc' && sortConfig?.key === 'price'
         }
       />
     ),
-    onHeaderCell: () => onHeaderCellClick('createdAt'),
-    dataIndex: 'createdAt',
-    key: 'createdAt',
-    width: 200,
-    render: (value: Date) => <DateCell date={value} />,
+    onHeaderCell: () => onHeaderCellClick('price'),
+    dataIndex: 'price',
+    key: 'price',
+    width: 150,
+    // render: (value: Date) => <DateCell date={value} />,
+    // render: (value: string) => price(value),
+    render: (price: User['price']) => price,  
   },
   {
-    title: <HeaderCell title="Permissions" />,
+    title: <HeaderCell title="Feed Stock" />,
     dataIndex: 'permissions',
     key: 'permissions',
-    width: 200,
-    render: (permissions: User['permissions'][]) => (
-      <div className="flex items-center gap-2">
-        {permissions.map((permission) => (
-          <Badge
-            key={permission}
-            rounded="lg"
-            variant="outline"
-            className="border-gray-200 font-normal text-gray-500"
-          >
-            {permission}
-          </Badge>
-        ))}
+    width: 150,
+    render: () => (
+      <div className="w-max flex justify-center">
+        <span><CiSquareMinus /></span>
+        <span>5</span>
+        <span><CiSquarePlus /></span>
       </div>
     ),
+    
+    
   },
   {
-    title: <HeaderCell title="Status" />,
+    title: <HeaderCell title="Total Weight" />,
     dataIndex: 'status',
     key: 'status',
     width: 120,
-    render: (status: User['status']) => getStatusBadge(status),
+    // render: (status: User['status']) => getStatusBadge(status),
+    render: () => (
+      <div className="w-max flex justify-center">
+        <h2>200kg</h2>
+      </div>
+    ),
   },
   {
     title: <></>,

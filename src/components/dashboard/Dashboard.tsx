@@ -79,64 +79,52 @@ const Dashboard = () => {
       {isLoading ? <AcreLoader /> : Dashboard}
       {/* <Header/> */}
       <div className=" pt-20  ">
-        <div className="h-full space-y-2       w-full    xl:w-[calc(100%-188px)]  2xl:ms-12 2xl:w-[calc(100%-288px)] ">
+      
        
           {/* main content */}
-          <div className="border-none p-0 outline-none">
-            <div className="flex items-center justify-between">
-              <div className="space-y-10">
-                <div className="">
-                  <p className="font-light text-gray-500 text-lg ">
-                    Welcome to
-                  </p>
-                  <p className="font-bold text-gray-700 text-lg tracking-tight">
-                    {farms?.farm_name}
-                  </p>
-                  <p className="font-light text-gray-500 text-sm">
-                    {`${farms?.line_address1}, ${farms?.state}`}
-                  </p>
-                </div>
-                <NotificationDialog   className=" "/>
+          <div className="border-none  outline-none lg:w-full mx-auto ">
+  <div className="flex items-center justify-between">
+    <div className="space-y-10">
+      <div className="">
+        <p className="font-light text-gray-500 text-lg">Welcome to</p>
+        <p className="font-bold text-gray-700 text-lg tracking-tight">{farms?.farm_name}</p>
+        <p className="font-light text-gray-500 text-sm">{`${farms?.line_address1}, ${farms?.state}`}</p>
+      </div>
+      <NotificationDialog className=" " />
 
-                <div className="">
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"default"}
-                        className={cn(
-                          "w-auto justify-start text-left font-normal",
-                          !date && "text-white"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4 text-white" />
-                        {date ? format(date, "PPP") : <span>Pick a date</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </div>
+      <div className="">
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button
+              variant={"default"}
+              className={cn("w-auto justify-start text-left font-normal", !date && "text-white")}
+            >
+              <CalendarIcon className="mr-2 h-4 w-4 text-white" />
+              {date ? format(date, "PPP") : <span>Pick a date</span>}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0">
+            <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+          </PopoverContent>
+        </Popover>
 
-                <div className="space-y-10">
-                  <DashCard />
+        <DashCard />
+      </div>
 
-                  <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 3xl:gap-8">
-                    <Bar />
-                    <Pie />
-                  </div>
-
-                  <Finance />
-                </div>
-              </div>
-            </div>
-          </div>
+      <div className="space-y-6">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2 3xl:gap-8">
+          <Bar />
+          <Pie />
         </div>
+        <Finance />
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+        
 
         <div className="lg:col-span-3 w-[50%]  ">
           <RightBar />

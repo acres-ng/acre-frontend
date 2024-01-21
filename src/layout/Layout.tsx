@@ -28,6 +28,7 @@ const Layout = ({ children }: Props) => {
           {/* Sidebar */}
           <aside className="lg:col-span-2">
             <Side children={children} />
+            {/* children={children} */}
           </aside>
 
           {/* Main Content */}
