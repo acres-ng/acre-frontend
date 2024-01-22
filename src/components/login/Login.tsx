@@ -43,7 +43,6 @@ function Login() {
   // const user = getCurrentUser();
   const navigate = useNavigate();
   const location = useLocation();
-
   const authContext = useContext(AuthContext);
 
   const {
