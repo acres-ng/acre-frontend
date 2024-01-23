@@ -27,7 +27,7 @@ const Layout = ({ children }: Props) => {
         <div className="grid grid-cols-12 h-full">
           {/* Sidebar */}
           <aside className="lg:col-span-2">
-            <Side children={children} />
+            <Side />
             {/* children={children} */}
           </aside>
 
