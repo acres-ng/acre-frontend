@@ -68,7 +68,7 @@ const RightBar = () => {
   }, []);
 
   return (
-    <div className="fixed hidden end-0 top-0 col-span-4 z-50 xl:block xl:w-[20rem]   2xl:w-[30rem]         ">
+    <div className="fixed hidden end-0 top-2 col-span-4 z-50 xl:block xl:w-[20rem]   2xl:w-[30rem]         ">
       <div className="">
       <div className=" flex flex-col px-6 py-2 overflow-hidden bg-[#CCE6DA] rounded-xl shadow-lg duration-300 hover:shadow-2xl ">
           <h3 className="text-3xl pt-4 font-bold text-[#2E5946] ">
