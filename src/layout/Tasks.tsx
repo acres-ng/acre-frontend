@@ -4,7 +4,7 @@ import WidgetCard from "../components/charts/Widget";
 import { FaTrophy } from "react-icons/fa6";
 import { cn } from "@/lib/utils";
 import SimpleBar from "@/components/ui/simplebar";
-import { members } from "./data";
+
 import { getActiveFarm } from '@/services/farmService';
 import { useEffect, useState } from 'react';
 import { getJwt } from '@/services/userService';

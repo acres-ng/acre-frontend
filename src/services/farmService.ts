@@ -3,7 +3,7 @@ import { API_URL } from "@/config";
 import { getUserLocal } from "./userService";
 import { Country } from "country-state-city";
 import { getCurrentUser, setCurrentUser } from "./authService";
-import { Farm } from "@/constants/types";
+import { Farm } from "@/lib/types";
 
 const apiUrl = API_URL + "farms";
 

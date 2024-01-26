@@ -1,6 +1,6 @@
 import React from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { useIsMounted} from '../hooks/use-is-mounted';
+import { Avatar, AvatarFallback, AvatarImage } from "../../src/components/ui/avatar";
+import { useIsMounted} from '../components/hooks/use-is-mounted';
 import { cn } from '@/lib/utils';
 import {
     Select,
@@ -10,10 +10,10 @@ import {
     SelectLabel,
     SelectTrigger,
     SelectValue,
-  } from "../ui/select";
-import { useWindowScroll } from '../hooks/use-window-scroll';
+  } from "../../src/components/ui/select";
+import { useWindowScroll } from '../components/hooks/use-window-scroll';
 import HamburgerButton from '@/layout/sidebar/hamburger-button';
-import SearchWidget from '../search/search';
+import SearchWidget from '../../src/components/search/search';
 import Sidebar from '@/layout/sidebar/Sidebar';
 import { Farm } from "@/lib/types";
 import { getActiveFarm, getFarmById } from "@/services/farmService";
@@ -51,7 +51,7 @@ const Header = () => {
   return (
     <div className=' w-full '> 
         <header  className={cn(
-        'fixed top-0 z-50 flex items-center   py-4 backdrop-blur-xl dark:bg-gray-50/50 md:px-5 lg:px-0 2xl:py-5 3xl:px-8 4xl:px-10',
+        'fixed top-0 z-50 flex items-center py-4 backdrop-blur-xl dark:bg-gray-50/50 md:px-5 lg:px-0 2xl:py-5 3xl:px-8 4xl:px-10',
         ((isMounted && windowScroll.y) as number) > 2 ? 'card-shadow' : ''
       )}>
 <div className="space-between flex items-center">
@@ -59,11 +59,11 @@ const Header = () => {
             <HamburgerButton
           view={<Sidebar className="static w-full 2xl:w-full" />}
         />
-              <SearchWidget />
+          
 
             </div>
 
-            <div className="flex  pl-[2rem] md:pl-[30rem] lg:pl-[32rem] xl:pl-[12rem]">
+            <div className="flex  pl-[2rem] md:pl-[30rem] lg:pl-[32rem] xl:pl-[65rem]">
               <Select>
                 <SelectTrigger className="w-[220px] bg-[#CCE6DA] text-white">
                   <p className="font-bold text-gray-700 text-lg tracking-tight">

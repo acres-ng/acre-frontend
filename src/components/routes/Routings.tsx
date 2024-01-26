@@ -39,7 +39,6 @@ const PublicRoutes = () => {
           </Layout>
         }
       /> */}
-      
 
       <Route path="/livestock">
         <Route
@@ -66,7 +65,7 @@ const PublicRoutes = () => {
             </Layout>
           }
         />
-         <Route
+        <Route
           path="health"
           element={
             <Layout>
@@ -83,24 +82,17 @@ const PublicRoutes = () => {
           }
         />
 
-<Route
+        <Route
           path="house"
           element={
             <Layout>
-               <InventoryList />
+              <InventoryList />
             </Layout>
           }
         />
-
-
-
-    
- 
-
       </Route>
 
       {/* <---- End of Protected Routes ---> */}
-
 
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
