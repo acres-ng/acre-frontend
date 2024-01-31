@@ -38,7 +38,16 @@ const Livestock = () => {
     });
   }, []);
 
+  
+
   const AddLivestockDialog = () => {
+    const handleSingleEntryClick = () => {
+      navigate("/livestock/add", { state: { entryType: "single" } });
+    };
+
+    const handleFlockEntryClick = () => {
+      navigate("/livestock/add", { state: { entryType: "flock" } });
+    };
     return (
       <Dialog>
         <DialogTrigger asChild>
@@ -56,7 +65,7 @@ const Livestock = () => {
               <CardContent className="grid gap-4">
                 <div
                   className=" flex items-center space-x-4 rounded-md border p-4 cursor-pointer"
-                  onClick={() => navigate("/livestock/add")}
+                  onClick={handleSingleEntryClick}
                 >
                   <BellRing />
                   <div className="flex-1 space-y-1">
@@ -71,7 +80,7 @@ const Livestock = () => {
 
                 <div className=" flex items-center space-x-4 rounded-md border p-4 cursor-pointer">
                   <BellRing />
-                  <div className="flex-1 space-y-1">
+                  <div className="flex-1 space-y-1"   onClick={handleFlockEntryClick}>
                     <p className="text-sm font-medium leading-none">
                       Flock Entry
                     </p>
