@@ -33,6 +33,18 @@ import { API_URL } from "@/config";
 import { getActiveFarm } from "@/services/farmService";
 import HttpService from "@/services/HttpService";
 
+
+type AddProps = {
+  entryType?: string;
+};
+
+interface AddQuantityFieldProps {
+  livestockForm: {
+    control: any; // You may need to replace this with the correct type
+  };
+  entryType: string | undefined; // You can replace 'string' with the specific type if available
+}
+
 const livestockSchema = z.object({
   animal_type: z.number(),
   breed: z.number(),
@@ -47,24 +59,46 @@ const livestockSchema = z.object({
   price: z.string().refine((value) => value === "0" ? null : !isNaN(parseFloat(value)), {
     message: "Please enter a valid price or leave it empty.",
   }),
+
   date_of_stocking: z.string().refine((value) => {
     const currentDate = new Date();
     const inputDate = new Date(value);
-    return !isNaN(inputDate.getTime()) && inputDate >= currentDate;
+    // Check if inputDate is not in the future
+    return !isNaN(inputDate.getTime()) && inputDate <= currentDate;
   }, {
-    message: "Please enter a valid date of stocking that is not earlier than today.",
+    message: "Please enter a valid date of stocking that is today or earlier.",
   }),
   quantity: z.number().int().refine((value) => value > 0, {
     message: "Quantity must be greater than 0.",
   }),
+
+  // quantity: z
+  // .number()
+  // .int()
+  // .refine((value) => value > 0, {
+  //   message: "Quantity must be greater than 0.",
+  // }),
+
+
 });
+
+
 
 type LiveStockHousing = { id: string; name: string; type?: string };
 
 const Add = () => {
-
+  
   const location = useLocation();
   const entryType = location.state?.entryType;
+  const [quantity, setQuantity] = useState(1); // Initialize quantity to 1
+  useEffect(() => {
+    if (entryType === "flock") {
+      setQuantity(2);
+    } else {
+      setQuantity(1);
+    }
+  }, [entryType]);
+
 
   const AddQuantityField = () => {
     if (entryType === "flock") {
@@ -88,7 +122,6 @@ const Add = () => {
   };
 
 
-
   const livestockForm = useForm<z.infer<typeof livestockSchema>>({
     resolver: zodResolver(livestockSchema),
     defaultValues: {
@@ -97,10 +130,12 @@ const Add = () => {
       measuring_unit: "kg",
       price: "",
       date_of_stocking: new Date().toISOString().split('T')[0],
-      quantity: entryType === "flock" ? 2 : 1, // Default to 1 for single entry
+      quantity: entryType === "flock" ? 2 : 1,  
       ageUnit: "days",
     },
   });
+
+
   const animalsList: Animal[] = getAnimalsLocal()?.animals; 
   const [housingData, setHousingData] = useState<LiveStockHousing[]>(); 
 
@@ -143,6 +178,8 @@ const Add = () => {
 
   const onSubmit: SubmitHandler<z.infer<typeof livestockSchema>> = async (data) => {
     console.log("Submitting data:", data);
+    data.quantity = entryType === "single" ? 1 : Number(data.quantity);
+
     try {
       // Convert age to days based on the selected unit
       const ageInDays = convertToDays(data.age, data.ageUnit);
@@ -160,16 +197,19 @@ const Add = () => {
   
       const postData = {
         ...data,
+        // date_of_stocking: data.date_of_stocking,
         age: combinedAgeInDays.toString(),
         combinedAge: combinedAge,
         combinedAgeInDays: combinedAgeInDays,
       };
   
       const userActiveFarmId = getActiveFarm().id;
-  
+    const postDataToSend = entryType === "single"
+    ? [postData] // Enclose in an array for single entries
+    : postData;
       const response = await HttpService.post(
         `${API_URL}farms/${userActiveFarmId}/livestock`,
-        postData,
+        postDataToSend,
         HttpService.getDefaultOptions()
       );
   
@@ -185,63 +225,7 @@ const Add = () => {
   };
 
   
-  // const onSubmit: SubmitHandler<z.infer<typeof livestockSchema>> = async (data) => {
-  //   console.log("Submitting data:", data);
-  //   try {
-  //     // Convert age to days based on the selected unit
-  //     const ageInDays = convertToDays(data.age, data.ageUnit);
-  
-  //     const combinedAge = `${data.age} ${data.ageUnit}`;
-  //     console.log("Combined Age:", combinedAge);
-  
-  //     const combinedAgeInDays = convertToDays(data.age, data.ageUnit);
-  //     console.log("Combined Age in Days:", combinedAgeInDays);
-  
-  //     // Conditionally format the data based on entryType
-  //     let postData;
-  //     if (entryType === "single") {
-  //       // If it's flock entry, send as an object
-  //       postData = {
-  //         livestock: {
-  //           ...data,
-  //           age: combinedAgeInDays.toString(),
-  //           combinedAge: combinedAge,
-  //           combinedAgeInDays: combinedAgeInDays,
-  //         },
-  //       };
-  //     } else {
-  //       // If it's a single entry, send as an array
-  //       postData = {
-  //         livestock: [
-  //           {
-  //             ...data,
-  //             age: combinedAgeInDays.toString(),
-  //             combinedAge: combinedAge,
-  //             combinedAgeInDays: combinedAgeInDays,
-  //           },
-  //         ],
-  //       };
-  //     }
-  
-  //     const userActiveFarmId = getActiveFarm().id;
-  
-  //     const response = await HttpService.post(
-  //       `${API_URL}farms/${userActiveFarmId}/livestock`,
-  //       postData,
-  //       HttpService.getDefaultOptions()
-  //     );
-  
-  //     if (response.data) {
-  //       toast.success("Livestock added successfully!");
-  //     } else {
-  //       toast.error("Failed to add livestock. Please try again.");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //     toast.error("An error occurred. Please try again later.");
-  //   }
-  // };
-  
+ 
   
   
   useEffect(() => {

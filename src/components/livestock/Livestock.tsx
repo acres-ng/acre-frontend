@@ -101,7 +101,9 @@ const Livestock = () => {
     );
   };
 
-  const LivestockTable = () => {
+
+
+ const LivestockTable = () => {
     return (
       <div className="items-stretch bg-white flex flex-col pt-6 pb-12 rounded-2xl ">
         <table className="border-spacing-0 min-w-full border-collapse">
@@ -158,6 +160,8 @@ const Livestock = () => {
       </div>
     );
   };
+
+
 
   const EmptyState = () => {
     return (
