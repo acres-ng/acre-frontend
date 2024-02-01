@@ -25,6 +25,7 @@ import { getFarmLivestock } from "@/services/livestockService";
 import { useEffect, useState } from "react";
 import { AcreLoader } from "../ui/acreLoader";
 import { LivestockType } from "@/lib/types";
+import UsersTable from "./UsersTable";
 
 const Livestock = () => {
   const navigate = useNavigate();
@@ -37,8 +38,6 @@ const Livestock = () => {
       setLoading(false);
     });
   }, []);
-
-  
 
   const AddLivestockDialog = () => {
     const handleSingleEntryClick = () => {
@@ -80,7 +79,10 @@ const Livestock = () => {
 
                 <div className=" flex items-center space-x-4 rounded-md border p-4 cursor-pointer">
                   <BellRing />
-                  <div className="flex-1 space-y-1"   onClick={handleFlockEntryClick}>
+                  <div
+                    className="flex-1 space-y-1"
+                    onClick={handleFlockEntryClick}
+                  >
                     <p className="text-sm font-medium leading-none">
                       Flock Entry
                     </p>
@@ -101,67 +103,68 @@ const Livestock = () => {
     );
   };
 
-
-
- const LivestockTable = () => {
+  const LivestockTable = () => {
     return (
-      <div className="items-stretch bg-white flex flex-col pt-6 pb-12 rounded-2xl ">
-        <table className="border-spacing-0 min-w-full border-collapse">
-          <thead className="bg-stone-50">
-            <tr className="">
-              <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
-                Name
-              </th>
-              <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
-                Animal type
-              </th>
-              <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
-                Count
-              </th>
-              <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
-                Breed
-              </th>
-              <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
-                Maturity
-              </th>
-              <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
-                Status
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {livestock.map((livestock: LivestockType) => (
-              <tr>
-                <td className="p-4 border-b-zinc-300 border-b border-solid">
-                  {livestock.name}
-                </td>
-                <td className="p-4 border-b-zinc-300 border-b border-solid">
-                  {livestock.animal_type}
-                </td>
-                <td className="p-4 border-b-zinc-300 border-b border-solid">
-                  {livestock.quantity}
-                </td>
-                <td className="p-4 border-b-zinc-300 border-b border-solid">
-                  {livestock.breed}
-                </td>
-                <td className="p-4 border-b-zinc-300 border-b border-solid">
-                  {livestock.maturity_public_name}
-                </td>
-                <td className="p-4 border-b-zinc-300 border-b border-solid">
-                  <select className="w-full">
-                    <option>okay</option>
-                    <option>sick</option>
-                  </select>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <div> <UsersTable data={livestock} /></div>
     );
   };
-
-
+  // const LivestockTable = () => {
+  //   return (
+  //     <div className="items-stretch bg-white flex flex-col pt-6 pb-12 rounded-2xl ">
+  //       <table className="border-spacing-0 min-w-full border-collapse">
+  //         <thead className="bg-stone-50">
+  //           <tr className="">
+  //             <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
+  //               Name
+  //             </th>
+  //             <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
+  //               Animal type
+  //             </th>
+  //             <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
+  //               Count
+  //             </th>
+  //             <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
+  //               Breed
+  //             </th>
+  //             <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
+  //               Maturity
+  //             </th>
+  //             <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
+  //               Status
+  //             </th>
+  //           </tr>
+  //         </thead>
+  //         <tbody>
+  //           {livestock.map((livestock: LivestockType) => (
+  //             <tr>
+  //               <td className="p-4 border-b-zinc-300 border-b border-solid">
+  //                 {livestock.name}
+  //               </td>
+  //               <td className="p-4 border-b-zinc-300 border-b border-solid">
+  //                 {livestock.animal_type}
+  //               </td>
+  //               <td className="p-4 border-b-zinc-300 border-b border-solid">
+  //                 {livestock.quantity}
+  //               </td>
+  //               <td className="p-4 border-b-zinc-300 border-b border-solid">
+  //                 {livestock.breed}
+  //               </td>
+  //               <td className="p-4 border-b-zinc-300 border-b border-solid">
+  //                 {livestock.maturity_public_name}
+  //               </td>
+  //               <td className="p-4 border-b-zinc-300 border-b border-solid">
+  //                 <select className="w-full">
+  //                   <option>okay</option>
+  //                   <option>sick</option>
+  //                 </select>
+  //               </td>
+  //             </tr>
+  //           ))}
+  //         </tbody>
+  //       </table>
+  //     </div>
+  //   );
+  // };
 
   const EmptyState = () => {
     return (
@@ -293,14 +296,14 @@ const Livestock = () => {
             />
           </span>
           <select
-              className="items-stretch border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
-              onChange={()=>{}}
-            >
-              <option value="">Animal type</option>
-              <option value="type1">Type 1</option>
-              <option value="type2">Type 2</option>
-              <option value="type3">Type 3</option>
-            </select>
+            className="items-stretch border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
+            onChange={() => {}}
+          >
+            <option value="">Animal type</option>
+            <option value="type1">Type 1</option>
+            <option value="type2">Type 2</option>
+            <option value="type3">Type 3</option>
+          </select>
           <span className="items-stretch border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid">
             <div className="text-zinc-500 text-sm leading-5 grow whitespace-nowrap">
               Grouping

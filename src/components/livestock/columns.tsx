@@ -1,21 +1,20 @@
-
-import { STATUSES, type User } from './users-data';
+import { STATUSES, type User } from "./users-data";
 // import { routes } from '@/config/routes';
-import { Text } from 'rizzui';
-import { Badge } from 'rizzui';
-import { Tooltip } from 'rizzui';
-import { HeaderCell } from './table';
-import { Checkbox } from 'rizzui';
-import { ActionIcon } from 'rizzui';
-import EyeIcon from '@/components/icons/eye';
-import PencilIcon from '@/components/icons/pencil';
-import AvatarCard from '@/components/ui/avatar-card';
-import DateCell from '@/components/ui/date-cell';
-import DeletePopover from './delete-popover';
- import { CiSquareMinus } from "react-icons/ci";
- import { CiSquarePlus } from "react-icons/ci";
+import { Text } from "rizzui";
+import { Badge } from "rizzui";
+import { Tooltip } from "rizzui";
+import { HeaderCell } from "./table";
+import { Checkbox } from "rizzui";
+import { ActionIcon } from "rizzui";
+import EyeIcon from "@/components/icons/eye";
+import PencilIcon from "@/components/icons/pencil";
+import AvatarCard from "@/components/ui/avatar-card";
+import DateCell from "@/components/ui/date-cell";
+import DeletePopover from "./delete-popover";
+import { CiSquareMinus } from "react-icons/ci";
+import { CiSquarePlus } from "react-icons/ci";
 
-function getStatusBadge(status: User['status']) {
+function getStatusBadge(status: User["status"]) {
   switch (status) {
     case STATUSES.Deactivated:
       return (
@@ -72,16 +71,15 @@ export const getColumns = ({
     title: (
       <div className="flex items-center gap-3 whitespace-nowrap ps-2">
         <Checkbox
-          title={'Select All'}
+          title={"Select All"}
           onChange={handleSelectAll}
           checked={checkedItems.length === data.length}
           className="cursor-pointer"
         />
-       Feed Name/ID
       </div>
     ),
-    dataIndex: 'checked',
-    key: 'checked',
+    dataIndex: "checked",
+    key: "checked",
     width: 30,
     render: (_: any, row: User) => (
       <div className="inline-flex ps-2">
@@ -89,97 +87,145 @@ export const getColumns = ({
           className="cursor-pointer"
           checked={checkedItems.includes(row.id)}
           {...(onChecked && { onChange: () => onChecked(row.id) })}
-          label={`${row.id}`}
+          // label={`${row.id}`}
         />
       </div>
     ),
   },
   {
-    title: <HeaderCell title="Livestock Type" />,
-    dataIndex: 'fullName',
-    key: 'fullName',
-    width: 150,
-    hidden: 'fullName',
-    render: (_: string, user: User) => (
-      <AvatarCard
-      className='ps-'
-        src={user.avatar}
-        name={user.fullName}
-        
+    title: (
+      <HeaderCell
+        title="Name/ID"
+        sortable
+        ascending={
+          sortConfig?.direction === "asc" && sortConfig?.key === "name"
+        }
       />
     ),
+    onHeaderCell: () => onHeaderCellClick("name"),
+    dataIndex: "name",
+    key: "name",
+    width: 150,
+    render: (name: string) => name,
   },
   {
     title: (
       <HeaderCell
-        title="Unit Weight"
+        title="Animal Type"
         sortable
         ascending={
-          sortConfig?.direction === 'asc' && sortConfig?.key === 'role'
+          sortConfig?.direction === "asc" && sortConfig?.key === "animal_type"
         }
       />
     ),
-    onHeaderCell: () => onHeaderCellClick('role'),
-    dataIndex: 'role',
-    key: 'role',
+    onHeaderCell: () => onHeaderCellClick("animal_type"),
+    dataIndex: "animal_type",
+    key: "animal_type",
     width: 150,
-    render: (role: string) => role,
+    render: (animal_type: string) => animal_type,
   },
   {
     title: (
       <HeaderCell
-        title="Price per Unit"
+        title="Total count"
         sortable
         ascending={
-          sortConfig?.direction === 'asc' && sortConfig?.key === 'price'
+          sortConfig?.direction === "asc" && sortConfig?.key === "quantity"
         }
       />
     ),
-    onHeaderCell: () => onHeaderCellClick('price'),
-    dataIndex: 'price',
-    key: 'price',
+    onHeaderCell: () => onHeaderCellClick("quantity"),
+    dataIndex: "quantity",
+    key: "quantity",
     width: 150,
     // render: (value: Date) => <DateCell date={value} />,
     // render: (value: string) => price(value),
-    render: (price: User['price']) => price,  
+    render: (quantity: number) => quantity,
   },
   {
-    title: <HeaderCell title="Feed Stock" />,
-    dataIndex: 'permissions',
-    key: 'permissions',
+    title: (
+      <HeaderCell
+        title="Breed"
+        sortable
+        ascending={
+          sortConfig?.direction === "asc" && sortConfig?.key === "breed"
+        }
+      />
+    ),
+    onHeaderCell: () => onHeaderCellClick("breed"),
+    dataIndex: "breed",
+    key: "breed",
     width: 150,
-    render: () => (
-      <div className="w-max flex justify-center">
-        <span><CiSquareMinus /></span>
-        <span>5</span>
-        <span><CiSquarePlus /></span>
-      </div>
-    ),
-    
-    
+    render: (breed: string) => breed,
   },
   {
-    title: <HeaderCell title="Total Weight" />,
-    dataIndex: 'status',
-    key: 'status',
-    width: 120,
-    // render: (status: User['status']) => getStatusBadge(status),
-    render: () => (
-      <div className="w-max flex justify-center">
-        <h2>200kg</h2>
-      </div>
+    title: (
+      <HeaderCell
+        title="Maturity"
+        sortable
+        ascending={
+          sortConfig?.direction === "asc" &&
+          sortConfig?.key === "maturity_public_name"
+        }
+      />
     ),
+    onHeaderCell: () => onHeaderCellClick("maturity_public_name"),
+    dataIndex: "maturity_public_name",
+    key: "maturity_public_name",
+    width: 150,
+    render: (name: string) => name,
+  },
+  {
+    title: (
+      <HeaderCell
+        title="Added on"
+        sortable
+        ascending={
+          sortConfig?.direction === "asc" && sortConfig?.key === "stocking_date"
+        }
+      />
+    ),
+    onHeaderCell: () => onHeaderCellClick("stocking_date"),
+    dataIndex: "stocking_date",
+    key: "stocking_date",
+    width: 150,
+    render: (stocking_date: string) => stocking_date,
+  },
+  {
+    title: (
+      <HeaderCell
+        title="Added on"
+        sortable
+        ascending={
+          sortConfig?.direction === "asc" && sortConfig?.key === "stocking_date"
+        }
+      />
+    ),
+    onHeaderCell: () => onHeaderCellClick("Status"),
+    dataIndex: "status",
+    key: "status",
+    width: 150,
+    render: (status: "okay" | "sick") =>
+      status === "okay" ? (
+        <div className="w-max flex justify-center px-2.5 py-1.5 rounded-md bg-green-300 text-green-800">
+          Healthy
+        </div>
+      ) : (
+        <div className="w-max flex justify-center px-2.5 py-1.5 rounded-md bg-yellow-200 text-yellow-500">
+          Sick
+        </div>
+      ),
   },
   {
     title: <></>,
-    dataIndex: 'action',
-    key: 'action',
+    dataIndex: "action",
+    key: "action",
     width: 140,
     render: (_: string, user: User) => (
       <div className="flex items-center justify-end gap-3 pe-3">
         <Tooltip
           size="sm"
-          content={() => 'Edit User'}
+          content={() => "Edit User"}
           placement="top"
           color="invert"
         >
@@ -196,7 +242,7 @@ export const getColumns = ({
         </Tooltip>
         <Tooltip
           size="sm"
-          content={() => 'View User'}
+          content={() => "View User"}
           placement="top"
           color="invert"
         >

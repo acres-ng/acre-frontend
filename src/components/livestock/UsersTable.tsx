@@ -1,22 +1,18 @@
-'use client';
+"use client";
 
-import { useCallback, useMemo, useState } from 'react';
-import React, { lazy } from 'react';
-import { useTable } from '../hooks/use-table';
-import { useColumn } from '../hooks/use-column';
-import { Button } from 'rizzui';
-import ControlledTable from './ControlledTable';
-import { getColumns } from './columns';
-const FilterElement = lazy(
-  () => import('./filter-element'),
-);
-const TableFooter = lazy(
-  () => import('./table-footer'), 
-);
+import { useCallback, useMemo, useState } from "react";
+import React, { lazy } from "react";
+import { useTable } from "../hooks/use-table";
+import { useColumn } from "../hooks/use-column";
+import { Button } from "rizzui";
+import ControlledTable from "./ControlledTable";
+import { getColumns } from "./columns";
+const FilterElement = lazy(() => import("./filter-element"));
+const TableFooter = lazy(() => import("./table-footer"));
 
 const filterState = {
-  role: '',
-  status: '',
+  role: "",
+  status: "",
 };
 
 export default function UsersTable({ data = [] }: { data: any[] }) {
