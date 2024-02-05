@@ -78,14 +78,14 @@ export default function UsersTable({ data = [] }: { data: any[] }) {
 
   return (
     <div className="mt-14">
-      <FilterElement
+      {/* <FilterElement
         isFiltered={isFiltered}
         filters={filters}
         updateFilter={updateFilter}
         handleReset={handleReset}
         onSearch={handleSearch}
         searchTerm={searchTerm}
-      />
+      /> */}
       <ControlledTable
         variant="modern"
         data={tableData}

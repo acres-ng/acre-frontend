@@ -29,18 +29,18 @@ export default function TablePagination({
   return (
     <div
       className={cn(
-        "table-pagination flex items-center justify-center sm:justify-between",
+        "table-pagination flex items-center justify-center  ",
         paginatorClassName
       )}
     >
-      {!setPageSize ? (
+      {/* {!setPageSize ? (
         total && (
           <div className="hidden text-gray-500 sm:inline-flex">
             {props.current} of {Math.ceil(total / pageSize)} pages
           </div>
         )
       ) : (
-        <div className="hidden items-center sm:flex">
+        <div className="hidden items-center sm:flex  sm:justify-between">
           Rows per page:{" "}
           <Select
             options={paginationLimitOptions}
@@ -55,7 +55,8 @@ export default function TablePagination({
             className="ms-1 [&_button]:font-medium"
           />
         </div>
-      )}
+      )} */}
+    
       <Pagination
         total={total}
         pageSize={pageSize}
@@ -65,6 +66,9 @@ export default function TablePagination({
         nextIconClassName="py-0 text-gray-500 !leading-[26px]"
         {...props}
       />
+
+
+     
     </div>
   );
 }

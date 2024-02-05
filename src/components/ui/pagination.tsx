@@ -27,10 +27,10 @@ const classes = {
   },
   variant: {
     solid: {
-      base: '[&>.rc-pagination-item-active>a]:!text-gray-0 [&>.rc-pagination-item-active>a]:hover:text-gray-0',
+      base: '[&>.rc-pagination-item-active>a]:!text-white [&>.rc-pagination-item-active>a]:hover:text-gray-0',
       color: {
         DEFAULT:
-          '[&>.rc-pagination-item-active]:bg-gray-900 [&>li.rc-pagination-item-active]:border-gray-900 [&>.rc-pagination-item-active]:hover:border-gray-900 [&>.rc-pagination-item-active]:focus:border-gray-900 dark:[&>.rc-pagination-item-active]:bg-gray-200 dark:[&>.rc-pagination-item-active>a]:!text-gray-700 dark:[&>.rc-pagination-item-active>a]:hover:text-gray-700 dark:[&>li.rc-pagination-item-active]:border-gray-200 dark:[&>.rc-pagination-item-active]:hover:border-gray-200 dark:[&>.rc-pagination-item-active]:focus:border-gray-200',
+          '[&>.rc-pagination-item-active]:bg-[#1B9C5C] [&>li.rc-pagination-item-active]:border-gray-900 [&>.rc-pagination-item-active]:hover:border-gray-900 [&>.rc-pagination-item-active]:focus:border-gray-900 dark:[&>.rc-pagination-item-active]:bg-gray-200 dark:[&>.rc-pagination-item-active>a]:!text-gray-700 dark:[&>.rc-pagination-item-active>a]:hover:text-gray-700 dark:[&>li.rc-pagination-item-active]:border-gray-200 dark:[&>.rc-pagination-item-active]:hover:border-gray-200 dark:[&>.rc-pagination-item-active]:focus:border-gray-200',
         primary:
           '[&>.rc-pagination-item-active]:bg-primary  [&>li.rc-pagination-item-active]:border-primary [&>.rc-pagination-item-active]:hover:border-primary [&>.rc-pagination-item-active]:focus:border-primary',
         secondary:
@@ -200,6 +200,7 @@ export interface PaginationProps extends RcPaginationProps {
   jumpPrevIconClassName?: string;
   /** Pass className for next icon */
   jumpNextIconClassName?: string;
+
 }
 
 /**
@@ -212,6 +213,7 @@ export default function Pagination({
   variant = 'solid',
   color = 'DEFAULT',
   locale,
+
   nextIcon,
   prevIcon,
   prevIconClassName,
@@ -227,20 +229,22 @@ export default function Pagination({
     <RcPagination
       locale={locale || localeDefault}
       nextIcon={
-        <NextIcon
-          icon={nextIcon as React.ReactNode}
-          rounded={rounded}
-          outline={outline}
-          className={nextIconClassName as string}
-        />
+        <h1
+     
+        className={nextIconClassName as string}
+      >Next</h1>
+        // <NextIcon
+        //   icon={nextIcon as React.ReactNode}
+        //   rounded={rounded}
+        //   outline={outline}
+        //   className={nextIconClassName as string}
+        // />
       }
       prevIcon={
-        <PrevIcon
-          icon={prevIcon as React.ReactNode}
-          rounded={rounded}
-          outline={outline}
+        <h1
+         
           className={prevIconClassName as string}
-        />
+        >Prev</h1>
       }
       jumpPrevIcon={
         <JumpPrevIcon
@@ -259,15 +263,13 @@ export default function Pagination({
         />
       }
       className={cn(
-        classes.base.item,
-        classes.base.jumperDiv,
-        classes.base.jumperInput,
-        !outline && classes.base.outline,
-        !outline && classes.base.icon,
+        
+        
         classes.rounded[rounded],
         classes.variant[variant].base,
         classes.variant[variant].color[color],
         className
+       
       )}
       {...props}
     />

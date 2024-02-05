@@ -1,5 +1,6 @@
 import { Button } from "../ui/button";
-import { Input } from "@/components/ui/input";
+// import { Input } from "@/components/ui/input";
+import { Input } from "@material-tailwind/react";
 import { Label } from "@/components/ui/label";
 import {
   Dialog,
@@ -10,6 +11,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  ArrowDownTrayIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
 import {
   Card,
   CardContent,
@@ -26,6 +31,8 @@ import { useEffect, useState } from "react";
 import { AcreLoader } from "../ui/acreLoader";
 import { LivestockType } from "@/lib/types";
 import UsersTable from "./UsersTable";
+// import { PlusIcon } from '@heroicons/react/solid'
+
 
 const Livestock = () => {
   const navigate = useNavigate();
@@ -50,7 +57,15 @@ const Livestock = () => {
     return (
       <Dialog>
         <DialogTrigger asChild>
-          <Button variant={"default"}>Add livestock</Button>
+        <Button variant={"default"} className="mt-8">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="mr-2 w-6 h-6">
+  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+</svg>
+  {/* <PlusIcon className="h-5 w-5 mr-2" /> */}
+  Add livestock
+</Button>
+
+
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -273,30 +288,29 @@ const Livestock = () => {
       {/*  */}
 
       <div className="justify-between items-stretch flex w-full gap-5 mt-6 max-md:max-w-full max-md:flex-wrap">
-        <span className="items-stretch border-[color:var(--Grey-Grey-3,#E4E5E6)] flex justify-between gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid">
-          <img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/82c400676dfa6d232df713f2fc4e3bad5362df9de34441a6e680ebefadd41104?"
-            className="aspect-square object-contain object-center w-5 overflow-hidden shrink-0 max-w-full"
-          />
-          <div className="text-zinc-500 text-sm leading-5 grow whitespace-nowrap">
-            Search animals
-          </div>
-        </span>
-        <div className="justify-between items-stretch flex gap-5 max-md:max-w-full max-md:flex-wrap">
-          <span className="items-stretch border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid">
-            <div className="text-zinc-500 text-sm leading-5 grow whitespace-nowrap">
-              Housing
-            </div>
-            <div className="text-black text-sm leading-5">All</div>
-            <img
-              loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/47f583ea49b1610fb44a9b138ca3139ffa055a3cceccd980caba372009785f0c?"
-              className="aspect-square object-contain object-center w-5 overflow-hidden shrink-0 max-w-full"
-            />
-          </span>
-          <select
-            className="items-stretch border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
+    
+   <div className="relative w-full  md:w-72 pt-2">
+      <div className="flex items-center  space-x-2 absolute inset-y-0 left-0 pl-3 pointer-events-none">
+        <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
+      </div>
+      <input
+        type="text"
+        placeholder="Search..."
+        className="rounded-xl w-full py-2 pl-10 pr-3 border border-gray-300 focus:outline-none focus:border-blue-500"
+      />
+    </div>
+        <div className="justify-between ml-8 items-stretch flex gap-5  max-md:max-w-full max-md:flex-wrap">
+        <select
+            className="items-stretch w-[10.5rem] border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3 rounded-xl border-2 border-solid"
+            onChange={() => {}}
+          >
+            <option value="">Housing</option>
+            <option value="type1">Type 1</option>
+            <option value="type2">Type 2</option>
+            <option value="type3">Type 3</option>
+          </select>
+        <select
+            className="items-stretch w-[10.5rem] border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
             onChange={() => {}}
           >
             <option value="">Animal type</option>
@@ -304,17 +318,24 @@ const Livestock = () => {
             <option value="type2">Type 2</option>
             <option value="type3">Type 3</option>
           </select>
-          <span className="items-stretch border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid">
-            <div className="text-zinc-500 text-sm leading-5 grow whitespace-nowrap">
-              Grouping
-            </div>
-            <div className="text-black text-sm leading-5">All</div>
-            <img
-              loading="lazy"
-              src="https://cdn.builder.io/api/v1/image/assets/TEMP/0fc81105c2d4eba638667a956a00df88568fabefbe432f1557ca3c1587ff07f2?"
-              className="aspect-square object-contain object-center w-5 overflow-hidden shrink-0 max-w-full"
-            />
-          </span>
+          <select
+            className="items-stretch w-[10.5rem] border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
+            onChange={() => {}}
+          >
+            <option value="">Joined</option>
+            <option value="type1">Type 1</option>
+            <option value="type2">Type 2</option>
+            <option value="type3">Type 3</option>
+          </select>
+          <select
+            className="items-stretch w-[10.5rem] border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
+            onChange={() => {}}
+          >
+            <option value="">Status</option>
+            <option value="type1">Type 1</option>
+            <option value="type2">Type 2</option>
+            <option value="type3">Type 3</option>
+          </select>
         </div>
       </div>
       {livestock[0] ? <LivestockTable /> : <EmptyState />}

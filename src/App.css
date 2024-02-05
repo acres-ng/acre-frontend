@@ -3,6 +3,7 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  font-family: poppins;
 }
 
 .logo {
@@ -39,4 +40,12 @@
 
 .read-the-docs {
   color: #888;
+}
+
+@font-face {
+  font-family: "poppins";
+  src: url("../public/fonts/Poppins-Black.ttf") format("truetype");
+}
+.poppins {
+  font-family: "poppins !important";
 }
