@@ -170,24 +170,24 @@ export const getColumns = ({
     width: 150,
     render: (breed: string) => breed,
   },
-  {
-    title: (
-      <HeaderCell
-        title="Maturity"
-        sortable
-        className="text-[#000000] font-medium"
-        ascending={
-          sortConfig?.direction === "asc" &&
-          sortConfig?.key === "maturity_public_name"
-        }
-      />
-    ),
-    onHeaderCell: () => onHeaderCellClick("maturity_public_name"),
-    dataIndex: "maturity_public_name",
-    key: "maturity_public_name",
-    width: 150,
-    render: (name: string) => name,
-  },
+  // {
+  //   title: (
+  //     <HeaderCell
+  //       title="Maturity"
+  //       sortable
+  //       className="text-[#000000] font-medium"
+  //       ascending={
+  //         sortConfig?.direction === "asc" &&
+  //         sortConfig?.key === "maturity_public_name"
+  //       }
+  //     />
+  //   ),
+  //   onHeaderCell: () => onHeaderCellClick("maturity_public_name"),
+  //   dataIndex: "maturity_public_name",
+  //   key: "maturity_public_name",
+  //   width: 150,
+  //   render: (name: string) => name,
+  // },
   {
     title: (
       <HeaderCell
@@ -282,7 +282,7 @@ export const getColumns = ({
       <div className="flex items-center justify-end gap-3">
       <Popover
         placement="left"
-        className="z-50 min-w-[140px] px-2 dark:bg-gray-100 [&>svg]:dark:fill-gray-100"
+        className="z-50 min-w-[140px] px-2 dark:bg-gray-100 bg-white [&>svg]:dark:fill-gray-100"
         content={() => (
           <div className="text-gray-900">
             <Button

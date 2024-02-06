@@ -29,11 +29,11 @@ export default function TablePagination({
   return (
     <div
       className={cn(
-        "table-pagination flex items-center justify-center  ",
+        "table-pagination flex items-center justify-center  sm:justify-between",
         paginatorClassName
       )}
     >
-      {/* {!setPageSize ? (
+        {!setPageSize ? (
         total && (
           <div className="hidden text-gray-500 sm:inline-flex">
             {props.current} of {Math.ceil(total / pageSize)} pages
@@ -51,11 +51,11 @@ export default function TablePagination({
             getOptionValue={({ value }) => value}
             suffix={<PiCaretDownBold />}
             useContainerWidth={false}
-            dropdownClassName="p-1 border w-12 border-gray-100 shadow-lg"
+            dropdownClassName="p-1 border w-12 border-gray-300 bg-white shadow-lg"
             className="ms-1 [&_button]:font-medium"
           />
         </div>
-      )} */}
+      )}
     
       <Pagination
         total={total}

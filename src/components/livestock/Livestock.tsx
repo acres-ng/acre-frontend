@@ -57,7 +57,7 @@ const Livestock = () => {
     return (
       <Dialog>
         <DialogTrigger asChild>
-        <Button variant={"default"} className="mt-8">
+        <Button variant={"default"} className="top-5">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="mr-2 w-6 h-6">
   <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
 </svg>
@@ -299,9 +299,9 @@ const Livestock = () => {
         className="rounded-xl w-full py-2 pl-10 pr-3 border border-gray-300 focus:outline-none focus:border-blue-500"
       />
     </div>
-        <div className="justify-between ml-8 items-stretch flex gap-5  max-md:max-w-full max-md:flex-wrap">
+        <div className="justify-between sm:ml-8 max-md:w-full items-stretch flex gap-5   max-md:max-w-full max-md:flex-wrap">
         <select
-            className="items-stretch w-[10.5rem] border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3 rounded-xl border-2 border-solid"
+            className="items-stretch w-full sm:w-[10.5rem]  border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3 rounded-xl border-2 border-solid"
             onChange={() => {}}
           >
             <option value="">Housing</option>
@@ -310,7 +310,7 @@ const Livestock = () => {
             <option value="type3">Type 3</option>
           </select>
         <select
-            className="items-stretch w-[10.5rem] border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
+            className="items-stretch w-full sm:w-[10.5rem] border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
             onChange={() => {}}
           >
             <option value="">Animal type</option>
@@ -318,7 +318,7 @@ const Livestock = () => {
             <option value="type2">Type 2</option>
             <option value="type3">Type 3</option>
           </select>
-          <select
+          {/* <select
             className="items-stretch w-[10.5rem] border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
             onChange={() => {}}
           >
@@ -326,9 +326,9 @@ const Livestock = () => {
             <option value="type1">Type 1</option>
             <option value="type2">Type 2</option>
             <option value="type3">Type 3</option>
-          </select>
+          </select> */}
           <select
-            className="items-stretch w-[10.5rem] border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
+            className="items-stretch w-full sm:w-[10.5rem] border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
             onChange={() => {}}
           >
             <option value="">Status</option>
