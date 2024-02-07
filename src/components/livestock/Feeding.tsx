@@ -26,7 +26,7 @@ const Menu = [
 const Feeding = () => {
   const [activeMenu, setActiveMenu] = useState(Menu);
 
-  const handleTabChange = (id) => {
+  const handleTabChange = (id: number) => {
     const newMenu = activeMenu.map((menu) => ({
       ...menu,
       active: menu.id === id,
@@ -49,9 +49,9 @@ const Feeding = () => {
         </div>
       </div>
       <div>
-        {active.id === 1 && <InventoryList />}
-        {active.id === 2 && <RecipeBuilder />}
-        {active.id === 3 && <Rations />}
+        {active?.id === 1 && <InventoryList />}
+        {active?.id === 2 && <RecipeBuilder />}
+        {active?.id === 3 && <Rations />}
       </div>
     
     </div>
