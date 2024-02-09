@@ -123,63 +123,7 @@ const Livestock = () => {
       <div> <UsersTable data={livestock} /></div>
     );
   };
-  // const LivestockTable = () => {
-  //   return (
-  //     <div className="items-stretch bg-white flex flex-col pt-6 pb-12 rounded-2xl ">
-  //       <table className="border-spacing-0 min-w-full border-collapse">
-  //         <thead className="bg-stone-50">
-  //           <tr className="">
-  //             <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
-  //               Name
-  //             </th>
-  //             <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
-  //               Animal type
-  //             </th>
-  //             <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
-  //               Count
-  //             </th>
-  //             <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
-  //               Breed
-  //             </th>
-  //             <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
-  //               Maturity
-  //             </th>
-  //             <th className="text-left p-4 border-b-2 border-b-zinc-300 border-solid">
-  //               Status
-  //             </th>
-  //           </tr>
-  //         </thead>
-  //         <tbody>
-  //           {livestock.map((livestock: LivestockType) => (
-  //             <tr>
-  //               <td className="p-4 border-b-zinc-300 border-b border-solid">
-  //                 {livestock.name}
-  //               </td>
-  //               <td className="p-4 border-b-zinc-300 border-b border-solid">
-  //                 {livestock.animal_type}
-  //               </td>
-  //               <td className="p-4 border-b-zinc-300 border-b border-solid">
-  //                 {livestock.quantity}
-  //               </td>
-  //               <td className="p-4 border-b-zinc-300 border-b border-solid">
-  //                 {livestock.breed}
-  //               </td>
-  //               <td className="p-4 border-b-zinc-300 border-b border-solid">
-  //                 {livestock.maturity_public_name}
-  //               </td>
-  //               <td className="p-4 border-b-zinc-300 border-b border-solid">
-  //                 <select className="w-full">
-  //                   <option>okay</option>
-  //                   <option>sick</option>
-  //                 </select>
-  //               </td>
-  //             </tr>
-  //           ))}
-  //         </tbody>
-  //       </table>
-  //     </div>
-  //   );
-  // };
+
 
   const EmptyState = () => {
     return (
