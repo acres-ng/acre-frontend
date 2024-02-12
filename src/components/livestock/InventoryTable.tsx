@@ -6,8 +6,9 @@ import { useTable } from "../hooks/use-table";
 import { useColumn } from "../hooks/use-column";
 import { Button } from "rizzui";
 import ControlledTable from "./ControlledTable";
+import { getInventoryColumns } from "./InventoryColumn";
 import { getColumns } from "./columns";
-import { inventoryColumns } from "./columns";
+
 const FilterElement = lazy(() => import("./filter-element"));
 const TableFooter = lazy(() => import("./table-footer"));
 
@@ -16,7 +17,7 @@ const filterState = {
   status: "",
 };
 
-export default function UsersTable({ data = [] }: { data: any[] }) {
+export default function InventoryTable({ data = [] }: { data: any[] }) {
   const [pageSize, setPageSize] = useState(10);
 
   const onHeaderCellClick = (value: string) => ({
@@ -51,9 +52,11 @@ export default function UsersTable({ data = [] }: { data: any[] }) {
     handleReset,
   } = useTable(data, pageSize, filterState);
 
-  const columns = useMemo(
+ 
+  
+  const inventoryColumns = useMemo(
     () =>
-      getColumns({
+      getInventoryColumns({
         data,
         sortConfig,
         checkedItems: selectedRowKeys,
@@ -74,8 +77,38 @@ export default function UsersTable({ data = [] }: { data: any[] }) {
     ]
   );
 
+ 
+  
+  
+
+  // const columns = useMemo(
+  //   () =>
+  //     getColumns({
+  //       data,
+  //       sortConfig,
+  //       checkedItems: selectedRowKeys,
+  //       onHeaderCellClick,
+  //       onDeleteItem,
+  //       onChecked: handleRowSelect,
+  //       handleSelectAll,
+  //     }),
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  //   [
+  //     selectedRowKeys,
+  //     onHeaderCellClick,
+  //     sortConfig.key,
+  //     sortConfig.direction,
+  //     onDeleteItem,
+  //     handleRowSelect,
+  //     handleSelectAll,
+  //   ]
+  // );
+
+
+
+
   const { visibleColumns, checkedColumns, setCheckedColumns } =
-    useColumn(columns);
+    useColumn(inventoryColumns);
 
   return (
     <div className="mt-14">
