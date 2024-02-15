@@ -24,7 +24,7 @@ import { useEffect, useState } from "react";
 import { Animal, AnimalBreed, AnimalWithTraits } from "@/lib/types";
 import { InputGroup, InputRightElement } from "@chakra-ui/react";
 import { getLivestockHousing } from "@/services/livestockHousingService";
-import { toast } from "sonner";
+  import { toast } from "sonner";
 import { API_URL } from "@/config";
 import { getActiveFarm } from "@/services/farmService";
 import HttpService from "@/services/HttpService";
@@ -35,9 +35,9 @@ type AddProps = {
 
 interface AddQuantityFieldProps {
   livestockForm: {
-    control: any; // You may need to replace this with the correct type
+    control: any; 
   };
-  entryType: string | undefined; // You can replace 'string' with the specific type if available
+  entryType: string | undefined;
 }
 
 const livestockSchema = z.object({

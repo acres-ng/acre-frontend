@@ -100,7 +100,7 @@ export const setAnimalAndTraits = (data:Animal[]) => {
 
 export const getFarmFeed = async (farmId?: number) => {
   const activeFarmId = farmId ?? getActiveFarm().id;
-  const url = `${config.API_URL}farms/${activeFarmId}/livestock`;
+  const url = `${config.API_URL}farms/${activeFarmId}/feeds`;
   const { data } = await http.get(url, getDefaultOptions());
   if (data.status === "success") {
     return data.data;

@@ -131,7 +131,7 @@ export const getColumns = ({
     onHeaderCell: () => onHeaderCellClick("animal_type"),
     dataIndex: "animal_type",
     key: "animal_type",
-    width: 150,
+    width: 120,
     render: (animal_type: string) => animal_type,
   },
   {
@@ -148,7 +148,7 @@ export const getColumns = ({
     onHeaderCell: () => onHeaderCellClick("quantity"),
     dataIndex: "quantity",
     key: "quantity",
-    width: 150,
+    width: 80,
     // render: (value: Date) => <DateCell date={value} />,
     // render: (value: string) => price(value),
     render: (quantity: number) => quantity,
@@ -202,7 +202,7 @@ export const getColumns = ({
     onHeaderCell: () => onHeaderCellClick("stocking_date"),
     dataIndex: "stocking_date",
     key: "stocking_date",
-    width: 150,
+    width: 120,
     render: (stocking_date: string) => stocking_date,
   },
   {
@@ -219,7 +219,7 @@ export const getColumns = ({
     onHeaderCell: () => onHeaderCellClick("Status"),
     dataIndex: "status",
     key: "status",
-    width: 150,
+    width: 120,
     render: (status: "okay" | "sick") =>
       status === "okay" ? (
         <div className="w-max flex justify-center px-2.5 py-1.5 rounded-xl bg-green-300 text-green-800">

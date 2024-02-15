@@ -79,7 +79,7 @@ const Dashboard = () => {
   return (
     <>
       {isLoading ? <AcreLoader /> : Dashboard}
-      <div className="pt-20">
+      <div className="pt-5">
         {/* main content */}
         <div className="flex flex-col items-center justify-between w-full space-y-10 mx-auto">
           <div className="w-full">

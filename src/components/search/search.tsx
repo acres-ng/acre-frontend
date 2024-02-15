@@ -166,7 +166,7 @@ export default function SearchWidget({
       <button
         onClick={() => setOpen(true)}
         className={cn(
-          'group inline-flex items-center focus:outline-none active:translate-y-px xl:h-10 xl:w-full xl:max-w-sm xl:rounded-xl xl:border xl:border-gray-200 xl:py-2 xl:pe-2 xl:ps-3.5 xl:shadow-sm xl:backdrop-blur-md xl:transition-colors xl:duration-200  xl:hover:outline-double xl:hover:outline-[0.5px]   xl:focus-visible:outline-double xl:focus-visible:outline-[0.5px] ',
+          'group  inline-flex items-center focus:outline-none active:translate-y-px xl:h-10 xl:w-full xl:max-w-sm xl:rounded-xl xl:border xl:border-gray-200 xl:py-2 xl:pe-2 xl:ps-3.5 xl:shadow-sm xl:backdrop-blur-md xl:transition-colors xl:duration-200  xl:hover:outline-double xl:hover:outline-[0.5px]   xl:focus-visible:outline-double xl:focus-visible:outline-[0.5px] ',
           className
         )}
       >

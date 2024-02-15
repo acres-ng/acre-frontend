@@ -1,4 +1,4 @@
-"use client";
+
 
 import { useCallback, useMemo, useState } from "react";
 import React, { lazy } from "react";
@@ -7,7 +7,7 @@ import { useColumn } from "../hooks/use-column";
 import { Button } from "rizzui";
 import ControlledTable from "./ControlledTable";
 import { getColumns } from "./columns";
-import { inventoryColumns } from "./columns";
+
 const FilterElement = lazy(() => import("./filter-element"));
 const TableFooter = lazy(() => import("./table-footer"));
 

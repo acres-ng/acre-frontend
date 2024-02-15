@@ -56,7 +56,7 @@ function getStatusBadge(status: User["status"]) {
   }
 }
 
-type Columns = {
+type InventoryColumns = {
   data: any[];
   sortConfig?: any;
   handleSelectAll: any;
@@ -74,7 +74,7 @@ export const getInventoryColumns = ({
   onHeaderCellClick,
   handleSelectAll,
   onChecked,
-}: Columns) => [
+}: InventoryColumns) => [
  
   {
     title: (
@@ -119,17 +119,17 @@ export const getInventoryColumns = ({
         sortable
         className="text-[#000000] font-medium"
         ascending={
-          sortConfig?.direction === "asc" && sortConfig?.key === "quantity"
+          sortConfig?.direction === "asc" && sortConfig?.key === "unit_weight"
         }
       />
     ),
-    onHeaderCell: () => onHeaderCellClick("quantity"),
-    dataIndex: "quantity",
-    key: "quantity",
+    onHeaderCell: () => onHeaderCellClick("unit_weight"),
+    dataIndex: "unit_weight",
+    key: "unit_weight",
     width: 150,
     // render: (value: Date) => <DateCell date={value} />,
     // render: (value: string) => price(value),
-    render: (quantity: number) => quantity,
+    render: (unit_weight: number) => unit_weight,
   },
 
   {
@@ -198,7 +198,7 @@ export const getInventoryColumns = ({
     onHeaderCell: () => onHeaderCellClick("Status"),
     dataIndex: "status",
     key: "status",
-    width: 150,
+    width: 120,
     render: (status: "okay" | "sick") =>
       status === "okay" ? (
         <div className="w-max flex justify-center px-2.5 py-1.5 rounded-xl bg-green-300 text-green-800">

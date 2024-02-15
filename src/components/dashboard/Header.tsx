@@ -55,7 +55,7 @@ const Header = () => {
     <div className="w-full">
       <header
         className={cn(
-          "w-full top-0 z-50 flex items-center py-4 backdrop-blur-xl dark:bg-gray-50/50 md:px-5 2xl:py-5 2xl:px-10",
+          "w-full top-0 z-50 flex items-center py-4 backdrop-blur-xl dark:bg-gray-50/50 md:px-5  xl:px-0   2xl:py-5 ",
           ((isMounted && windowScroll.y) as number) > 2 ? "card-shadow" : ""
         )}
       >
@@ -66,7 +66,7 @@ const Header = () => {
             />
           </div>
 
-          <div>
+          <div className="">
             {pathname === "/" && <SearchWidget />}
           </div>
 

@@ -14,12 +14,12 @@ const Menu = [
   },
   {
     id: 2,
-    title: "Recipe Builder",
+    title: "Ration",
     active: false,
   },
   {
     id: 3,
-    title: "Ration",
+    title: "Recipe Builder",
     active: false,
   },
 ];
@@ -37,8 +37,8 @@ const Feeding = () => {
   const active = activeMenu.find((menu) => menu.active);
 
   return (
-    <div>
-      <div className="w-[400px] flex flex-row items-center bg-[#CCE6DA] p-2 rounded-lg mt-[4rem]">
+    <>
+      <div className="w-[400px] flex flex-row items-center bg-[#CCE6DA] p-2 rounded-lg mt-[2rem]">
         {activeMenu.map((menu, index) => (
           <div key={index} className="flex-auto text-center">
             <span
@@ -55,10 +55,11 @@ const Feeding = () => {
 
       <div>
         {active?.id === 1 && <InventoryList />}
-        {active?.id === 2 && <RecipeBuilder />}
-        {active?.id === 3 && <Rations />}
+        {active?.id === 2 && <Rations />}
+        {active?.id === 3 && <RecipeBuilder />}
+        
       </div>
-    </div>
+    </>
   );
 };
 
