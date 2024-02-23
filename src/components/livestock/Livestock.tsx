@@ -1,7 +1,5 @@
 import { Button } from "../ui/button";
-// import { Input } from "@/components/ui/input";
-import { Input } from "@material-tailwind/react";
-import { Label } from "@/components/ui/label";
+
 import {
   Dialog,
   DialogContent,
@@ -11,39 +9,90 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import {
-  ArrowDownTrayIcon,
-  MagnifyingGlassIcon,
-} from "@heroicons/react/24/outline";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { Card, CardContent } from "@/components/ui/card";
 import { BellRing } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
-import { getFarmLivestock } from "@/services/livestockService";
+import {
+  getAnimals,
+  getFarmLivestock,
+  getLivestockHousing,
+} from "@/services/livestockService";
 import { useEffect, useState } from "react";
 import { AcreLoader } from "../ui/acreLoader";
-import { LivestockType } from "@/lib/types";
 import UsersTable from "./UsersTable";
+import { getAnimalLocal } from "@/services/localCacheService";
+import { Select } from "antd";
+
+const { Option } = Select;
 // import { PlusIcon } from '@heroicons/react/solid'
 
 const Livestock = () => {
   const navigate = useNavigate();
   const [livestock, setLivestockData] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const [animalTypes, setAnimalTypes] = useState([]);
+  const [housing, setHousing] = useState([]);
+
+  const [filterValue, setFilterValue] = useState({
+    animal: "",
+    housing: "",
+    management: "",
+  });
 
   useEffect(() => {
-    getFarmLivestock().then((res) => {
+    getAnimals(undefined, "maturity,breeds").then(() => {
+      const animals = (getAnimalLocal()?.animals || []).map((animal: any) => {
+        return {
+          label: animal?.name,
+          value: animal?.id,
+        };
+      });
+      setAnimalTypes(animals);
+    });
+    getLivestockHousing().then((data) => {
+      const housings = (data || []).map((housing: any) => {
+        return {
+          label: housing?.name,
+          value: housing?.id,
+        };
+      });
+      setHousing(housings);
+    });
+  }, []);
+
+
+
+
+  useEffect(() => {
+    const query = [];
+    if (filterValue.housing.length > 0) {
+      query.push(`housing_id=${filterValue.housing}`);
+    }
+    if (filterValue.animal) { 
+      query.push(`animalType=${filterValue.animal}`);
+    }
+    if (filterValue.management.length > 0) {
+      query.push(`managementType=${filterValue.management}`);
+    }
+
+    const queryString = query.join("&"); 
+
+    getFarmLivestock(undefined, queryString).then((res) => {
       setLivestockData(res);
       setLoading(false);
     });
-  }, []);
+  }, [filterValue]);
+  
+  
+
+  const handlefilterSelect = (name: string, value: any) => {
+    setFilterValue({
+      ...filterValue,
+      [name]: value,
+    });
+  };
 
   const AddLivestockDialog = () => {
     const handleSingleEntryClick = () => {
@@ -57,21 +106,8 @@ const Livestock = () => {
       <Dialog>
         <DialogTrigger asChild>
           <Button variant={"default"} className="top-5">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="mr-2 w-6 h-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 4.5v15m7.5-7.5h-15"
-              />
-            </svg>
-            {/* <PlusIcon className="h-5 w-5 mr-2" /> */}
+        
+            <PlusIcon className="h-5 w-5 mr-2" />
             Add livestock
           </Button>
         </DialogTrigger>
@@ -136,7 +172,7 @@ const Livestock = () => {
 
   const EmptyState = () => {
     return (
-      <div className="items-stretch bg-white flex flex-col pt-6 pb-12 px-8 rounded-2xl max-md:px-5 m-5">
+      <div className="items-stretch bg-white flex flex-col pt-6 pb-12 px-8 max-md:px-5 m-5">
         <img
           loading="lazy"
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/bd51dbfefabec61626aceec83bcbea198f0cbbf004dcb1e0ff1c5ed65f6f2d2c?"
@@ -160,74 +196,85 @@ const Livestock = () => {
     );
   };
 
+  const handleReset = () => {
+    setFilterValue({
+      animal: "",
+      housing: "",
+      management: "",
+    });
+  };
+
   return (
-    <span className="items-stretch bg-white flex flex-col pt-6 pb-12 px-8 rounded-2xl max-md:px-5 m-5">
+    <div className="bg-white flex flex-col pt-6 pb-12 px-8 max-md:px-5">
       {isLoading ? <AcreLoader /> : null}
 
-      {/* <div className="text-black text-2xl font-semibold max-md:max-w-full">
-        Livestock
-      </div> */}
-
       {/*  */}
-      <span className="justify-between self-stretch flex w-full gap-5 items-start max-md:max-w-full max-md:flex-wrap">
+      <div className="justify-between self-stretch flex w-full gap-5 items-center max-md:max-w-full max-md:flex-wrap">
         <div className="text-black text-2xl font-semibold">Livestock</div>
         {livestock[0] ? <AddLivestockDialog /> : null}
-      </span>
+      </div>
 
       {/*  */}
 
-      <div className="justify-between items-stretch flex w-full gap-5 mt-6 max-md:max-w-full max-md:flex-wrap">
-        <div className="relative w-full  md:w-72 pt-2">
-          <div className="flex items-center  space-x-2 absolute inset-y-0 left-0 pl-3 pointer-events-none">
-            <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
-          </div>
+      <div className="justify-between items-center flex w-full gap-5 mt-6 max-md:max-w-full max-md:flex-wrap">
+        <div className="w-full md:w-72 p-2 flex gap-3 items-center border rounded-lg border-gray-300 focus:outline-none focus:border-blue-500">
+          <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
           <input
             type="text"
             placeholder="Search..."
-            className="rounded-xl w-full py-2 pl-10 pr-3 border border-gray-300 focus:outline-none focus:border-blue-500"
+            className="w-full border-none outline-none"
           />
         </div>
+        {(filterValue.animal.length > 0 ||
+          filterValue.housing.length > 0 ||
+          filterValue.management.length > 0) && (
+          <div>
+            <div
+              className="px-3 py-2 rounded-md bg-green-400 text-white"
+              onClick={handleReset}
+            >
+              Clear
+            </div>
+          </div>
+        )}
         <div className="justify-between sm:ml-8 max-md:w-full items-stretch flex gap-5   max-md:max-w-full max-md:flex-wrap">
-          <select
-            className="items-stretch w-full sm:w-[10.5rem]  border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3 rounded-xl border-2 border-solid"
-            onChange={() => {}}
+          <Select
+            className="w-full sm:w-[10.5rem] flex px-4 py-4 rounded-xl border-2 border-solid"
+            onChange={(e) => handlefilterSelect("housing", e)}
+            value={filterValue.housing}
           >
-            <option value="">Housing</option>
-            <option value="type1">Type 1</option>
-            <option value="type2">Type 2</option>
-            <option value="type3">Type 3</option>
-          </select>
-          <select
-            className="items-stretch w-full sm:w-[10.5rem] border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
-            onChange={() => {}}
+            <Option value="">Housing - All</Option>
+            {housing.map((item: any, index) => (
+              <Option key={index} value={item?.value}>
+                {item?.label}
+              </Option>
+            ))}
+          </Select>
+          <Select
+            className="items-stretch w-full sm:w-[10.5rem] flex gap-2.5 px-4 py-4 rounded-xl border-2 border-solid"
+            onChange={(e) => handlefilterSelect("animal", e)}
+            value={filterValue.animal}
           >
-            <option value="">Animal type</option>
-            <option value="type1">Type 1</option>
-            <option value="type2">Type 2</option>
-            <option value="type3">Type 3</option>
-          </select>
-          {/* <select
-            className="items-stretch w-[10.5rem] border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
-            onChange={() => {}}
+            <Option value="">Animal Type - All</Option>
+            {animalTypes.map((item: any, index) => (
+              <Option key={index} value={item?.value}>
+                {item?.label}
+              </Option>
+            ))}
+          </Select>
+          <Select
+            className="items-stretch w-full sm:w-[10.5rem]  flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
+            onChange={(e) => handlefilterSelect("management", e)}
+            value={filterValue.management}
           >
-            <option value="">Joined</option>
-            <option value="type1">Type 1</option>
-            <option value="type2">Type 2</option>
-            <option value="type3">Type 3</option>
-          </select> */}
-          <select
-            className="items-stretch w-full sm:w-[10.5rem] border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
-            onChange={() => {}}
-          >
-            <option value="">Status</option>
-            <option value="type1">Type 1</option>
-            <option value="type2">Type 2</option>
-            <option value="type3">Type 3</option>
-          </select>
+            <Option value="">Management Type - ALL</Option>
+            <Option value="single">Single</Option>
+            <Option value="flock">Flock</Option>
+          </Select>
         </div>
       </div>
       {livestock[0] ? <LivestockTable /> : <EmptyState />}
-    </span>
+    </div>
   );
 };
 

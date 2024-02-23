@@ -99,7 +99,7 @@ const RightBar = () => {
                   />
                 </span>
                 <span className="text-[40px] text-[#006D38] font-semibold">
-                  {weatherData.temperature}°C
+                  {weatherData.temperature}°
                 </span>
               </div>
               <div className="flex justify-center mt-[-40px] items-center">

@@ -26,7 +26,6 @@ export default function HamburgerButton({
     variant="text"
     className={cn('me-3 h-auto w-auto p-0 sm:me-4 xl:hidden', className)}
     onClick={() => {
-      console.log('clicked');
       openDrawer({
         view,
         placement,

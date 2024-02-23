@@ -11,7 +11,7 @@ type TStep3Schema = z.infer<typeof step3Schema>;
 
 const submitStep3 = (data: TStep3Schema) => {
   // Handle form submission for step 2
-  console.log("Step 3 Data:", data);
+
   // nextStep();
 };
 

@@ -12,15 +12,15 @@ import {
 } from "@/lib/types";
 import { setAnimalLocal } from "./localCacheService";
 
-export const getFarmLivestock = async (farmId?: number) => {
+export const getFarmLivestock = async (farmId?: number, query?: string) => {
   const activeFarmId = farmId ?? getActiveFarm().id;
-  const url = `${config.API_URL}farms/${activeFarmId}/livestock`;
+  const url = `${config.API_URL}farms/${activeFarmId}/livestock${query ? `?${query}` : ""}`;
   const { data } = await http.get(url, getDefaultOptions());
   if (data.status === "success") {
     return data.data;
   } else {
-    return null;
     toast.error(data.message);
+    return null;
   }
 };
 
@@ -80,22 +80,18 @@ export const setAnimalAndTraits = (data:Animal[]) => {
   setAnimalLocal(animalsTraitsObj);
 };
 
-
-// export const getAnimals = async (id?: number | string, props?: string) => {
-//   let url = id ? config.API_URL + "animals/" + id : config.API_URL + "animals";
-//   url = props ? url + `?props=${props}` : url;
-//   const { data } = await http.get(url, getDefaultOptions());
-//   if (data.status === "success") {
-//     if (!id) {
-//       setAnimalAndTraits(data.data);
-//     }
-//     return data;
-//   } else {
-//     toast.error(data.message);
-//     return null;
-//   }
-// };
-
+export const getLivestockHousing = async (housingId?: string) => {
+  const activeFarmId = getActiveFarm().id;
+  let url = `${config.API_URL}farms/${activeFarmId}/housing`;
+  url = housingId ? `${url}/${housingId}` : url;
+  const { data } = await http.get(url, getDefaultOptions());
+  if (data.status === "success") {
+    return data.data;
+  } else {
+    toast.error(data.message);
+    return null;
+  }
+};
 
 
 export const getFarmFeed = async (farmId?: number) => {

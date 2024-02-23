@@ -112,3 +112,9 @@ body {
 .no_scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.ant-select-selector,
+.ant-select-selector:hover,
+.ant-select-selector:focus {
+  border: none !important;
+}

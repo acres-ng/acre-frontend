@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import UsersTable from "./UsersTable";
 import { usersData } from "./users-data";
@@ -10,7 +9,7 @@ const Menu = [
   {
     id: 1,
     title: "Inventory List",
-    active: true, 
+    active: true,
   },
   {
     id: 2,
@@ -28,22 +27,26 @@ const Feeding = () => {
   const [activeMenu, setActiveMenu] = useState(Menu);
 
   const handleTabChange = (id: number) => {
-    setActiveMenu((prevMenu) => prevMenu.map((menu) => ({
-      ...menu,
-      active: menu.id === id,
-    })));
+    setActiveMenu((prevMenu) =>
+      prevMenu.map((menu) => ({
+        ...menu,
+        active: menu.id === id,
+      }))
+    );
   };
 
   const active = activeMenu.find((menu) => menu.active);
 
   return (
-    <>
-      <div className="w-[400px] flex flex-row items-center bg-[#CCE6DA] p-2 rounded-lg mt-[2rem]">
+    <div className="bg-white flex flex-col pt-6 pb-12 px-8 max-md:px-5">
+      <div className="w-[400px] flex flex-row items-center bg-[#CCE6DA] p-2 rounded-lg">
         {activeMenu.map((menu, index) => (
           <div key={index} className="flex-auto text-center">
             <span
               className={`flex w-full cursor-pointer items-center justify-center rounded-lg px-0 py-2.5 transition-all ease-in-out ${
-                menu.active ? "bg-white rounded-xl text-[#1B9C5C]" : "text-black"
+                menu.active
+                  ? "bg-white rounded-xl text-[#1B9C5C]"
+                  : "text-black"
               }`}
               onClick={() => handleTabChange(menu.id)}
             >
@@ -57,9 +60,8 @@ const Feeding = () => {
         {active?.id === 1 && <InventoryList />}
         {active?.id === 2 && <Rations />}
         {active?.id === 3 && <RecipeBuilder />}
-        
       </div>
-    </>
+    </div>
   );
 };
 

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { getJwt } from "./userService";
 
-let isAlertShown = false; // Add a flag to track if the alert has been shown
+let isAlertShown = false; 
 
 axios.interceptors.response.use(
   null,
@@ -13,9 +13,8 @@ axios.interceptors.response.use(
 
     if (!expectedError) {
       if (!isAlertShown) {
-        console.log("Logging the error", error);
         alert("Something went wrong");
-        isAlertShown = true; // Set the flag to true after showing the alert
+        isAlertShown = true; 
       }
     }
     return Promise.reject(error);

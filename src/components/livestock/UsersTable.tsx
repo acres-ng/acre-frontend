@@ -8,7 +8,6 @@ import { Button } from "rizzui";
 import ControlledTable from "./ControlledTable";
 import { getColumns } from "./columns";
 
-const FilterElement = lazy(() => import("./filter-element"));
 const TableFooter = lazy(() => import("./table-footer"));
 
 const filterState = {
@@ -16,7 +15,11 @@ const filterState = {
   status: "",
 };
 
-export default function UsersTable({ data = [] }: { data: any[] }) {
+interface IProp {
+  data: any[];
+}
+
+export default function UsersTable({ data = [] }: IProp) {
   const [pageSize, setPageSize] = useState(10);
 
   const onHeaderCellClick = (value: string) => ({
@@ -79,14 +82,6 @@ export default function UsersTable({ data = [] }: { data: any[] }) {
 
   return (
     <div className="mt-14">
-      {/* <FilterElement
-        isFiltered={isFiltered}
-        filters={filters}
-        updateFilter={updateFilter}
-        handleReset={handleReset}
-        onSearch={handleSearch}
-        searchTerm={searchTerm}
-      /> */}
       <ControlledTable
         variant="modern"
         data={tableData}

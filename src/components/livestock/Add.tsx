@@ -23,11 +23,12 @@ import { getAnimalLocal as getAnimalsLocal } from "@/services/localCacheService"
 import { useEffect, useState } from "react";
 import { Animal, AnimalBreed, AnimalWithTraits } from "@/lib/types";
 import { InputGroup, InputRightElement } from "@chakra-ui/react";
-import { getLivestockHousing } from "@/services/livestockHousingService";
+import { getLivestockHousing } from "@/services/livestockService";
   import { toast } from "sonner";
 import { API_URL } from "@/config";
 import { getActiveFarm } from "@/services/farmService";
 import HttpService from "@/services/HttpService";
+import SucessDialogue from "./SucessDialogue";
 
 type AddProps = {
   entryType?: string;
@@ -89,6 +90,7 @@ type LiveStockHousing = { id: string; name: string; type?: string };
 const Add = () => {
   const location = useLocation();
   const entryType = location.state?.entryType;
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   useEffect(() => {
     getLivestockHousing().then((housing) => {
@@ -132,7 +134,7 @@ const Add = () => {
     );
   });
 
-  // Helper function to convert age to days
+  
   const convertToDays = (
     value: string | undefined,
     unit: string | undefined
@@ -155,12 +157,12 @@ const Add = () => {
   const onSubmit: SubmitHandler<z.infer<typeof livestockSchema>> = async (
     data
   ) => {
-    console.log("Submitting data:", data);
+   
     data.quantity = entryType === "single" ? 1 : Number(data.quantity);
 
     try {
       const combinedAgeInDays = convertToDays(data.age, data.ageUnit);
-      console.log("Combined Age in Days:", combinedAgeInDays);
+     
 
       if (entryType !== "flock") {
         data.quantity = 1;
@@ -185,6 +187,7 @@ const Add = () => {
 
       if (response.data) {
         toast.success("Livestock added successfully!");
+        setSubmitSuccess(true);
       } else {
         toast.error("Failed to add livestock. Please try again.");
       }
@@ -241,6 +244,7 @@ const Add = () => {
 
   return (
     <div className="h-auto px-4 py-6 lg:px-8">
+      {/* {submitSuccess && <SucessDialogue open={true} onClose={() => {}} />} */}
       <div className="h-full space-y-6 bg-white rounded-lg px-14 py-5">
         <div className="">
           <h3 className="text-2xl font-semibold leading-none tracking-tight">
@@ -428,12 +432,7 @@ const Add = () => {
                               onChange={(e) => {
                                 const inputAgeValue = e.target.value;
                                 livestockForm.setValue("age", inputAgeValue);
-                                console.log(
-                                  "Input Age:",
-                                  inputAgeValue,
-                                  "Selected Age Unit:",
-                                  livestockForm.getValues("ageUnit")
-                                );
+                          
                               }}
                             />
                             <InputRightElement width={"8rem"}>
@@ -441,12 +440,7 @@ const Add = () => {
                                 defaultValue="days"
                                 onValueChange={(value) => {
                                   livestockForm.setValue("ageUnit", value);
-                                  console.log(
-                                    "Input Age:",
-                                    livestockForm.getValues("age"),
-                                    "Selected Age Unit:",
-                                    value
-                                  );
+                              
                                   setAgeUnit(value);
                                 }}
                               >
@@ -547,19 +541,7 @@ const Add = () => {
                     </FormItem>
                   )}
                 />
-                {/* <FormField
-                  control={livestockForm.control}
-                  name="quantity"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Quantity</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter quantity" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
+             
                 <AddQuantityField />
                 <Button
                   type="submit"
@@ -569,11 +551,22 @@ const Add = () => {
                 </Button>
               </form>
             </Form>
+           
           </div>
         </div>
       </div>
+      
     </div>
   );
 };
 
 export default Add;
+
+
+
+
+
+
+
+
+

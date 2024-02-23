@@ -91,10 +91,7 @@ const RecipeDetailForm = () => {
 </form>
 
     </CardContent>
-    {/* <CardFooter className="flex justify-between">
-      <Button variant="outline">Cancel</Button>
-      <Button>Deploy</Button>
-    </CardFooter> */}
+ 
   </Card>
   )
 }

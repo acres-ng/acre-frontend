@@ -3,7 +3,11 @@ import { Button } from "../ui/button";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { ChevronUpIcon, ChevronDownIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronUpIcon,
+  ChevronDownIcon,
+  MagnifyingGlassIcon,
+} from "@heroicons/react/24/outline";
 import { Input as Rizzput } from "rizzui";
 import {
   InputGroup,
@@ -87,11 +91,6 @@ const InventoryList = () => {
 
   const onSubmit: SubmitHandler<z.infer<typeof feedSchema>> = async (data) => {
     try {
-      console.log("Submitting data:", data); // Log the FormData
-      // const payload = {
-      //   ...data,
-      //   quantity: quantityState
-      // }
       const userActiveFarmId = getActiveFarm().id;
       const response = await HttpService.post(
         `${API_URL}farms/${userActiveFarmId}/feeds`,
@@ -99,7 +98,7 @@ const InventoryList = () => {
         HttpService.getDefaultOptions()
       );
 
-      console.log("Response from server:", response);
+     
       if (response.data) {
         toast.success("Feed added successfully!");
       } else {
@@ -117,18 +116,13 @@ const InventoryList = () => {
   useEffect(() => {
     getFarmFeed().then((res) => {
       setFeedData(res);
-      console.log("Data>", res);
       setLoading(false);
     });
   }, []);
 
-
-
-
   const AddInventoryFeedDialog = () => {
-
     return (
-      <Dialog >
+      <Dialog>
         <DialogTrigger asChild>
           <Button variant={"default"} className="top-5 mr-4">
             <svg
@@ -285,11 +279,6 @@ const InventoryList = () => {
     );
   };
 
-
-
-
-
-
   const TableInventory = () => {
     return (
       <div className="w-full">
@@ -300,7 +289,7 @@ const InventoryList = () => {
 
   const EmptyState = () => {
     return (
-      <div className="items-stretch bg-white flex flex-col pt-6 pb-12 px-8 rounded-2xl max-md:px-5 m-5">
+      <div className="items-stretch bg-white flex flex-col pt-6 pb-12 px-8 max-md:px-5 m-5">
         <img
           loading="lazy"
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/bd51dbfefabec61626aceec83bcbea198f0cbbf004dcb1e0ff1c5ed65f6f2d2c?"
@@ -326,15 +315,12 @@ const InventoryList = () => {
 
   return (
     <>
-    
-
-
-      <span className="justify-between self-stretch flex w-full gap-5 items-start max-md:max-w-full max-md:flex-wrap">
-        <div className="text-black text-2xl font-semibold pt-4">Feed Inventory List</div>
+      <div className="justify-between self-stretch flex w-full gap-5 items-center max-md:max-w-full max-md:flex-wrap">
+        <div className="text-black text-2xl font-semibold pt-4">
+          Feed Inventory List
+        </div>
         {feedData[0] ? <AddInventoryFeedDialog /> : null}
-      </span>
-
-
+      </div>
 
       <div className="justify-between items-stretch flex w-full gap-5 mt-6 max-md:max-w-full max-md:flex-wrap pr-4">
         <div className="relative w-full  md:w-72 pt-2">
@@ -386,10 +372,6 @@ const InventoryList = () => {
           </select>
         </div>
       </div>
-
-
-
-
 
       <TableInventory />
       {/* {feedData[0] ? <TableInventory /> : <EmptyState />} */}
