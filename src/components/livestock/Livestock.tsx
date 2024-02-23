@@ -26,7 +26,7 @@ import { getAnimalLocal } from "@/services/localCacheService";
 import { Select } from "antd";
 
 const { Option } = Select;
-// import { PlusIcon } from '@heroicons/react/solid'
+
 
 const Livestock = () => {
   const navigate = useNavigate();
