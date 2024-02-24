@@ -336,9 +336,9 @@ export const getColumns = ({
                       </div>
                     </form>
                   </CardContent>
-                  <CardFooter className="flex justify-between">
-                    <Btn variant="secondary">Cancel</Btn>
-                    <Btn variant="default">Save Ration</Btn>
+                  <CardFooter className="flex justify-between gap-4">
+                    <Btn variant="secondary" className="w-full">Cancel</Btn>
+                    <Btn variant="default" className="w-full">Save Ration</Btn>
                   </CardFooter>
                 </DialogContent>
               </Dialog>
