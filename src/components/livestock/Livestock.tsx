@@ -24,9 +24,9 @@ import { AcreLoader } from "../ui/acreLoader";
 import UsersTable from "./UsersTable";
 import { getAnimalLocal } from "@/services/localCacheService";
 import { Select } from "antd";
+import { NoFilterResultsCard, NoResourcesCard } from "./Tables";
 
 const { Option } = Select;
-
 
 const Livestock = () => {
   const navigate = useNavigate();
@@ -64,8 +64,6 @@ const Livestock = () => {
   }, []);
 
 
-
-
   useEffect(() => {
     const query = [];
     if (filterValue.housing) {
@@ -90,7 +88,6 @@ const Livestock = () => {
   }, [filterValue]);
   
   
-
   const handlefilterSelect = (name: string, value: any) => {
     setFilterValue({
       ...filterValue,
@@ -176,42 +173,22 @@ const Livestock = () => {
 
   const EmptyState = () => {
     return (
-      <div className="items-stretch bg-white flex flex-col pt-3 pb-12 px-8 max-md:px-5">
-        <img
-          loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/bd51dbfefabec61626aceec83bcbea198f0cbbf004dcb1e0ff1c5ed65f6f2d2c?"
-          className="aspect-[1.54] object-contain object-center w-[500px] overflow-hidden self-center max-w-full mt-10 max-md:mt-3"
-        />
-        <div className="text-zinc-500 text-center text-sm leading-5 self-center max-w-[466px] mt-8 max-md:max-w-full">
-          You don’t have any livestock in your farm yet. Click on the button
-          below to start adding livestock to your farm
-        </div>
-        <span className="justify-end items-stretch bg-green-600 self-center flex gap-2 mt-8 mb-24 px-4 py-3.5 rounded-xl max-md:mb-10">
-          <img
-            loading="lazy"
-            src="https://cdn.builder.io/api/v1/image/assets/TEMP/ccdb2f2b68080580aa7837cf3c49aed36dc1fa5986139cce42f014f5d8151f02?"
-            className="aspect-square object-contain object-center w-6 overflow-hidden shrink-0 max-w-full"
-          />
-          <div className="text-white text-sm font-semibold self-center grow whitespace-nowrap my-auto">
-            {<AddLivestockDialog />}
-          </div>
-        </span>
-      </div>
+      <NoResourcesCard 
+      imageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/bd51dbfefabec61626aceec83bcbea198f0cbbf004dcb1e0ff1c5ed65f6f2d2c?"
+      imageAlt="No resources to show image"
+      infoText="You don’t have any livestock in your farm yet. Click on the button below to start adding livestock to your farm"
+      actionButton= {<AddLivestockDialog />}
+      />
     );
   };
 
   const NoResultsState = () => {
     return (
-      <div className="items-stretch bg-white flex flex-col pt-3 pb-12 px-8 max-md:px-5">
-        <img
-          loading="lazy"
-          src="https://cdn.builder.io/api/v1/image/assets/TEMP/bd51dbfefabec61626aceec83bcbea198f0cbbf004dcb1e0ff1c5ed65f6f2d2c?"
-          className="aspect-[1.54] object-contain object-center w-[500px] overflow-hidden self-center max-w-full mt-10 max-md:mt-3"
-        />
-        <div className="text-zinc-500 text-center text-sm leading-5 self-center max-w-[466px] mt-8 max-md:max-w-full">
-          We did not find any livestock that matches your search criteria. 
-        </div>
-      </div>
+      <NoFilterResultsCard 
+      imageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/bd51dbfefabec61626aceec83bcbea198f0cbbf004dcb1e0ff1c5ed65f6f2d2c?"
+      imageAlt="No resources to show image"
+      infoText=" We did not find any livestock that matches your search criteria."
+      />
     );
   };
 
@@ -231,13 +208,11 @@ const Livestock = () => {
     <div className="bg-white flex flex-col pt-6 pb-12 px-8 max-md:px-5">
       {isLoading ? <AcreLoader /> : null}
 
-      {/*  */}
       <div className="justify-between self-stretch flex w-full gap-5 items-center max-md:max-w-full max-md:flex-wrap">
         <div className="text-black text-2xl font-semibold">Livestock</div>
-        {livestock[0] ? <AddLivestockDialog /> : null}
+       <AddLivestockDialog /> 
       </div>
 
-      {/*  */}
 
       <div className="justify-between items-center flex w-full gap-5 mt-6 max-md:max-w-full max-md:flex-wrap">
         <div className="w-full md:w-72 p-2 flex gap-3 items-center border rounded-lg border-gray-300 focus:outline-none focus:border-blue-500">

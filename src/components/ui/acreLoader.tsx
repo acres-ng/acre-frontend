@@ -1,7 +1,10 @@
 import * as React from "react";
 import { Hourglass } from "react-loader-spinner";
 
-const AcreLoader = () => {
+type LoaderProps = {
+  text?:string,
+}
+const AcreLoader: React.FC<LoaderProps> = ({text = "Loading..."}) => {
   return (
     <div
       className="lg:px-8 grid grid-cols-10 end-3"
@@ -26,7 +29,7 @@ const AcreLoader = () => {
         />
       </div>
       <div className="mt-2">
-        <span>Loading...</span>
+        <span>{text}</span>
       </div>
     </div>
   );
