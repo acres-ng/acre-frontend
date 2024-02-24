@@ -34,12 +34,13 @@ const Livestock = () => {
   const [isLoading, setLoading] = useState(true);
   const [animalTypes, setAnimalTypes] = useState([]);
   const [housing, setHousing] = useState([]);
-
   const [filterValue, setFilterValue] = useState({
     animal: "",
     housing: "",
     management: "",
+    search: ""
   });
+  const [filterApplied, setFilterApplied] = useState(false);
 
   useEffect(() => {
     getAnimals(undefined, "maturity,breeds").then(() => {
@@ -67,14 +68,17 @@ const Livestock = () => {
 
   useEffect(() => {
     const query = [];
-    if (filterValue.housing.length > 0) {
-      query.push(`housing_id=${filterValue.housing}`);
+    if (filterValue.housing) {
+      query.push(`housingId=${filterValue.housing}`);
     }
     if (filterValue.animal) { 
       query.push(`animalType=${filterValue.animal}`);
     }
-    if (filterValue.management.length > 0) {
+    if (filterValue.management) {
       query.push(`managementType=${filterValue.management}`);
+    }
+    if (filterValue.search) {
+      query.push(`search=${filterValue.search}`);
     }
 
     const queryString = query.join("&"); 
@@ -92,6 +96,7 @@ const Livestock = () => {
       ...filterValue,
       [name]: value,
     });
+    setFilterApplied(true);
   };
 
   const AddLivestockDialog = () => {
@@ -102,12 +107,11 @@ const Livestock = () => {
     const handleFlockEntryClick = () => {
       navigate("/livestock/add", { state: { entryType: "flock" } });
     };
+
     return (
       <Dialog>
         <DialogTrigger asChild>
           <Button variant={"default"} className="top-5">
-        
-            <PlusIcon className="h-5 w-5 mr-2" />
             Add livestock
           </Button>
         </DialogTrigger>
@@ -172,11 +176,11 @@ const Livestock = () => {
 
   const EmptyState = () => {
     return (
-      <div className="items-stretch bg-white flex flex-col pt-6 pb-12 px-8 max-md:px-5 m-5">
+      <div className="items-stretch bg-white flex flex-col pt-3 pb-12 px-8 max-md:px-5">
         <img
           loading="lazy"
           src="https://cdn.builder.io/api/v1/image/assets/TEMP/bd51dbfefabec61626aceec83bcbea198f0cbbf004dcb1e0ff1c5ed65f6f2d2c?"
-          className="aspect-[1.54] object-contain object-center w-[500px] overflow-hidden self-center max-w-full mt-40 max-md:mt-10"
+          className="aspect-[1.54] object-contain object-center w-[500px] overflow-hidden self-center max-w-full mt-10 max-md:mt-3"
         />
         <div className="text-zinc-500 text-center text-sm leading-5 self-center max-w-[466px] mt-8 max-md:max-w-full">
           You don’t have any livestock in your farm yet. Click on the button
@@ -196,12 +200,31 @@ const Livestock = () => {
     );
   };
 
+  const NoResultsState = () => {
+    return (
+      <div className="items-stretch bg-white flex flex-col pt-3 pb-12 px-8 max-md:px-5">
+        <img
+          loading="lazy"
+          src="https://cdn.builder.io/api/v1/image/assets/TEMP/bd51dbfefabec61626aceec83bcbea198f0cbbf004dcb1e0ff1c5ed65f6f2d2c?"
+          className="aspect-[1.54] object-contain object-center w-[500px] overflow-hidden self-center max-w-full mt-10 max-md:mt-3"
+        />
+        <div className="text-zinc-500 text-center text-sm leading-5 self-center max-w-[466px] mt-8 max-md:max-w-full">
+          We did not find any livestock that matches your search criteria. 
+        </div>
+      </div>
+    );
+  };
+
   const handleReset = () => {
     setFilterValue({
       animal: "",
       housing: "",
       management: "",
+      search: ""
     });
+    const searchField = document.getElementById("search") as HTMLInputElement;
+    searchField.value = "";
+    setFilterApplied(false);
   };
 
   return (
@@ -220,24 +243,32 @@ const Livestock = () => {
         <div className="w-full md:w-72 p-2 flex gap-3 items-center border rounded-lg border-gray-300 focus:outline-none focus:border-blue-500">
           <MagnifyingGlassIcon className="h-5 w-5 text-gray-400" />
           <input
+            id="search"
             type="text"
             placeholder="Search..."
             className="w-full border-none outline-none"
+            onChange={(e) => {
+              if (e.target.value.trim()) {
+                handlefilterSelect("search", e.target.value)
+              }
+            }}
           />
         </div>
-        {(filterValue.animal.length > 0 ||
-          filterValue.housing.length > 0 ||
-          filterValue.management.length > 0) && (
-          <div>
-            <div
-              className="px-3 py-2 rounded-md bg-green-400 text-white"
+        
+        <div className="justify-between sm:ml-8 max-md:w-full items-stretch flex gap-5   max-md:max-w-full max-md:flex-wrap">
+        {(filterValue.animal ||
+          filterValue.housing ||
+          filterValue.management ||
+          filterValue.search) && (
+          <div className="flex items-end">
+            <span
+              className="mb-0 text-red-500 hover:underline"
               onClick={handleReset}
             >
-              Clear
-            </div>
+            Clear filters
+            </span>
           </div>
         )}
-        <div className="justify-between sm:ml-8 max-md:w-full items-stretch flex gap-5   max-md:max-w-full max-md:flex-wrap">
           <Select
             className="w-full sm:w-[10.5rem] flex px-4 py-4 rounded-xl border-2 border-solid"
             onChange={(e) => handlefilterSelect("housing", e)}
@@ -273,7 +304,7 @@ const Livestock = () => {
           </Select>
         </div>
       </div>
-      {livestock[0] ? <LivestockTable /> : <EmptyState />}
+      {livestock[0] ? <LivestockTable /> : filterApplied ? <NoResultsState /> : <EmptyState />}
     </div>
   );
 };
