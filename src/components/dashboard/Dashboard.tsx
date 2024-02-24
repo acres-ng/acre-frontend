@@ -89,7 +89,7 @@ const Dashboard = () => {
             </p>
             <p className="font-light text-gray-500 text-sm">{`${farms?.line_address1}, ${farms?.state}`}</p>
           </div>
-          <NotificationDialog className=" " />
+          {/* <NotificationDialog className=" " /> */}
 
           <div className="w-full">
             <Popover>
