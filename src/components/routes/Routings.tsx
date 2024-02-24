@@ -13,7 +13,7 @@ import Livestock from "../livestock/Livestock";
 import Add from "../livestock/Add";
 import Feeding from "../livestock/Feeding";
 import Health from "../livestock/Health";
-import Housing from "../livestock/Housing";
+import Housing from "../livestock/Housing/HousingList";
 import Layyout from "@/layout/sidebar/layyout";
 import InventoryList from "../livestock/InventoryList";
 import Rations from "../livestock/Rations";
