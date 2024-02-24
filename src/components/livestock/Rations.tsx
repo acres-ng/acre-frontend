@@ -7,3 +7,8 @@ const Rations = () => {
 }
 
 export default Rations
+
+
+
+
+

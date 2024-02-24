@@ -99,3 +99,22 @@
   opacity: 0.5; 
 }
 
+@font-face {
+  font-family: "poppins";
+  src: url("../public/fonts/Poppins-Black.ttf") format("truetype");
+}
+
+body {
+  font-family: 'poppins' !important;
+ 
+}
+
+.no_scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.ant-select-selector,
+.ant-select-selector:hover,
+.ant-select-selector:focus {
+  border: none !important;
+}

@@ -1,19 +1,13 @@
-
-
-import React, { lazy } from 'react';
-import isEmpty from 'lodash/isEmpty';
-import Table, { type TableProps } from './table';
-import { Title } from 'rizzui';
-import Spinner from '@/components/ui/spinner';
-import type { TableFilterProps } from './table-filter';
-import type { TablePaginationProps } from './table-pagination';
+import React, { lazy } from "react";
+import isEmpty from "lodash/isEmpty";
+import Table, { type TableProps } from "./table";
+import { Title } from "rizzui";
+import Spinner from "@/components/ui/spinner";
+import type { TableFilterProps } from "./table-filter";
+import type { TablePaginationProps } from "./table-pagination";
 import { cn } from "@/lib/utils";
-const TableFilter = lazy(
-  () => import('./table-filter'),
-);
-const TablePagination = lazy(
-  () => import('./table-pagination'),
-);
+const TableFilter = lazy(() => import("./table-filter"));
+const TablePagination = lazy(() => import("./table-pagination"));
 
 type ControlledTableProps = {
   isLoading?: boolean;

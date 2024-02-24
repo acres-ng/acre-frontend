@@ -17,7 +17,7 @@ const Step1 = () => {
 
   const submitStep1 = (data: TStep1Schema) => {
     // Handle form submission for step 1
-    console.log("Step 1 Data:", data);
+  
     // nextStep();
   };
   return (

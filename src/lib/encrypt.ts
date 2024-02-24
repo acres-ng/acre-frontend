@@ -21,21 +21,4 @@ export const decryptData = (encryptedData: string) => {
   }
 };
 
-// Your secret key for encryption (keep this secure)
-//   const secretKey = 'your-secret-key';
 
-//   // Data you want to send
-//   const dataToSend = { username: 'user123', email: 'user@example.com' };
-
-//   // Encrypt the data
-//   const encryptedData = encryptData(dataToSend, secretKey);
-
-//   // Include the encrypted data in your URL
-//   const url = `https://example.com/some-page?data=${encryptedData}`;
-
-//   // On the receiving end, you can decrypt the data
-//   const encryptedQueryParam = new URLSearchParams(window.location.search).get('data');
-//   if (encryptedQueryParam) {
-//     const decryptedData = decryptData(encryptedQueryParam, secretKey);
-//     console.log(decryptedData);
-//   }

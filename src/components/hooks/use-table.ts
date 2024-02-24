@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo } from 'react';
-import isString from 'lodash/isString';
+import { useState, useEffect, useMemo } from "react";
+import isString from "lodash/isString";
 
 interface AnyObject {
   [key: string]: any;
@@ -54,9 +54,9 @@ export function useTable<T extends AnyObject>(
       const bValue = b[sortKey];
 
       if (aValue < bValue) {
-        return sortDirection === 'asc' ? -1 : 1;
+        return sortDirection === "asc" ? -1 : 1;
       } else if (aValue > bValue) {
-        return sortDirection === 'asc' ? 1 : -1;
+        return sortDirection === "asc" ? 1 : -1;
       }
       return 0;
     });
@@ -72,9 +72,9 @@ export function useTable<T extends AnyObject>(
   }, [sortConfig, data]);
 
   function handleSort(key: string) {
-    let direction = 'asc';
-    if (sortConfig.key === key && sortConfig.direction === 'asc') {
-      direction = 'desc';
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
     }
     setSortConfig({ key, direction });
   }
@@ -109,18 +109,18 @@ export function useTable<T extends AnyObject>(
   /*
    * Handle Filters and searching
    */
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<Record<string, any>>(
     initialFilterState ?? {}
   );
 
   function updateFilter(columnId: string, filterValue: string | any[]) {
     if (!Array.isArray(filterValue) && !isString(filterValue)) {
-      throw new Error('filterValue data type should be string or array of any');
+      throw new Error("filterValue data type should be string or array of any");
     }
 
     if (Array.isArray(filterValue) && filterValue.length !== 2) {
-      throw new Error('filterValue data must be an array of length 2');
+      throw new Error("filterValue data must be an array of length 2");
     }
 
     setFilters((prevFilters) => ({
@@ -139,7 +139,7 @@ export function useTable<T extends AnyObject>(
             ([columnId, filterValue]) => {
               if (
                 Array.isArray(filterValue) &&
-                typeof filterValue[1] === 'object'
+                typeof filterValue[1] === "object"
               ) {
                 const itemValue = new Date(item[columnId]);
                 return (
@@ -149,7 +149,7 @@ export function useTable<T extends AnyObject>(
               }
               if (
                 Array.isArray(filterValue) &&
-                typeof filterValue[1] === 'string'
+                typeof filterValue[1] === "string"
               ) {
                 const itemPrice = Math.ceil(Number(item[columnId]));
                 return (
@@ -171,7 +171,7 @@ export function useTable<T extends AnyObject>(
         // global search after running filters
         .filter((item) =>
           Object.values(item).some((value) =>
-            typeof value === 'object'
+            typeof value === "object"
               ? value &&
                 Object.values(value).some(
                   (nestedItem) =>
@@ -198,7 +198,7 @@ export function useTable<T extends AnyObject>(
 
     return sortedData.filter((item) =>
       Object.values(item).some((value) =>
-        typeof value === 'object'
+        typeof value === "object"
           ? value &&
             Object.values(value).some(
               (nestedItem) =>
@@ -215,7 +215,7 @@ export function useTable<T extends AnyObject>(
    */
   function handleReset() {
     setData(() => initialData);
-    handleSearch('');
+    handleSearch("");
     if (initialFilterState) return setFilters(initialFilterState);
   }
 

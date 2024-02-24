@@ -32,7 +32,6 @@ export default function CreateUser() {
     };
     setLoading(true);
     setTimeout(() => {
-      console.log('formattedData', formattedData);
       setLoading(false);
       setReset({
         fullName: '',
@@ -53,7 +52,6 @@ export default function CreateUser() {
       className="grid grid-cols-1 gap-6 p-6 @container md:grid-cols-2 [&_.rizzui-input-label]:font-medium [&_.rizzui-input-label]:text-gray-900"
     >
       {({ register, control, watch, formState: { errors } }) => {
-        console.log('errors', errors);
 
         return (
           <>

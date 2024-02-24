@@ -1,4 +1,4 @@
-
+"use client";
 
 import { useCallback, useMemo, useState } from "react";
 import React, { lazy } from "react";
@@ -6,8 +6,10 @@ import { useTable } from "../hooks/use-table";
 import { useColumn } from "../hooks/use-column";
 import { Button } from "rizzui";
 import ControlledTable from "./ControlledTable";
-import { getColumns } from "./columns";
+import { getInventoryColumns } from "./InventoryColumn";
 
+
+const FilterElement = lazy(() => import("./filter-element"));
 const TableFooter = lazy(() => import("./table-footer"));
 
 const filterState = {
@@ -15,11 +17,7 @@ const filterState = {
   status: "",
 };
 
-interface IProp {
-  data: any[];
-}
-
-export default function UsersTable({ data = [] }: IProp) {
+export default function InventoryTable({ data = [] }: { data: any[] }) {
   const [pageSize, setPageSize] = useState(10);
 
   const onHeaderCellClick = (value: string) => ({
@@ -54,9 +52,11 @@ export default function UsersTable({ data = [] }: IProp) {
     handleReset,
   } = useTable(data, pageSize, filterState);
 
-  const columns = useMemo(
+ 
+  
+  const inventoryColumns = useMemo(
     () =>
-      getColumns({
+      getInventoryColumns({
         data,
         sortConfig,
         checkedItems: selectedRowKeys,
@@ -77,11 +77,23 @@ export default function UsersTable({ data = [] }: IProp) {
     ]
   );
 
+ 
+
+
+
   const { visibleColumns, checkedColumns, setCheckedColumns } =
-    useColumn(columns);
+    useColumn(inventoryColumns);
 
   return (
     <div className="mt-14">
+      {/* <FilterElement
+        isFiltered={isFiltered}
+        filters={filters}
+        updateFilter={updateFilter}
+        handleReset={handleReset}
+        onSearch={handleSearch}
+        searchTerm={searchTerm}
+      /> */}
       <ControlledTable
         variant="modern"
         data={tableData}

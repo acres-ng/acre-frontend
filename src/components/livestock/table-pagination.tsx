@@ -1,6 +1,6 @@
-import { PiCaretDownBold } from 'react-icons/pi';
-import Pagination, { type PaginationProps } from '../ui/pagination';
-import Select from './select';
+import { PiCaretDownBold } from "react-icons/pi";
+import Pagination, { type PaginationProps } from "../ui/pagination";
+import Select from "./select";
 import { cn } from "@/lib/utils";
 
 const paginationLimitOptions = [5, 10, 15, 20, 25].map((v, idx) => ({
@@ -19,7 +19,7 @@ export default function TablePagination({
   pageSize,
   setPageSize,
   total,
-  paginatorClassName = 'mt-5 xs:mt-6 sm:mt-7',
+  paginatorClassName = "mt-5 xs:mt-6 sm:mt-7",
   ...props
 }: TablePaginationProps) {
   if (total && total < pageSize) {
@@ -29,19 +29,19 @@ export default function TablePagination({
   return (
     <div
       className={cn(
-        'table-pagination flex items-center justify-center sm:justify-between',
+        "table-pagination flex items-center justify-center  sm:justify-between",
         paginatorClassName
       )}
     >
-      {!setPageSize ? (
+        {!setPageSize ? (
         total && (
           <div className="hidden text-gray-500 sm:inline-flex">
             {props.current} of {Math.ceil(total / pageSize)} pages
           </div>
         )
       ) : (
-        <div className="hidden items-center sm:flex">
-          Rows per page:{' '}
+        <div className="hidden items-center sm:flex  sm:justify-between">
+          Rows per page:{" "}
           <Select
             options={paginationLimitOptions}
             onChange={setPageSize}
@@ -51,11 +51,12 @@ export default function TablePagination({
             getOptionValue={({ value }) => value}
             suffix={<PiCaretDownBold />}
             useContainerWidth={false}
-            dropdownClassName="p-1 border w-12 border-gray-100 shadow-lg"
+            dropdownClassName="p-1 border w-12 border-gray-300 bg-white shadow-lg"
             className="ms-1 [&_button]:font-medium"
           />
         </div>
       )}
+    
       <Pagination
         total={total}
         pageSize={pageSize}
@@ -65,6 +66,9 @@ export default function TablePagination({
         nextIconClassName="py-0 text-gray-500 !leading-[26px]"
         {...props}
       />
+
+
+     
     </div>
   );
 }

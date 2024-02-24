@@ -44,50 +44,50 @@ const PublicRoutes = () => {
         <Route
           path="list"
           element={
-            <Layout>
+            <Layyout>
               <Livestock />
-            </Layout>
+            </Layyout>
           }
         />
         <Route
           path="add"
           element={
-            <Layout>
+            <Layyout>
               <Add />
-            </Layout>
+            </Layyout>
           }
         />
         <Route
           path="feed"
           element={
-            <Layout>
+            <Layyout>
               <Feeding />
-            </Layout>
+            </Layyout>
           }
         />
         <Route
           path="health"
           element={
-            <Layout>
+            <Layyout>
               <Health />
-            </Layout>
+            </Layyout>
           }
         />
         <Route
           path="house"
           element={
-            <Layout>
+            <Layyout>
               <Housing />
-            </Layout>
+            </Layyout>
           }
         />
 
         <Route
           path="house"
           element={
-            <Layout>
+            <Layyout>
               <InventoryList />
-            </Layout>
+            </Layyout>
           }
         />
       </Route>

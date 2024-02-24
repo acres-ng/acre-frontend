@@ -1,6 +1,3 @@
-
-
-
 import Side from "./sidebar/layyout";
 import React, { useEffect } from "react";
 // import Sidebar from "./Sidebar";
@@ -27,7 +24,7 @@ const Layout = ({ children }: Props) => {
   return (
     <div className="md:block h-screen">
       <div className="bg-white h-full">
-      <LayoutHeader />
+        <LayoutHeader />
         <div className="grid grid-cols-12 h-full">
           {/* Sidebar */}
           <aside className="lg:col-span-2">
@@ -46,6 +43,3 @@ const Layout = ({ children }: Props) => {
 };
 
 export default Layout;
-
-
-

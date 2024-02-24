@@ -5,6 +5,7 @@ import Routings from "./components/routes/Routings";
 import AuthContext from "./components/context/authContext";
 import GlobalDrawer from '../src/layout/sidebar/GlobalDrawer';
 
+
 interface User {
   token: string;
   customer: {

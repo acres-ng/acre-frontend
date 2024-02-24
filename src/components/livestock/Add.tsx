@@ -21,18 +21,14 @@ import {
 } from "../ui/select";
 import { getAnimalLocal as getAnimalsLocal } from "@/services/localCacheService";
 import { useEffect, useState } from "react";
-import {
-  Animal,
-  AnimalBreed,
-  AnimalWithTraits,
-} from "@/lib/types";
+import { Animal, AnimalBreed, AnimalWithTraits } from "@/lib/types";
 import { InputGroup, InputRightElement } from "@chakra-ui/react";
-import { getLivestockHousing } from "@/services/livestockHousingService";
-import { toast } from "sonner";
+import { getLivestockHousing } from "@/services/livestockService";
+  import { toast } from "sonner";
 import { API_URL } from "@/config";
 import { getActiveFarm } from "@/services/farmService";
 import HttpService from "@/services/HttpService";
-
+import SucessDialogue from "./SucessDialogue";
 
 type AddProps = {
   entryType?: string;
@@ -40,9 +36,9 @@ type AddProps = {
 
 interface AddQuantityFieldProps {
   livestockForm: {
-    control: any; // You may need to replace this with the correct type
+    control: any; 
   };
-  entryType: string | undefined; // You can replace 'string' with the specific type if available
+  entryType: string | undefined;
 }
 
 const livestockSchema = z.object({
@@ -56,21 +52,30 @@ const livestockSchema = z.object({
   ageUnit: z.string().min(1).optional(),
   status: z.string().min(1).nullable(),
   measuring_unit: z.string().min(1),
-  price: z.string().refine((value) => value === "0" ? null : !isNaN(parseFloat(value)), {
-    message: "Please enter a valid price or leave it empty.",
-  }),
+  price: z
+    .string()
+    .refine((value) => (value === "0" ? null : !isNaN(parseFloat(value))), {
+      message: "Please enter a valid price or leave it empty.",
+    }),
 
-  date_of_stocking: z.string().refine((value) => {
-    const currentDate = new Date();
-    const inputDate = new Date(value);
-    // Check if inputDate is not in the future
-    return !isNaN(inputDate.getTime()) && inputDate <= currentDate;
-  }, {
-    message: "Please enter a valid date of stocking that is today or earlier.",
-  }),
-  quantity: z.number().int().refine((value) => value > 0, {
-    message: "Quantity must be greater than 0.",
-  }),
+  date_of_stocking: z.string().refine(
+    (value) => {
+      const currentDate = new Date();
+      const inputDate = new Date(value);
+      // Check if inputDate is not in the future
+      return !isNaN(inputDate.getTime()) && inputDate <= currentDate;
+    },
+    {
+      message:
+        "Please enter a valid date of stocking that is today or earlier.",
+    }
+  ),
+  quantity: z
+    .number()
+    .int()
+    .refine((value) => value > 0, {
+      message: "Quantity must be greater than 0.",
+    }),
 
   // quantity: z
   // .number()
@@ -78,66 +83,36 @@ const livestockSchema = z.object({
   // .refine((value) => value > 0, {
   //   message: "Quantity must be greater than 0.",
   // }),
-
-
 });
-
-
 
 type LiveStockHousing = { id: string; name: string; type?: string };
 
 const Add = () => {
-  
   const location = useLocation();
   const entryType = location.state?.entryType;
-  const [quantity, setQuantity] = useState(1); // Initialize quantity to 1
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
   useEffect(() => {
-    if (entryType === "flock") {
-      setQuantity(2);
-    } else {
-      setQuantity(1);
-    }
-  }, [entryType]);
-
-
-  const AddQuantityField = () => {
-    if (entryType === "flock") {
-      return (
-        <FormField
-          control={livestockForm.control}
-          name="quantity"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Quantity</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter quantity" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      );
-    }
-
-  };
-
+    getLivestockHousing().then((housing) => {
+      setHousingData(housing);
+    });
+  }, []);
 
   const livestockForm = useForm<z.infer<typeof livestockSchema>>({
     resolver: zodResolver(livestockSchema),
     defaultValues: {
       weight: "",
-      age: "",  
+      age: "",
       measuring_unit: "kg",
       price: "",
-      date_of_stocking: new Date().toISOString().split('T')[0],
-      quantity: entryType === "flock" ? 2 : 1,  
+      date_of_stocking: new Date().toISOString().split("T")[0],
+      quantity: entryType === "flock" ? 2 : 1,
       ageUnit: "days",
     },
   });
 
-
-  const animalsList: Animal[] = getAnimalsLocal()?.animals; 
-  const [housingData, setHousingData] = useState<LiveStockHousing[]>(); 
+  const animalsList: Animal[] = getAnimalsLocal()?.animals;
+  const [housingData, setHousingData] = useState<LiveStockHousing[]>();
 
   const [animalTraits, setAnimalTraits] = useState<AnimalWithTraits>({
     animals: [],
@@ -159,10 +134,13 @@ const Add = () => {
     );
   });
 
-  // Helper function to convert age to days
-  const convertToDays = (value: string | undefined, unit: string | undefined): number => {
-    const numericValue = value ? parseFloat(value) : 0; 
-    const selectedUnit = unit || 'days'; 
+  
+  const convertToDays = (
+    value: string | undefined,
+    unit: string | undefined
+  ): number => {
+    const numericValue = value ? parseFloat(value) : 0;
+    const selectedUnit = unit || "days";
 
     switch (selectedUnit) {
       case "years":
@@ -176,45 +154,40 @@ const Add = () => {
     }
   };
 
-  const onSubmit: SubmitHandler<z.infer<typeof livestockSchema>> = async (data) => {
-    console.log("Submitting data:", data);
+  const onSubmit: SubmitHandler<z.infer<typeof livestockSchema>> = async (
+    data
+  ) => {
+   
     data.quantity = entryType === "single" ? 1 : Number(data.quantity);
 
     try {
-      // Convert age to days based on the selected unit
-      const ageInDays = convertToDays(data.age, data.ageUnit);
-  
-      const combinedAge = `${data.age} ${data.ageUnit}`;
-      console.log("Combined Age:", combinedAge);
-
-      
       const combinedAgeInDays = convertToDays(data.age, data.ageUnit);
-      console.log("Combined Age in Days:", combinedAgeInDays);
+     
 
       if (entryType !== "flock") {
         data.quantity = 1;
       }
-  
+
       const postData = {
         ...data,
         // date_of_stocking: data.date_of_stocking,
         age: combinedAgeInDays.toString(),
-        combinedAge: combinedAge,
-        combinedAgeInDays: combinedAgeInDays,
       };
-  
+
       const userActiveFarmId = getActiveFarm().id;
-    const postDataToSend = entryType === "single"
-    ? [postData] // Enclose in an array for single entries
-    : postData;
+      const postDataToSend =
+        entryType === "single"
+          ? [postData] // Enclose in an array for single entries
+          : postData;
       const response = await HttpService.post(
         `${API_URL}farms/${userActiveFarmId}/livestock`,
         postDataToSend,
         HttpService.getDefaultOptions()
       );
-  
+
       if (response.data) {
         toast.success("Livestock added successfully!");
+        setSubmitSuccess(true);
       } else {
         toast.error("Failed to add livestock. Please try again.");
       }
@@ -224,18 +197,54 @@ const Add = () => {
     }
   };
 
-  
- 
-  
-  
-  useEffect(() => {
-    getLivestockHousing().then((housing) => {
-      setHousingData(housing);
-    });
-  }, []);
+  const AddQuantityField = () => {
+    if (entryType === "flock") {
+      return (
+        <FormField
+          control={livestockForm.control}
+          name="quantity"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Quantity</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter quantity"
+                  {...field}
+                  onChange={(e: any) => {
+                    if (e.target.value.length === 0) {
+                      field.onChange(e);
+                    } else {
+                      field.onChange({
+                        ...e,
+                        target: {
+                          ...e.target,
+                          value: parseInt(e.target.value),
+                        },
+                      });
+                    }
+
+                    if (
+                      e.target.value.length > 0 &&
+                      parseInt(e.target.value) === 1
+                    ) {
+                      livestockForm.setError("quantity", {
+                        message: "Ise kushe len she yi oo",
+                      });
+                    }
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      );
+    }
+  };
 
   return (
     <div className="h-auto px-4 py-6 lg:px-8">
+      {/* {submitSuccess && <SucessDialogue open={true} onClose={() => {}} />} */}
       <div className="h-full space-y-6 bg-white rounded-lg px-14 py-5">
         <div className="">
           <h3 className="text-2xl font-semibold leading-none tracking-tight">
@@ -386,7 +395,10 @@ const Add = () => {
                               <Select
                                 defaultValue="kg"
                                 onValueChange={(value) => {
-                                  livestockForm.setValue("measuring_unit", value);
+                                  livestockForm.setValue(
+                                    "measuring_unit",
+                                    value
+                                  );
                                 }}
                               >
                                 <SelectTrigger>
@@ -413,27 +425,29 @@ const Add = () => {
                         <FormLabel>Age at stocking</FormLabel>
                         <FormControl>
                           <InputGroup>
-                            <Input 
-                              required 
-                              placeholder="Enter age" 
-                              {...field} 
+                            <Input
+                              required
+                              placeholder="Enter age"
+                              {...field}
                               onChange={(e) => {
                                 const inputAgeValue = e.target.value;
-                                livestockForm.setValue('age', inputAgeValue);
-                                console.log('Input Age:', inputAgeValue, 'Selected Age Unit:', livestockForm.getValues('ageUnit'));
+                                livestockForm.setValue("age", inputAgeValue);
+                          
                               }}
                             />
                             <InputRightElement width={"8rem"}>
                               <Select
                                 defaultValue="days"
                                 onValueChange={(value) => {
-                                  livestockForm.setValue('ageUnit', value);
-                                  console.log('Input Age:', livestockForm.getValues('age'), 'Selected Age Unit:', value);
+                                  livestockForm.setValue("ageUnit", value);
+                              
                                   setAgeUnit(value);
                                 }}
                               >
                                 <SelectTrigger>
-                                  <SelectValue>{livestockForm.getValues('ageUnit')}</SelectValue>
+                                  <SelectValue>
+                                    {livestockForm.getValues("ageUnit")}
+                                  </SelectValue>
                                 </SelectTrigger>
                                 <SelectContent>
                                   <SelectItem value="days">Days</SelectItem>
@@ -527,19 +541,7 @@ const Add = () => {
                     </FormItem>
                   )}
                 />
-                {/* <FormField
-                  control={livestockForm.control}
-                  name="quantity"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Quantity</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter quantity" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
+             
                 <AddQuantityField />
                 <Button
                   type="submit"
@@ -549,12 +551,22 @@ const Add = () => {
                 </Button>
               </form>
             </Form>
+           
           </div>
         </div>
       </div>
+      
     </div>
   );
 };
 
 export default Add;
+
+
+
+
+
+
+
+
 
