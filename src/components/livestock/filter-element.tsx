@@ -7,10 +7,10 @@ import { Button } from 'rizzui';
 import { default as useMedia } from 'react-use/lib/useMedia';
 import { STATUSES, User } from './users-data';
 import SelectBox from './select';
-import { rolesList } from './roles-permissions';
+
 import { Input } from 'rizzui';
 import ModalButton from './modal-button';
-import CreateUser from './create-user';
+
 import { cn } from '@/lib/utils';
 
 const statusOptions = [
@@ -61,10 +61,7 @@ type FilterElementProps = {
   searchTerm: string;
 };
 
-const roles = rolesList.map((role) => ({
-  name: role.name,
-  value: role.name,
-}));
+
 
 export default function FilterElement({
   isFiltered,
@@ -95,21 +92,6 @@ export default function FilterElement({
             selected
           }
         />
-        <StatusField
-          options={roles}
-          value={filters['role']}
-          placeholder="Filter by Role"
-          className=" @4xl:-auto -order-2 w-full @[25rem]:w-[calc(calc(100%_-_10px)_/_2)] @4xl:-order-4 @4xl:w-auto"
-          dropdownClassName="w-48"
-          useContainerWidth={false}
-          getOptionValue={(option) => option.value}
-          onChange={(value: string) => {
-            updateFilter('role', value);
-          }}
-          displayValue={(selected: string) =>
-            roles.find((option) => option.value === selected)?.name ?? selected
-          }
-        />
 
         {isFiltered && (
           <Button
@@ -133,12 +115,6 @@ export default function FilterElement({
           className="-order-4 w-full @xl:-order-5 @xl:ms-auto @xl:w-auto @4xl:-order-2 @4xl:w-[230px] @5xl:w-auto"
         />
         <div className="-order-5 flex basis-auto justify-end @xl:-order-4 @4xl:-order-1">
-          <ModalButton
-            label="Add New User"
-            view={<CreateUser />}
-            customSize="600px"
-            className="mt-0"
-          />
         </div>
       </div>
     </>
