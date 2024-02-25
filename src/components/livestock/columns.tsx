@@ -276,48 +276,6 @@ export const getColumns = ({
     key: "action",
     width: 60,
     render: (_: string, user: User) => (
-      // <div className="flex items-center justify-end gap-3 pe-3">
-      //   <Tooltip
-      //     size="sm"
-      //     content={() => "Edit User"}
-      //     placement="top"
-      //     color="invert"
-      //   >
-      //     {/* <Link href={routes.invoice.edit(user.id)}> */}
-      //     <ActionIcon
-      //       tag="span"
-      //       size="sm"
-      //       variant="outline"
-      //       className="hover:!border-gray-900 hover:text-gray-700"
-      //     >
-      //       <PencilIcon className="h-4 w-4" />
-      //     </ActionIcon>
-      //     {/* </Link> */}
-      //   </Tooltip>
-      //   <Tooltip
-      //     size="sm"
-      //     content={() => "View User"}
-      //     placement="top"
-      //     color="invert"
-      //   >
-      //     {/* <Link href={routes.invoice.details(user.id)}> */}
-      //     <ActionIcon
-      //       tag="span"
-      //       size="sm"
-      //       variant="outline"
-      //       className="hover:!border-gray-900 hover:text-gray-700"
-      //     >
-      //       <EyeIcon className="h-4 w-4" />
-      //     </ActionIcon>
-      //     {/* </Link> */}
-      //   </Tooltip>
-      //   <DeletePopover
-      //     title={`Delete this user`}
-      //     description={`Are you sure you want to delete this #${user.id} user?`}
-      //     onDelete={() => onDeleteItem(user.id)}
-      //   />
-      // </div>
-
       <div className="flex items-center justify-end gap-3">
         <Popover
           placement="left"

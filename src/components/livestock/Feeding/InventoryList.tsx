@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import InventoryTable from "./InventoryTable";
+import InventoryTable from "../InventoryTable";
 import { getFarmFeed } from "@/services/livestockService";
 import HttpService from "@/services/HttpService";
 import { API_URL } from "@/config";
@@ -56,25 +56,27 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { MeasuringUnitSelect,CurrencySelect } from "../../FormInput/AcreSelect";
 
 interface FormData {
   name: string;
-  unit_weight: number;
+  stocking_weight: number;
   weight_measuring_unit: string;
-  ingredients: any;
-  unit_Price: number;
+  ingredients?: any;
+  stocking_price: number;
+  currency: string;
 }
 
 const feedSchema = z.object({
   name: z.string(),
-  unit_weight: z.number(),
+  stocking_weight: z.number(),
   weight_measuring_unit: z.string(),
-  ingredients: z.any(),
-  unit_Price: z.number(),
+  ingredients: z.any().nullable(),
+  stocking_price: z.number(),
+  currency: z.string(),
 });
 
 const InventoryList = () => {
-  const [quantityState, setQuantityState] = useState(0);
   const [feedData, setFeedData] = useState([]);
   const [isLoading, setLoading] = useState(true);
 
@@ -82,10 +84,10 @@ const InventoryList = () => {
     resolver: zodResolver(feedSchema),
     defaultValues: {
       name: "",
-      unit_weight: 0,
-      weight_measuring_unit: "kg",
-      ingredients: "",
-      unit_Price: 0,
+      stocking_weight: 0,
+      weight_measuring_unit: "",
+      stocking_price: 0,
+      currency: "NGN",
     },
   });
 
@@ -98,7 +100,6 @@ const InventoryList = () => {
         HttpService.getDefaultOptions()
       );
 
-     
       if (response.data) {
         toast.success("Feed added successfully!");
       } else {
@@ -148,12 +149,12 @@ const InventoryList = () => {
           </DialogHeader>
           <Form {...feedForm}>
             <form onSubmit={feedForm.handleSubmit(onSubmit)}>
-              <div className="grid w-full items-center gap-4">
+              <div className="grid w-full items-center gap-4 mb-5">
                 <div className="flex flex-col space-y-1.5">
                   <Label htmlFor="name">Feed Name or ID</Label>
                   <Input
                     id="name"
-                    placeholder="eg Ultima DIY"
+                    placeholder="eg Vital Feed Growers"
                     {...feedForm.register("name")}
                   />
                   {feedForm.formState.errors.name && (
@@ -162,101 +163,53 @@ const InventoryList = () => {
                 </div>
                 <div className="flex space-x-4 pt-2">
                   <span className="flex flex-col space-y-1.5 w-full">
-                    <Label htmlFor="unitWeight">Unit Weight</Label>
+                    <Label htmlFor="unitWeight">Stocking Weight</Label>
                     <InputGroup>
                       <Input
                         placeholder="Enter weight"
                         className="text-center"
                         id="unitWeight"
                         type="number"
-                        {...feedForm.register("unit_weight", {
+                        {...feedForm.register("stocking_weight", {
                           setValueAs: (value: string) => parseInt(value) || 0, // Parse value to integer or default to 0
                         })}
                       />
-                      {feedForm.formState.errors.unit_weight && (
+                      {feedForm.formState.errors.stocking_weight && (
                         <span>
-                          {feedForm.formState.errors.unit_weight.message}
+                          {feedForm.formState.errors.stocking_weight.message}
                         </span>
                       )}
-                      <InputRightElement width={"4rem"}>
-                        <Select>
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="kg">Kg</SelectItem>
-                            <SelectItem value="g">Gm</SelectItem>
-                          </SelectContent>
-                        </Select>
+                      <InputRightElement width={"6rem"}>
+                          <MeasuringUnitSelect onchange={(value) => {
+                            feedForm.setValue("weight_measuring_unit", value);
+                          }}/>
                       </InputRightElement>
                     </InputGroup>
                   </span>
-                  <span className="flex flex-col space-y-1.5 w-full">
-                    <Rizzput
-                      label="Quantity to Stock"
-                      type="number"
-                      min={0}
-                      step={1}
-                      value={quantityState}
-                      onChange={(e) => {
-                        // feedForm.setValue("unit_Price", Number(e.target.value));
-                        setQuantityState(Number(e.target.value));
-                      }}
-                      suffix={
-                        <div className="-mr-3.5 grid gap-[2px] p-0.5 rtl:-ml-3.5 rtl:-mr-0">
-                          <button
-                            type="button"
-                            className="rounded-[3px] bg-gray-100 py-0.5 px-1.5 hover:bg-gray-200 focus:bg-gray-200"
-                            onClick={() => {
-                              // feedForm.setValue("unit_Price", feedForm.getValues().unit_Price - 1);
-                              setQuantityState((prevState) => prevState + 1);
-                            }}
-                          >
-                            <ChevronUpIcon className="h-3 w-3" />
-                          </button>
-                          <button
-                            type="button"
-                            className="rounded-[3px] bg-gray-100 py-0.5 px-1.5 hover:bg-gray-200 focus:bg-gray-200"
-                            onClick={() => {
-                              // feedForm.setValue("unit_Price", feedForm.getValues().unit_Price - 1);
-                              setQuantityState((prevState) => prevState - 1);
-                            }}
-                          >
-                            <ChevronDownIcon className="h-3 w-3" />
-                          </button>
-                        </div>
-                      }
-                    />
-                  </span>
+                  
                 </div>
                 <div className="flex flex-col space-y-1.5 pt-2">
-                  <Label htmlFor="unitPrice">Current price per Unit</Label>
+                  <Label htmlFor="unitPrice">Total Price</Label>
                   <InputGroup>
                     <Input
                       placeholder="Enter price"
                       className="text-center"
                       id="unitPrice"
                       type="number"
-                      {...feedForm.register("unit_Price", {
+                      {...feedForm.register("stocking_price", {
                         setValueAs: (value: string) => parseInt(value) || 0,
                       })}
                     />
-                    {feedForm.formState.errors.unit_Price && (
+                    {feedForm.formState.errors.stocking_price && (
                       <span>
-                        {feedForm.formState.errors.unit_Price.message}
+                        {feedForm.formState.errors.stocking_price.message}
                       </span>
                     )}
-                    <InputLeftElement width={"8rem"}>
-                      <Select>
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="NGN">NGN</SelectItem>
-                          <SelectItem value="Gram">Gram</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </InputLeftElement>
+                    <InputRightElement width={"6rem"}>
+                          <CurrencySelect  onchange={(value) => {
+                            feedForm.setValue("currency", value);
+                          }}/>
+                      </InputRightElement>
                   </InputGroup>
                 </div>
               </div>
@@ -319,7 +272,7 @@ const InventoryList = () => {
         <div className="text-black text-2xl font-semibold pt-4">
           Feed Inventory List
         </div>
-        {feedData[0] ? <AddInventoryFeedDialog /> : null}
+        <AddInventoryFeedDialog />
       </div>
 
       <div className="justify-between items-stretch flex w-full gap-5 mt-6 max-md:max-w-full max-md:flex-wrap pr-4">

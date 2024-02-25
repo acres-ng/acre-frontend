@@ -110,6 +110,10 @@ workflows:
   acre-frontend:
     jobs:
       - build-frontend:
+          filters:
+            branches:
+              only:
+                - main
           context:
             - heroku
             - slack

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import UsersTable from "./UsersTable";
-import { usersData } from "./users-data";
+import UsersTable from "../UsersTable";
+import { usersData } from "../users-data";
 import InventoryList from "./InventoryList";
-import RecipeBuilder from "./RecipeBuilder";
-import Rations from "./Rations";
+import RecipeBuilder from "../RecipeBuilder";
+import Rations from "../Rations";
 
 const Menu = [
   {
@@ -25,7 +25,6 @@ const Menu = [
 
 const Feeding = () => {
   const [activeMenu, setActiveMenu] = useState(Menu);
-
   const handleTabChange = (id: number) => {
     setActiveMenu((prevMenu) =>
       prevMenu.map((menu) => ({
