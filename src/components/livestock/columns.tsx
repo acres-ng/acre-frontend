@@ -61,39 +61,39 @@ import { CiSquareMinus } from "react-icons/ci";
 import { CiSquarePlus } from "react-icons/ci";
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "../ui/dialog";
 
-function getStatusBadge(status: User["status"]) {
-  switch (status) {
-    case STATUSES.Deactivated:
-      return (
-        <div className="flex items-center">
-          <Badge color="danger" renderAsDot />
-          {/* <Text className="ms-2 font-medium text-orange-dark">{status}</Text> */}
-          <Text className="ms-2 font-medium text-red-dark">{status}</Text>
-        </div>
-      );
-    case STATUSES.Active:
-      return (
-        <div className="flex items-center">
-          <Badge color="success" renderAsDot />
-          <Text className="ms-2 font-medium text-green-dark">{status}</Text>
-        </div>
-      );
-    case STATUSES.Pending:
-      return (
-        <div className="flex items-center">
-          <Badge renderAsDot className="bg-gray-400" />
-          <Text className="ms-2 font-medium text-gray-600">{status}</Text>
-        </div>
-      );
-    default:
-      return (
-        <div className="flex items-center">
-          <Badge renderAsDot className="bg-gray-400" />
-          <Text className="ms-2 font-medium text-gray-600">{status}</Text>
-        </div>
-      );
-  }
-}
+// function getStatusBadge(status: User["status"]) {
+//   switch (status) {
+//     case STATUSES.Deactivated:
+//       return (
+//         <div className="flex items-center">
+//           <Badge color="danger" renderAsDot />
+//           {/* <Text className="ms-2 font-medium text-orange-dark">{status}</Text> */}
+//           <Text className="ms-2 font-medium text-red-dark">{status}</Text>
+//         </div>
+//       );
+//     case STATUSES.Active:
+//       return (
+//         <div className="flex items-center">
+//           <Badge color="success" renderAsDot />
+//           <Text className="ms-2 font-medium text-green-dark">{status}</Text>
+//         </div>
+//       );
+//     case STATUSES.Pending:
+//       return (
+//         <div className="flex items-center">
+//           <Badge renderAsDot className="bg-gray-400" />
+//           <Text className="ms-2 font-medium text-gray-600">{status}</Text>
+//         </div>
+//       );
+//     default:
+//       return (
+//         <div className="flex items-center">
+//           <Badge renderAsDot className="bg-gray-400" />
+//           <Text className="ms-2 font-medium text-gray-600">{status}</Text>
+//         </div>
+//       );
+//   }
+// }
 
 type Columns = {
   data: any[];
