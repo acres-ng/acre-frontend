@@ -69,11 +69,11 @@ interface FormData {
 
 const feedSchema = z.object({
   name: z.string(),
-  stocking_weight: z.number(),
-  weight_measuring_unit: z.string(),
+  stocking_weight: z.number().nullable(),
+  weight_measuring_unit: z.string().nullable(),
   ingredients: z.any().nullable(),
-  stocking_price: z.number(),
-  currency: z.string(),
+  stocking_price: z.number().nullable(),
+  currency: z.string().nullable(),
 });
 
 const InventoryList = () => {
