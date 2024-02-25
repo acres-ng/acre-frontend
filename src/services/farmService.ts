@@ -75,3 +75,11 @@ export function getFarmLocalTime() {
 
   return time;
 }
+
+export async function getMeasuringUnits(type: string = 'mass', system: string = 'metric') {
+  const { data } = await http.get(
+    API_URL + `utils/measuring_units?type=${type}&system=${system}`,
+    http.getDefaultOptions()
+  );
+  return data.data;
+}
