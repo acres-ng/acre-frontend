@@ -19,7 +19,7 @@ const Housing = () => {
       <NoResourcesCard
         imageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/bd51dbfefabec61626aceec83bcbea198f0cbbf004dcb1e0ff1c5ed65f6f2d2c?"
         imageAlt="No housing image"
-        infoText="You have not created have any housing for your livestock yet. Click on the button below to get started"
+        infoText="You have not created have any housing for your  yet. Click on the button below to get started"
       />
     );
   };

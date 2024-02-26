@@ -33,11 +33,13 @@ import { Calendar } from "../ui/calendar";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { getActiveFarm, getFarmById } from "@/services/farmService";
+import { getFarmFeed } from "@/services/livestockService";
 import { getCurrentUser } from "@/services/authService";
 import BarCharts from "../charts/BarCharts";
 import PieCharts from "../charts/PieCharts";
 import SearchWidget from "../search/search";
 import RightBar from "@/layout/RighBar";
+
 // import Header from "../common/sidebar/header";
 import DashCard from "./DashCard";
 import { AcreLoader } from "../ui/acreLoader";
@@ -52,6 +54,7 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [date, setDate] = useState<Date>();
   const [farms, setFarms] = useState<Farm>();
+  const [feedData, setFeedData] = useState<any[]>([]);
   const user = getCurrentUser();
 
   useEffect(() => {
