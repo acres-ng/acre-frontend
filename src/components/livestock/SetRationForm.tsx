@@ -163,7 +163,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
       <Form {...rationForm}>
         {editMode && (
           <div>
-            <Label htmlFor="editedName">Edited Name</Label>
+            <Label htmlFor="editedName">Edit Ration Name</Label>
             <Input
               type="text"
               id="editedName"
@@ -173,7 +173,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
           </div>
         )}
         <div className="grid w-full items-center gap-4">
-          <div className="flex flex-col space-y-1.5">
+          <div className="flex flex-col space-y-1.5 mt-3">
             <Label htmlFor="feedName">Feed Name or ID</Label>
             <Select
               {...rationForm.register("feedName")}
@@ -224,7 +224,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
 
         <CardFooter className="flex justify-between mt-8 gap-9">
         <DialogClose asChild>
-          <Button className="w-full  bg-white text-black shadow-xl">
+          <Button className="w-full  bg-white text-black border-[3px]">
             Cancel
           </Button>
           </DialogClose>
