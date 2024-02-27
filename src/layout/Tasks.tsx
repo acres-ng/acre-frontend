@@ -63,7 +63,8 @@ export default function Members({ className }: { className?: string }) {
         </Title>
         <SimpleBar style={{ maxHeight: 450 }}>
           <div className="flex items-center justify-center mb-4">
-            <div className="relative inline-flex mr-4">
+            <div className="relative inline-flex mr-auto left-4">
+              {" "}
               <svg
                 className="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -82,7 +83,8 @@ export default function Members({ className }: { className?: string }) {
               </select>
             </div>
 
-            <div className="relative inline-flex">
+            <div className="relative inline-flex ml-auto right-4">
+              {" "}
               <svg
                 className="w-2 h-2 absolute top-0 right-0 m-4 pointer-events-none"
                 xmlns="http://www.w3.org/2000/svg"

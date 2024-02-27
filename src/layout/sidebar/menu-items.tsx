@@ -1,15 +1,11 @@
 import { routes } from "./config/routes";
 
-import { DUMMY_ID } from "./config/constants";
+
 import { GrTransaction } from "react-icons/gr";
 import { GiCow } from "react-icons/gi";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { RiMoneyDollarBoxLine } from "react-icons/ri";
 import {
-  PiShoppingCartDuotone,
-
-  PiChartBarDuotone,
-  PiFileImageDuotone,
   PiPlantLight,
  
 } from "react-icons/pi";
@@ -20,11 +16,9 @@ export const menuItems = [
   {
     name: "Home",
   },
-  // label end
   {
     name: "Dashboard",
     href: "/",
-    // href: routes.file.dashboard,
     icon: <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 24 24"

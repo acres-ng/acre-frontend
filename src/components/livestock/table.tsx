@@ -47,10 +47,8 @@ export interface TableProps
   className?: string;
 }
 
-/**
- *  React table component with useful functions. Under the hood we are using `rc-table` package,
- * you can check their official documentation for more details -> https://www.npmjs.com/package/rc-table
- */
+
+
 export default function Table({
   striped,
   variant = "classic",
@@ -68,13 +66,13 @@ export default function Table({
         striped && classes.striped,
         className
       )}
-      emptyText={
-        emptyText || (
-          <div className="py-5 text-center lg:py-8">
-            <Empty /> <Text className="mt-3">No Data</Text>
-          </div>
-        )
-      }
+      // emptyText={
+      //   emptyText || (
+      //     <div className="py-5 text-center lg:py-8">
+      //       <Empty /> <Text className="mt-3">No Data</Text>
+      //     </div>
+      //   )
+      // }
       {...props}
     />
   );

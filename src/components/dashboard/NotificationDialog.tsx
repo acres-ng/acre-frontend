@@ -126,7 +126,7 @@ const NotificationDialog: React.FC<NotificationDialogProps> = () => {
                   </span>
                 </div>
                 <div className="flex justify-center items-center">
-                  <span className="text-md text-gray-500">
+                  <span className="text-xs text-gray-500">
                     {weatherData.description}
                   </span>
                 </div>

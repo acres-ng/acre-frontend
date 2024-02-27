@@ -102,24 +102,12 @@ const RightBar = () => {
                   {weatherData.temperature}°
                 </span>
               </div>
-              <div className="flex justify-center mt-[-40px] items-center">
-                <h2 className="text-[16px] text-[#006D38] ml-16 font-medium ">
+              <div className="flex justify-end mt-[-40px] items-center mr-4">
+                <h2 className="text-[14px] text-[#006D38]  font-medium">
                   {weatherData.description}
                 </h2>
               </div>
             </div>
-
-            //  <div className="flex flex-col items-center">
-            //   <div className="flex space-x-4">
-            //     <span role="img" aria-label="weather-icon " >
-            //       <img src={getIconUrl(weatherData.icon)} alt="weather-icon"  />
-            //     </span>
-            //     <span className="text-3xl text-[#006D38] mt-5 font-semibold">{weatherData.temperature}°C</span>
-            //   </div>
-            //   <h2 className="text-[16px] text-[#006D38] font-medium mt-1">
-            //     {weatherData.description}
-            //   </h2>
-            // </div>
           )}
         </div>
 

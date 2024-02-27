@@ -1,5 +1,5 @@
 import { routes } from  "@/layout/sidebar/config/routes";
-import { DUMMY_ID } from "@/layout/sidebar/config/constants";
+
 
 // Note: do not add href in the label object, it is rendering as label
 export const pageLinks = [
@@ -37,18 +37,12 @@ export const pageLinks = [
     name: 'Products',
     href: routes.eCommerce.products,
   },
-  {
-    name: 'Product Details',
-    href: routes.eCommerce.productDetails(DUMMY_ID),
-  },
+ 
   {
     name: 'Create Product',
     href: routes.eCommerce.createProduct,
   },
-  {
-    name: 'Edit Product',
-    href: routes.eCommerce.ediProduct(DUMMY_ID),
-  },
+ 
   {
     name: 'Categories',
     href: routes.eCommerce.categories,
@@ -57,26 +51,17 @@ export const pageLinks = [
     name: 'Create Category',
     href: routes.eCommerce.createCategory,
   },
-  {
-    name: 'Edit Category',
-    href: routes.eCommerce.editCategory(DUMMY_ID),
-  },
+ 
   {
     name: 'Orders',
     href: routes.eCommerce.orders,
   },
-  {
-    name: 'Order Details',
-    href: routes.eCommerce.orderDetails(DUMMY_ID),
-  },
+ 
   {
     name: 'Create Order',
     href: routes.eCommerce.createOrder,
   },
-  {
-    name: 'Edit Order',
-    href: routes.eCommerce.editOrder(DUMMY_ID),
-  },
+ 
   {
     name: 'Reviews',
     href: routes.eCommerce.reviews,
@@ -110,29 +95,16 @@ export const pageLinks = [
     href: routes.invoice.home,
   },
   {
-    name: 'Invoice Details',
-    href: routes.invoice.details(DUMMY_ID),
-  },
-  {
     name: 'Create Invoice',
     href: routes.invoice.create,
   },
-  {
-    name: 'Edit Invoice',
-    href: routes.invoice.edit(DUMMY_ID),
-  },
+ 
   {
     name: 'Shipment List',
     href: routes.logistics.shipmentList,
   },
-  {
-    name: 'Shipment Details',
-    href: routes.logistics.shipmentDetails(DUMMY_ID),
-  },
-  {
-    name: 'Tracking',
-    href: routes.logistics.tracking(DUMMY_ID),
-  },
+
+
   {
     name: 'File Manager',
     href: routes.file.manager,
