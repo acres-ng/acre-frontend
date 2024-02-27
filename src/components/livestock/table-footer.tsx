@@ -40,7 +40,7 @@ export default function TableFooter({
                 <DialogTrigger asChild>
         <Button
           size="sm"
-          variant="text"
+          // variant="text"
           className="underline"
           color="danger"
           // onClick={() => {

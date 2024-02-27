@@ -27,6 +27,7 @@ import {
   DialogContent,
   DialogDescription,
   DialogTitle,
+  DialogClose,
   DialogTrigger,
 } from "../ui/dialog";
 import { Label } from "@/components/ui/label";
@@ -142,7 +143,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
   return (
     <div>
       <DialogTitle className="mb-6 flex justify-between items-center">
-        <span>
+        <span className="text-green-500">
           {editMode ? (
             <input type="text" value={editedName} onChange={handleNameChange} />
           ) : (
@@ -222,9 +223,11 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
         {/* <button type="submit">Submit</button> */}
 
         <CardFooter className="flex justify-between mt-8 gap-9">
+        <DialogClose asChild>
           <Button className="w-full  bg-white text-black shadow-xl">
             Cancel
           </Button>
+          </DialogClose>
           <Button
             className="w-full"
             onClick={(e) => {
