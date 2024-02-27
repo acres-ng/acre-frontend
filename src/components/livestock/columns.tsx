@@ -18,7 +18,7 @@ import { Popover } from "rizzui";
 import { Button } from "rizzui";
 import * as React from "react";
 import { Button as Btn } from "@/components/ui/button";
-import {getFarmFeed} from "@/services/livestockService";
+import { getFarmFeed } from "@/services/livestockService";
 import {
   Card,
   CardContent,
@@ -47,7 +47,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
-import  SetFeedRation  from "./SetRationForm";
+import SetFeedRation from "./SetRationForm";
 
 type Columns = {
   data: any[];
@@ -58,7 +58,6 @@ type Columns = {
   onHeaderCellClick: (value: string) => void;
   onChecked?: (id: string) => void;
 };
-
 
 export const getColumns = ({
   data,
@@ -256,27 +255,18 @@ export const getColumns = ({
                 </DialogTrigger>
 
                 <DialogContent className=" rounded-2xl">
-                <CardHeader>
-        <CardTitle className="flex">
-          <span className="mr-2 bg-[#CCE6DA]  border-b rounded-full p-2">
-            <BiSolidBowlRice className="text-green-500" />
-          </span>
-          <span className="mt-2"> Set Feed Ration</span>
-        </CardTitle>
-      </CardHeader>
-                 
+                  <CardHeader>
+                    <CardTitle className="flex">
+                      <span className="mr-2 bg-[#CCE6DA]  border-b rounded-full p-2">
+                        <BiSolidBowlRice className="text-green-500" />
+                      </span>
+                      <span className="mt-2"> Set Feed Ration</span>
+                    </CardTitle>
+                  </CardHeader>
+
                   <CardContent>
-                  <SetFeedRation row={row} />
-                  
+                    <SetFeedRation row={row} />
                   </CardContent>
-                  <CardFooter className="flex justify-between gap-4">
-                    <Btn variant="secondary" className="w-full">
-                      Cancel
-                    </Btn>
-                    <Btn variant="default" className="w-full">
-                      Save Ration
-                    </Btn>
-                  </CardFooter>
                 </DialogContent>
               </Dialog>
 
