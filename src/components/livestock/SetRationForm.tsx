@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { updateLivestock } from "@/services/livestockService";
 import { CiEdit } from "react-icons/ci";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -69,10 +68,6 @@ const setRationSchema = z.object({
 });
 
 const SetFeedRation: React.FC<SetFeedRationProps> = ({ row,onRationCreated }) => {
-  useEffect(() => {
-    console.log("Row object:", row);
-    console.log("Livestock ID:", row.uuid);
-  }, [row]);
   const [feedNames, setFeedNames] = useState<string[]>([]);
   const [selectedFeed, setSelectedFeed] = useState<string | null>(null);
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -124,9 +119,6 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row,onRationCreated }) =>
     data,
     uuid
   ) => {
-    console.log("Data submitted:", data);
-    console.log("UUID:", uuid);
-
     try {
       const userActiveFarmId = getActiveFarm().id;
       const postData = {
@@ -137,8 +129,6 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row,onRationCreated }) =>
         daily_ration_weight: data.dailyRation,
         weight_measuring_unit: "lb",
       };
-
-    console.log("Request body:", postData);
     const response = await HttpService.put(
         `${API_URL}farms/${userActiveFarmId}/livestock/${uuid}`,
         postData,
@@ -247,7 +237,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row,onRationCreated }) =>
             </InputGroup>
           </div>
         </div>
-        {/* <button type="submit">Submit</button> */}
+       
 
         <CardFooter className="flex justify-between mt-8 gap-9">
           <DialogClose asChild>
