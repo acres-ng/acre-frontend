@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { Input } from "@/components/ui/input";
-import { Button } from "rizzui";
+import { Button as Btn } from "rizzui";
 import {
   Card,
   CardContent,
@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "../ui/button";
 import {
   InputGroup,
   InputRightElement,
@@ -255,11 +256,11 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
           </div>
         </div>
 
-        <CardFooter className="flex justify-between mt-8 gap-9">
+        <div className="flex  mt-8 gap-[20px]">
           <DialogClose asChild>
-            <Button className="w-full  bg-white text-black border-[3px]">
+            <Btn className="w-full text-black border-[3px]border-gray-200">
               Cancel
-            </Button>
+            </Btn>
           </DialogClose>
 
           <Button
@@ -271,7 +272,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
           >
             Save Ration
           </Button>
-        </CardFooter>
+        </div>
       </Form>
     </div>
   );
