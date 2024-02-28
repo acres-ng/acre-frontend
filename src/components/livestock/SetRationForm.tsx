@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { updateLivestock } from "@/services/livestockService";
 import { CiEdit } from "react-icons/ci";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -50,7 +51,7 @@ interface SetFeedRationProps {
   row: any;
 }
 interface FormData {
-    feed_id: string;
+  feed_id: string;
   dailyRation: number;
   editedName: string;
 }
@@ -60,12 +61,16 @@ interface FormData {
 //   dailyRation: z.number(),
 // });
 const setRationSchema = z.object({
-    feed_id: z.string().nonempty(), // Required field
+  feed_id: z.string().nonempty(), // Required field
   dailyRation: z.number(),
   editedName: z.string().nonempty(), // Required field
 });
 
 const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
+  useEffect(() => {
+    console.log("Row object:", row);
+    console.log("Livestock ID:", row.uuid);
+  }, [row]);
   const [feedNames, setFeedNames] = useState<string[]>([]);
   const [selectedFeed, setSelectedFeed] = useState<string | null>(null);
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -74,7 +79,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
   const rationForm = useForm<FormData>({
     resolver: zodResolver(setRationSchema),
     defaultValues: {
-        feed_id: "",
+      feed_id: "",
       dailyRation: 0,
     },
   });
@@ -103,7 +108,9 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
     setEditMode(true);
 
     setEditedName(
-      selectedFeed ? `${selectedFeed}-${row.animal_type}-${row.maturity_public_name}` : row.animal_type
+      selectedFeed
+        ? `${selectedFeed}-${row.animal_type}-${row.maturity_public_name}`
+        : row.animal_type
     );
   };
 
@@ -112,34 +119,36 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
   };
 
   const onSubmit: SubmitHandler<z.infer<typeof setRationSchema>> = async (
-    data
+    data,
+    uuid
   ) => {
-  
     console.log("Data submitted:", data);
+    console.log("UUID:", uuid);
+
     try {
       const userActiveFarmId = getActiveFarm().id;
       const postData = {
-        name: data.editedName,
-        feed_id: data.feed_id, 
-        animal_type: 1, 
-        animal_maturity: 7, 
+        name: editedName,
+        feed_id: data.feed_id,
+        animal_type: 1,
+        animal_maturity: 7,
         daily_ration_weight: data.dailyRation,
-        weight_measuring_unit: "lb", 
+        weight_measuring_unit: "lb",
       };
-      
-      console.log("Request body:", postData); 
+
+      console.log("Request body:", postData);
       const response = await HttpService.put(
-        `${API_URL}farms/${userActiveFarmId}/livestock`,
+        `${API_URL}farms/${userActiveFarmId}/livestock/${uuid}`,
         postData,
         HttpService.getDefaultOptions()
       );
-  
+
       if (response.data) {
         toast.success("Feed added successfully!");
       } else {
         toast.error("Failed to add feed. Please try again.");
       }
-  
+
       return response.data;
     } catch (error) {
       console.error("Error:", error);
@@ -147,30 +156,34 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
       throw error;
     }
   };
-  
 
   return (
     <div>
-    
-
       <Form {...rationForm}>
-      <DialogTitle className="mb-6 flex justify-between items-center">
-        <span className="text-green-500">
-          {editMode ? (
-            <input type="text" value={editedName} onChange={handleNameChange} />
-          ) : (
-            <>
-              {selectedFeed &&
-                `${editedName || selectedFeed}-${row.animal_type} -${row.maturity_public_name}`}
-              {!selectedFeed && `${row.animal_type}-${row.maturity_public_name}`}
-            </>
-          )}
-        </span>
+        <DialogTitle className="mb-6 flex justify-between items-center">
+          <span className="text-green-500">
+            {editMode ? (
+              <input
+                type="text"
+                value={editedName}
+                onChange={handleNameChange}
+              />
+            ) : (
+              <>
+                {selectedFeed &&
+                  `${editedName || selectedFeed}-${row.animal_type} -${
+                    row.maturity_public_name
+                  }`}
+                {!selectedFeed &&
+                  `${row.animal_type}-${row.maturity_public_name}`}
+              </>
+            )}
+          </span>
 
-        <span className="material-icons" onClick={handleEditName}>
-          <CiEdit />
-        </span>
-      </DialogTitle>
+          <span className="material-icons" onClick={handleEditName}>
+            <CiEdit />
+          </span>
+        </DialogTitle>
 
         {editMode && (
           <div>
@@ -239,13 +252,12 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
               Cancel
             </Button>
           </DialogClose>
-    
 
           <Button
             className="w-full"
             onClick={(e) => {
               e.preventDefault();
-              rationForm.handleSubmit(onSubmit)
+              onSubmit(rationForm.getValues(), row.uuid);
             }}
           >
             Save Ration

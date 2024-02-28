@@ -105,3 +105,24 @@ export const getFarmFeed = async (farmId?: number) => {
     toast.error(data.message);
   }
 };
+
+
+
+// export const updateLivestock = async (livestockId: any, data: any) => {
+//   const activeFarmId = getActiveFarm().id;
+//   const url = `${config.API_URL}farms/${activeFarmId}/livestock/${livestockId}`;
+//   try {
+//     const response = await http.put(url, data, getDefaultOptions());
+//     if (response.data.status === "success") {
+//       toast.success("Livestock updated successfully!");
+//       return response.data.data;
+//     } else {
+//       toast.error(response.data.message);
+//       return null;
+//     }
+//   } catch (error) {
+//     console.error("Error updating livestock:", error);
+//     toast.error("An error occurred while updating livestock. Please try again later.");
+//     return null;
+//   }
+// };
