@@ -57,7 +57,7 @@ type Columns = {
   onDeleteItem: (id: string) => void;
   onHeaderCellClick: (value: string) => void;
   onChecked?: (id: string) => void;
-  handleRationCreated : (data: any) => void;
+  handleRationCreated : () => void;
 };
 
 export const getColumns = ({

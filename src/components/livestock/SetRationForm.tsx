@@ -49,7 +49,7 @@ type FeedItem = {
 
 interface SetFeedRationProps {
     row: any;
-    onRationCreated: (data: any) => void; // Accepts one argument of type any
+    onRationCreated: () => void; // Accepts one argument of type any
 }
 
 interface FormData {
@@ -147,7 +147,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row,onRationCreated }) =>
 
     if (response.data) {
         toast.success("Ration added successfully!");
-        onRationCreated(response.data); 
+        onRationCreated(); 
     } else {
         toast.error("Failed to add feed. Please try again.");
     }

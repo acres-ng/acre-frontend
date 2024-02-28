@@ -42,8 +42,7 @@ const Livestock = () => {
     search: "",
   });
   const [filterApplied, setFilterApplied] = useState(false);
-  const handleRationCreated = useCallback(() => {
-    return async () => {
+  const handleRationCreated = async () => {
       try {
         const updatedData = await getFarmLivestock();
         setLivestockData(updatedData);
@@ -52,7 +51,7 @@ const Livestock = () => {
         console.error("Error updating livestock data:", error);
       }
     };
-  }, []);
+  
 
   useEffect(() => {
     getAnimals(undefined, "maturity,breeds").then(() => {
@@ -180,7 +179,7 @@ const Livestock = () => {
   const LivestockTable = () => {
     return (
       <div className="w-full">
-        <UsersTable data={livestock} />
+        <UsersTable handleRationCreated={handleRationCreated} data={livestock} />
       </div>
     );
   };

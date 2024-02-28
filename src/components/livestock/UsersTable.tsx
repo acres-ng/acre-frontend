@@ -17,9 +17,10 @@ const filterState = {
 
 interface IProp {
   data: any[];
+  handleRationCreated:()=>void;
 }
 
-export default function UsersTable({ data = [] }: IProp) {
+export default function UsersTable({ data = [],handleRationCreated }: IProp) {
   const [pageSize, setPageSize] = useState(10);
 
   const onHeaderCellClick = (value: string) => ({
@@ -64,6 +65,7 @@ export default function UsersTable({ data = [] }: IProp) {
         onDeleteItem,
         onChecked: handleRowSelect,
         handleSelectAll,
+        handleRationCreated
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -74,6 +76,7 @@ export default function UsersTable({ data = [] }: IProp) {
       onDeleteItem,
       handleRowSelect,
       handleSelectAll,
+      handleRationCreated
     ]
   );
 
