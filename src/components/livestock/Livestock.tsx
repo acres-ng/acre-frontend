@@ -19,7 +19,7 @@ import {
   getFarmLivestock,
   getLivestockHousing,
 } from "@/services/livestockService";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { AcreLoader } from "../ui/acreLoader";
 import UsersTable from "./UsersTable";
 import { getAnimalLocal } from "@/services/localCacheService";
@@ -42,17 +42,17 @@ const Livestock = () => {
     search: "",
   });
   const [filterApplied, setFilterApplied] = useState(false);
-  const handleRationCreated = async () => {
-    try {
-      const updatedData = await getFarmLivestock();
-
-      setLivestockData(updatedData);
-
-      setLoading(false);
-    } catch (error) {
-      console.error("Error updating livestock data:", error);
-    }
-  };
+  const handleRationCreated = useCallback(() => {
+    return async () => {
+      try {
+        const updatedData = await getFarmLivestock();
+        setLivestockData(updatedData);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error updating livestock data:", error);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     getAnimals(undefined, "maturity,breeds").then(() => {
@@ -96,7 +96,7 @@ const Livestock = () => {
       setLivestockData(res);
       setLoading(false);
     });
-  }, [filterValue, handleRationCreated]);
+  }, [filterValue]);
 
   const handlefilterSelect = (name: string, value: any) => {
     setFilterValue({
@@ -180,7 +180,7 @@ const Livestock = () => {
   const LivestockTable = () => {
     return (
       <div className="w-full">
-        <UsersTable data={livestock}  />
+        <UsersTable data={livestock} />
       </div>
     );
   };
