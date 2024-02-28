@@ -57,6 +57,7 @@ type Columns = {
   onDeleteItem: (id: string) => void;
   onHeaderCellClick: (value: string) => void;
   onChecked?: (id: string) => void;
+  handleRationCreated : (data: any) => void;
 };
 
 export const getColumns = ({
@@ -67,6 +68,7 @@ export const getColumns = ({
   onHeaderCellClick,
   handleSelectAll,
   onChecked,
+  handleRationCreated,
 }: Columns) => [
   {
     title: (
@@ -265,7 +267,8 @@ export const getColumns = ({
                   </CardHeader>
 
                   <CardContent>
-                    <SetFeedRation row={row} />
+                    
+                    <SetFeedRation row={row} onRationCreated={handleRationCreated} />
                   </CardContent>
                 </DialogContent>
               </Dialog>

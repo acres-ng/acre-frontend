@@ -48,8 +48,10 @@ type FeedItem = {
 };
 
 interface SetFeedRationProps {
-  row: any;
+    row: any;
+    onRationCreated: (data: any) => void; // Accepts one argument of type any
 }
+
 interface FormData {
   feed_id: string;
   dailyRation: number;
@@ -66,7 +68,7 @@ const setRationSchema = z.object({
   editedName: z.string().nonempty(), // Required field
 });
 
-const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
+const SetFeedRation: React.FC<SetFeedRationProps> = ({ row,onRationCreated }) => {
   useEffect(() => {
     console.log("Row object:", row);
     console.log("Livestock ID:", row.uuid);
@@ -136,18 +138,19 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
         weight_measuring_unit: "lb",
       };
 
-      console.log("Request body:", postData);
-      const response = await HttpService.put(
+    console.log("Request body:", postData);
+    const response = await HttpService.put(
         `${API_URL}farms/${userActiveFarmId}/livestock/${uuid}`,
         postData,
         HttpService.getDefaultOptions()
-      );
+    );
 
-      if (response.data) {
-        toast.success("Feed added successfully!");
-      } else {
+    if (response.data) {
+        toast.success("Ration added successfully!");
+        onRationCreated(response.data); 
+    } else {
         toast.error("Failed to add feed. Please try again.");
-      }
+    }
 
       return response.data;
     } catch (error) {

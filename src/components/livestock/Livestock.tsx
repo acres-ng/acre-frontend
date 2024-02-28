@@ -30,6 +30,7 @@ const { Option } = Select;
 
 const Livestock = () => {
   const navigate = useNavigate();
+
   const [livestock, setLivestockData] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [animalTypes, setAnimalTypes] = useState([]);
@@ -38,9 +39,20 @@ const Livestock = () => {
     animal: "",
     housing: "",
     management: "",
-    search: ""
+    search: "",
   });
   const [filterApplied, setFilterApplied] = useState(false);
+  const handleRationCreated = async () => {
+    try {
+      const updatedData = await getFarmLivestock();
+
+      setLivestockData(updatedData);
+
+      setLoading(false);
+    } catch (error) {
+      console.error("Error updating livestock data:", error);
+    }
+  };
 
   useEffect(() => {
     getAnimals(undefined, "maturity,breeds").then(() => {
@@ -63,13 +75,12 @@ const Livestock = () => {
     });
   }, []);
 
-
   useEffect(() => {
     const query = [];
     if (filterValue.housing) {
       query.push(`housingId=${filterValue.housing}`);
     }
-    if (filterValue.animal) { 
+    if (filterValue.animal) {
       query.push(`animalType=${filterValue.animal}`);
     }
     if (filterValue.management) {
@@ -79,15 +90,14 @@ const Livestock = () => {
       query.push(`search=${filterValue.search}`);
     }
 
-    const queryString = query.join("&"); 
+    const queryString = query.join("&");
 
     getFarmLivestock(undefined, queryString).then((res) => {
       setLivestockData(res);
       setLoading(false);
     });
-  }, [filterValue]);
-  
-  
+  }, [filterValue, handleRationCreated]);
+
   const handlefilterSelect = (name: string, value: any) => {
     setFilterValue({
       ...filterValue,
@@ -163,31 +173,35 @@ const Livestock = () => {
     );
   };
 
+  interface IProp {
+    onRationCreated: () => Promise<void>;
+  }
+
   const LivestockTable = () => {
     return (
       <div className="w-full">
-        <UsersTable data={livestock} />
+        <UsersTable data={livestock}  />
       </div>
     );
   };
 
   const EmptyState = () => {
     return (
-      <NoResourcesCard 
-      imageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/bd51dbfefabec61626aceec83bcbea198f0cbbf004dcb1e0ff1c5ed65f6f2d2c?"
-      imageAlt="No resources to show image"
-      infoText="You don’t have any livestock in your farm yet. Click on the button below to start adding livestock to your farm"
-      actionButton= {<AddLivestockDialog />}
+      <NoResourcesCard
+        imageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/bd51dbfefabec61626aceec83bcbea198f0cbbf004dcb1e0ff1c5ed65f6f2d2c?"
+        imageAlt="No resources to show image"
+        infoText="You don’t have any livestock in your farm yet. Click on the button below to start adding livestock to your farm"
+        actionButton={<AddLivestockDialog />}
       />
     );
   };
 
   const NoResultsState = () => {
     return (
-      <NoFilterResultsCard 
-      imageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/bd51dbfefabec61626aceec83bcbea198f0cbbf004dcb1e0ff1c5ed65f6f2d2c?"
-      imageAlt="No resources to show image"
-      infoText=" We did not find any livestock that matches your search criteria."
+      <NoFilterResultsCard
+        imageSrc="https://cdn.builder.io/api/v1/image/assets/TEMP/bd51dbfefabec61626aceec83bcbea198f0cbbf004dcb1e0ff1c5ed65f6f2d2c?"
+        imageAlt="No resources to show image"
+        infoText=" We did not find any livestock that matches your search criteria."
       />
     );
   };
@@ -197,7 +211,7 @@ const Livestock = () => {
       animal: "",
       housing: "",
       management: "",
-      search: ""
+      search: "",
     });
     const searchField = document.getElementById("search") as HTMLInputElement;
     searchField.value = "";
@@ -210,9 +224,8 @@ const Livestock = () => {
 
       <div className="justify-between self-stretch flex w-full gap-5 items-center max-md:max-w-full max-md:flex-wrap">
         <div className="text-black text-2xl font-semibold">Livestock</div>
-       <AddLivestockDialog /> 
+        <AddLivestockDialog />
       </div>
-
 
       <div className="justify-between items-center flex w-full gap-5 mt-6 max-md:max-w-full max-md:flex-wrap">
         <div className="w-full md:w-72 p-2 flex gap-3 items-center border rounded-lg border-gray-300 focus:outline-none focus:border-blue-500">
@@ -224,26 +237,26 @@ const Livestock = () => {
             className="w-full border-none outline-none"
             onChange={(e) => {
               if (e.target.value.trim()) {
-                handlefilterSelect("search", e.target.value)
+                handlefilterSelect("search", e.target.value);
               }
             }}
           />
         </div>
-        
+
         <div className="justify-between sm:ml-8 max-md:w-full items-stretch flex gap-5   max-md:max-w-full max-md:flex-wrap">
-        {(filterValue.animal ||
-          filterValue.housing ||
-          filterValue.management ||
-          filterValue.search) && (
-          <div className="flex items-end">
-            <span
-              className="mb-0 text-red-500 hover:underline"
-              onClick={handleReset}
-            >
-            Clear filters
-            </span>
-          </div>
-        )}
+          {(filterValue.animal ||
+            filterValue.housing ||
+            filterValue.management ||
+            filterValue.search) && (
+            <div className="flex items-end">
+              <span
+                className="mb-0 text-red-500 hover:underline"
+                onClick={handleReset}
+              >
+                Clear filters
+              </span>
+            </div>
+          )}
           <Select
             className="w-full sm:w-[10.5rem] flex px-4 py-4 rounded-xl border-2 border-solid"
             onChange={(e) => handlefilterSelect("housing", e)}
@@ -279,7 +292,13 @@ const Livestock = () => {
           </Select>
         </div>
       </div>
-      {livestock[0] ? <LivestockTable /> : filterApplied ? <NoResultsState /> : <EmptyState />}
+      {livestock[0] ? (
+        <LivestockTable />
+      ) : filterApplied ? (
+        <NoResultsState />
+      ) : (
+        <EmptyState />
+      )}
     </div>
   );
 };
