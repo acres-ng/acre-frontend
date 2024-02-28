@@ -50,14 +50,19 @@ interface SetFeedRationProps {
   row: any;
 }
 interface FormData {
-  feedName: string;
+    feed_id: string;
   dailyRation: number;
   editedName: string;
 }
 
+// const setRationSchema = z.object({
+//   feedName: z.string(),
+//   dailyRation: z.number(),
+// });
 const setRationSchema = z.object({
-  feedName: z.string(),
+    feed_id: z.string().nonempty(), // Required field
   dailyRation: z.number(),
+  editedName: z.string().nonempty(), // Required field
 });
 
 const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
@@ -69,7 +74,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
   const rationForm = useForm<FormData>({
     resolver: zodResolver(setRationSchema),
     defaultValues: {
-      feedName: "",
+        feed_id: "",
       dailyRation: 0,
     },
   });
@@ -89,7 +94,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
   }, []);
 
   const handleFeedSelection = (value: string) => {
-    rationForm.setValue("feedName", value);
+    rationForm.setValue("feed_id", value);
     setSelectedFeed(value);
     setEditedName(value);
   };
@@ -98,7 +103,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
     setEditMode(true);
 
     setEditedName(
-      selectedFeed ? `${row.animal_type}-${selectedFeed}` : row.animal_type
+      selectedFeed ? `${selectedFeed}-${row.animal_type}-${row.maturity_public_name}` : row.animal_type
     );
   };
 
@@ -107,31 +112,34 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
   };
 
   const onSubmit: SubmitHandler<z.infer<typeof setRationSchema>> = async (
-    data,
-    event
+    data
   ) => {
-    // if (event) {
-    //   event.preventDefault();
-    // }
+  
     console.log("Data submitted:", data);
     try {
       const userActiveFarmId = getActiveFarm().id;
       const postData = {
-        ...data,
-        editedName: editedName,
+        name: data.editedName,
+        feed_id: data.feed_id, 
+        animal_type: 1, 
+        animal_maturity: 7, 
+        daily_ration_weight: data.dailyRation,
+        weight_measuring_unit: "lb", 
       };
+      
+      console.log("Request body:", postData); 
       const response = await HttpService.put(
         `${API_URL}farms/${userActiveFarmId}/livestock`,
         postData,
         HttpService.getDefaultOptions()
       );
-
+  
       if (response.data) {
         toast.success("Feed added successfully!");
       } else {
         toast.error("Failed to add feed. Please try again.");
       }
-
+  
       return response.data;
     } catch (error) {
       console.error("Error:", error);
@@ -139,9 +147,13 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
       throw error;
     }
   };
+  
 
   return (
     <div>
+    
+
+      <Form {...rationForm}>
       <DialogTitle className="mb-6 flex justify-between items-center">
         <span className="text-green-500">
           {editMode ? (
@@ -149,8 +161,8 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
           ) : (
             <>
               {selectedFeed &&
-                `${editedName || selectedFeed}-${row.animal_type}`}
-              {!selectedFeed && `${row.animal_type}`}
+                `${editedName || selectedFeed}-${row.animal_type} -${row.maturity_public_name}`}
+              {!selectedFeed && `${row.animal_type}-${row.maturity_public_name}`}
             </>
           )}
         </span>
@@ -160,7 +172,6 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
         </span>
       </DialogTitle>
 
-      <Form {...rationForm}>
         {editMode && (
           <div>
             <Label htmlFor="editedName">Edit Ration Name</Label>
@@ -176,7 +187,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
           <div className="flex flex-col space-y-1.5 mt-3">
             <Label htmlFor="feedName">Feed Name or ID</Label>
             <Select
-              {...rationForm.register("feedName")}
+              {...rationForm.register("feed_id")}
               onValueChange={(value: string) => handleFeedSelection(value)}
             >
               <SelectTrigger id="framework">
@@ -190,8 +201,8 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
                 ))}
               </SelectContent>
             </Select>
-            {rationForm.formState.errors.feedName && (
-              <span>{rationForm.formState.errors.feedName.message}</span>
+            {rationForm.formState.errors.feed_id && (
+              <span>{rationForm.formState.errors.feed_id.message}</span>
             )}
           </div>
 
@@ -223,18 +234,19 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row }) => {
         {/* <button type="submit">Submit</button> */}
 
         <CardFooter className="flex justify-between mt-8 gap-9">
-        <DialogClose asChild>
-          <Button className="w-full  bg-white text-black border-[3px]">
-            Cancel
-          </Button>
+          <DialogClose asChild>
+            <Button className="w-full  bg-white text-black border-[3px]">
+              Cancel
+            </Button>
           </DialogClose>
+    
+
           <Button
             className="w-full"
             onClick={(e) => {
               e.preventDefault();
               rationForm.handleSubmit(onSubmit)
             }}
-            disabled={rationForm.formState.isSubmitting}
           >
             Save Ration
           </Button>
