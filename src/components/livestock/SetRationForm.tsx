@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CiEdit } from "react-icons/ci";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Button } from "rizzui";
 import {
   Card,
   CardContent,
@@ -47,8 +47,8 @@ type FeedItem = {
 };
 
 interface SetFeedRationProps {
-    row: any;
-    onRationCreated: () => void; // Accepts one argument of type any
+  row: any;
+  onRationCreated: () => void; // Accepts one argument of type any
 }
 
 interface FormData {
@@ -67,7 +67,10 @@ const setRationSchema = z.object({
   editedName: z.string().nonempty(), // Required field
 });
 
-const SetFeedRation: React.FC<SetFeedRationProps> = ({ row,onRationCreated }) => {
+const SetFeedRation: React.FC<SetFeedRationProps> = ({
+  row,
+  onRationCreated,
+}) => {
   const [feedNames, setFeedNames] = useState<string[]>([]);
   const [selectedFeed, setSelectedFeed] = useState<string | null>(null);
   const [editMode, setEditMode] = useState<boolean>(false);
@@ -120,6 +123,10 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row,onRationCreated }) =>
     uuid
   ) => {
     try {
+      if (!data.dailyRation) {
+        toast.error("Daily Ration is required.");
+        return; 
+      }
       const userActiveFarmId = getActiveFarm().id;
       const postData = {
         name: editedName,
@@ -129,18 +136,18 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row,onRationCreated }) =>
         daily_ration_weight: data.dailyRation,
         weight_measuring_unit: "lb",
       };
-    const response = await HttpService.put(
+      const response = await HttpService.put(
         `${API_URL}farms/${userActiveFarmId}/livestock/${uuid}`,
         postData,
         HttpService.getDefaultOptions()
-    );
+      );
 
-    if (response.data) {
+      if (response.data) {
         toast.success("Ration added successfully!");
-        onRationCreated(); 
-    } else {
+        onRationCreated();
+      } else {
         toast.error("Failed to add feed. Please try again.");
-    }
+      }
 
       return response.data;
     } catch (error) {
@@ -237,7 +244,6 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({ row,onRationCreated }) =>
             </InputGroup>
           </div>
         </div>
-       
 
         <CardFooter className="flex justify-between mt-8 gap-9">
           <DialogClose asChild>
