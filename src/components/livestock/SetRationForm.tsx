@@ -75,6 +75,12 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
   const [selectedFeed, setSelectedFeed] = useState<string | null>(null);
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editedName, setEditedName] = useState<string>("");
+  const [selectedMeasuringUnit, setSelectedMeasuringUnit] =
+    useState<string>("");
+
+  const handleMeasuringUnitSelect = (value: string) => {
+    setSelectedMeasuringUnit(value);
+  };
 
   const rationForm = useForm<FormData>({
     resolver: zodResolver(setRationSchema),
@@ -125,16 +131,18 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
     try {
       if (!data.dailyRation) {
         toast.error("Daily Ration is required.");
-        return; 
+        return;
       }
       const userActiveFarmId = getActiveFarm().id;
+      const measuringUnit = selectedMeasuringUnit;
+
       const postData = {
         name: editedName,
         feed_id: data.feed_id,
         animal_type: 1,
         animal_maturity: 7,
         daily_ration_weight: data.dailyRation,
-        weight_measuring_unit: "lb",
+        weight_measuring_unit: measuringUnit,
       };
       const response = await HttpService.put(
         `${API_URL}farms/${userActiveFarmId}/livestock/${uuid}`,
@@ -236,8 +244,10 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
               )}
               <InputRightElement width={"6rem"}>
                 <MeasuringUnitSelect
-                  onchange={(value: number) => {
-                    rationForm.setValue("dailyRation", value);
+                  onchange={(value: string) => {
+                    // Handle measuring unit selection
+                    handleMeasuringUnitSelect(value);
+                    rationForm.setValue("dailyRation", parseInt(value));
                   }}
                 />
               </InputRightElement>
