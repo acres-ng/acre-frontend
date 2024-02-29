@@ -89,6 +89,13 @@ const RecordSale = () => {
         const data = await getTransactionUtils();
         setTransactionUtils(data);
         setIsLoading(false);
+        saleForm.setValue(
+          "category_id",
+          data?.data?.transaction_categories.find(
+            (category: { name: string; }) => category.name === "sale"
+          )?.id || 0
+        );
+        saleForm.setValue("transactionable_type", "Livestock");
       } catch (error) {
         console.error("Error fetching transaction utilities:", error);
         setIsLoading(false);
@@ -96,6 +103,7 @@ const RecordSale = () => {
     };
     fetchData();
   }, []);
+
 
   const onSubmit: SubmitHandler<z.infer<typeof transactionSchema>> = async (
     data
