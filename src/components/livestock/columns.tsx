@@ -300,7 +300,7 @@ export const getColumns = ({
                   <Button
                     variant="text"
                     className="flex w-full items-center justify-start px-2 py-2 text-red-500 hover:bg-gray-100 focus:outline-none dark:hover:bg-gray-50"
-                    // onClick={() => onDeleteItem(user.id)}
+                   
                   >
                     <FaRegTrashAlt className="mr-2 h-5 w-5 text-red-500" />
                     Delete Livestock
@@ -327,7 +327,7 @@ export const getColumns = ({
                     <Btn className="bg-white text-black shadow-md w-full">
                       Cancel
                     </Btn>
-                    <Btn className="bg-red-500 w-full">Delete</Btn>
+                    <Btn className="bg-red-500 w-full"  onClick={() => onDeleteItem(row.id)}>Delete</Btn>
                   </CardFooter>
                 </DialogContent>
               </Dialog>

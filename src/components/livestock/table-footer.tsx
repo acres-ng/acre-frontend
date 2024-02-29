@@ -18,20 +18,33 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import HttpService from "@/services/HttpService";
+import { API_URL } from "@/config";
+import { getActiveFarm } from "@/services/farmService";
 
 interface TableFooterProps {
   checkedItems: string[];
-  handleDelete: (ids: string[]) => void;
+  onDeleteItem: (id: string) => void;
+  handleDelete: (uuid: string[]) => void;
 }
 
 export default function TableFooter({
   checkedItems,
+  onDeleteItem,
   handleDelete,
   children,
 }: React.PropsWithChildren<TableFooterProps>) {
+  const onDelete = async () => {
+    try {
+      handleDelete(checkedItems);
+    } catch (error) {
+      console.error("Error deleting livestock:", error);
+    }
+  };
   if (checkedItems.length === 0) {
     return null;
   }
+
 
   return (
     <div className="sticky bottom-0 left-0 z-10 mt-2.5 flex justify-end w-full items-center  ">
@@ -51,7 +64,6 @@ export default function TableFooter({
             </CardHeader>
             <CardContent>
               <Text as="strong">{checkedItems.length}</Text> selected{" "}
-              {/* <DialogTitle>Are you sure you want to permanently delete Livestock Name/ID from your farm?</DialogTitle> */}
               <DialogDescription className="font-medium text-black">
                 Are you sure you want to permanently delete Livestock Name/ID
                 from your farm?
@@ -61,7 +73,12 @@ export default function TableFooter({
               <Button className="bg-white text-black shadow-md w-full">
                 Cancel
               </Button>
-              <Button className="bg-red-500 w-full">Delete</Button>
+              <Button
+                className="bg-red-500 w-full"
+                onClick={onDelete}
+              >
+                Delete
+              </Button>
             </CardFooter>
           </DialogContent>
         </Dialog>

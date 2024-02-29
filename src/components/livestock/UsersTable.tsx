@@ -7,6 +7,9 @@ import { useColumn } from "../hooks/use-column";
 import { Button } from "rizzui";
 import ControlledTable from "./ControlledTable";
 import { getColumns } from "./columns";
+import HttpService from "@/services/HttpService";
+import { API_URL } from "@/config";
+import { getActiveFarm } from "@/services/farmService";
 
 const TableFooter = lazy(() => import("./table-footer"));
 
@@ -29,11 +32,24 @@ export default function UsersTable({ data = [],handleRationCreated }: IProp) {
     },
   });
 
-  const onDeleteItem = useCallback((id: string) => {
-    handleDelete(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  const onDeleteItem = useCallback(async (uuid: string) => {
+    try {
+      const userActiveFarmId = getActiveFarm().id;
+      const response = await HttpService.delete(
+        `${API_URL}farms/${userActiveFarmId}/livestock/${uuid}`,
+        HttpService.getDefaultOptions()
+      );
+  
+      if (response.data) {
+        console.log("Livestock deleted successfully");
+      } else {
+        console.error("Failed to delete livestock");
+      }
+    } catch (error) {
+      console.error("Error deleting livestock:", error);
+    }
   }, []);
-
+  
   const {
     isLoading,
     isFiltered,
@@ -87,10 +103,11 @@ export default function UsersTable({ data = [],handleRationCreated }: IProp) {
     <div className="mt-14">
        <TableFooter
             checkedItems={selectedRowKeys}
-            handleDelete={(ids: string[]) => {
+            handleDelete={(uuid: string[]) => {
               setSelectedRowKeys([]);
-              handleDelete(ids);
+              handleDelete(uuid);
             }}
+            onDeleteItem={onDeleteItem}
           />
       <ControlledTable
         variant="modern"
