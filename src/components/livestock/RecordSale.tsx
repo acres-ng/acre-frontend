@@ -100,6 +100,7 @@ const RecordSale = () => {
   const onSubmit: SubmitHandler<z.infer<typeof transactionSchema>> = async (
     data
   ) => {
+    console.log("Data to be submitted:", data);
     try {
       const userActiveFarmId = getActiveFarm().id;
       const response = await HttpService.post(
@@ -130,7 +131,7 @@ const RecordSale = () => {
       </CardHeader>
       <CardContent>
         <Form {...saleForm}>
-          <form onSubmit={saleForm.handleSubmit(onSubmit)}>
+        <form onSubmit={saleForm.handleSubmit(onSubmit)}>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5 pt-2">
                 <Label htmlFor="amount">Amount</Label>
@@ -172,23 +173,20 @@ const RecordSale = () => {
                 />
               </div>
 
-              <div className="flex mt-8 gap-[20px]">
+            <div className="flex mt-8 gap-[20px]">
                 <DialogClose asChild>
-                  <Btn className="w-full text-black border-[3px] border-gray-200">
-                    Cancel
-                  </Btn>
+                    <Btn className="w-full text-black border-[3px] border-gray-200">
+                        Cancel
+                    </Btn>
                 </DialogClose>
                 <Button
-                  className="w-full"
-                  disabled={saleForm.formState.isSubmitting}
-                  onClick={(e) => {
-                    e.preventDefault(); 
-                    saleForm.handleSubmit(onSubmit)();
-                  }}
+                    className="w-full"
+                    disabled={saleForm.formState.isSubmitting}
+                    onClick={(e) => e.preventDefault()}
                 >
-                  Save Transaction
+                    Save Transaction
                 </Button>
-              </div>
+            </div>
             </div>
           </form>
         </Form>
