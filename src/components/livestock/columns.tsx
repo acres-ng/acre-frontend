@@ -48,6 +48,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import SetFeedRation from "./SetRationForm";
+import RecordSale from "./RecordSale";
 
 type Columns = {
   data: any[];
@@ -273,13 +274,34 @@ export const getColumns = ({
                 </DialogContent>
               </Dialog>
 
-              <Button
-                variant="text"
-                className="flex w-full items-center justify-start px-2 py-2 hover:bg-gray-100 focus:outline-none dark:hover:bg-gray-50"
-              >
-                <LuCircleDollarSign className="mr-2 h-5 w-5 text-gray-500" />
-                Record Sale
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="text"
+                    className="flex w-full items-center justify-start px-2 py-2 hover:bg-gray-100 focus:outline-none dark:hover:bg-gray-50"
+                  >
+                    <BiBowlRice className="mr-2 h-5 w-5 text-gray-500" />
+                    Record Sale
+                  </Button>
+                </DialogTrigger>
+
+                <DialogContent className=" rounded-2xl">
+                  {/* <CardHeader>
+                    <CardTitle className="flex">
+                      <span className="mr-2 bg-[#CCE6DA]  border-b rounded-full p-2">
+                        <BiSolidBowlRice className="text-green-500" />
+                      </span>
+                      <span className="mt-2"> Set Feed Ration</span>
+                    </CardTitle>
+                  </CardHeader> */}
+
+               
+                    
+                    <RecordSale />
+                  
+                </DialogContent>
+              </Dialog>
+
               <Button
                 variant="text"
                 className="flex w-full items-center justify-start px-2 py-2 hover:bg-gray-100 focus:outline-none dark:hover:bg-gray-50"
