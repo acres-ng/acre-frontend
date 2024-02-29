@@ -2,9 +2,13 @@ import * as React from "react";
 import { useEffect, useState } from "react";
 import { getTransactionUtils } from "@/services/livestockService";
 import { Button } from "@/components/ui/button";
+import { Form } from "react-hook-form";
 import { RiExchangeDollarLine } from "react-icons/ri";
 import { Button as Btn } from "rizzui";
 import { Textarea } from "@/components/ui/textarea";
+import * as z from "zod";
+import HttpService from "@/services/HttpService";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   InputGroup,
   InputRightElement,
@@ -27,7 +31,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { getActiveFarm } from "@/services/farmService";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
+import { API_URL } from "@/config";
 import { BiSolidBowlRice } from "react-icons/bi";
 import {
   Select,
@@ -38,80 +46,152 @@ import {
 } from "@/components/ui/select";
 import { MeasuringUnitSelect } from "../FormInput/AcreSelect";
 
+interface FormData {
+  amount: number;
+  category_id: number;
+  transactionable_type: string;
+  transactionable_id: string;
+  quantity: number;
+  description: string;
+  notes: string;
+}
+
 const RecordSale = () => {
-    const [transactionUtils, setTransactionUtils] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    
-    useEffect(() => {
-        getTransactionUtils()
-          .then((data) => {
-            setTransactionUtils(data);
-            setIsLoading(false);
-          })
-          .catch((error) => {
-            console.error('Error fetching transaction utilities:', error);
-            setIsLoading(false);
-          });
-      }, []);
-    
+  const [transactionUtils, setTransactionUtils] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const transactionSchema = z.object({
+    amount: z.number(),
+    category_id: z.number(),
+    transactionable_type: z.string(),
+    transactionable_id: z.string(),
+    quantity: z.number(),
+    description: z.string(),
+    notes: z.string(),
+  });
+
+  const saleForm = useForm<FormData>({
+    resolver: zodResolver(transactionSchema),
+    defaultValues: {
+      amount: 0,
+      category_id: 0,
+      transactionable_type: "",
+      transactionable_id: "",
+      quantity: 0,
+      description: "",
+      notes: "",
+    },
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getTransactionUtils();
+        setTransactionUtils(data);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching transaction utilities:", error);
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const onSubmit: SubmitHandler<z.infer<typeof transactionSchema>> = async (
+    data
+  ) => {
+    try {
+      const userActiveFarmId = getActiveFarm().id;
+      const response = await HttpService.post(
+        `${API_URL}farms/${userActiveFarmId}/transactions/`,
+        data,
+        HttpService.getDefaultOptions()
+      );
+      if (response.data) {
+        toast.success("Transaction saved successfully!");
+      } else {
+        toast.error("Failed to save transaction. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      toast.error("An error occurred. Please try again later.");
+    }
+  };
 
   return (
-    <div className=" rounded-2xl">
+    <div className="rounded-2xl">
       <CardHeader>
         <CardTitle className="flex">
-          <span className="mr-2 bg-[#CCE6DA]  border-b rounded-full p-2">
+          <span className="mr-2 bg-[#CCE6DA] border-b rounded-full p-2">
             <RiExchangeDollarLine className="text-green-500" />
           </span>
           <span className="mt-2">Add Sale Transaction</span>
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <form>
-          <div className="grid w-full items-center gap-4">
-            <div className="flex flex-col space-y-1.5 pt-2">
-              <Label htmlFor="dailyRation">Amount</Label>
-              <InputGroup>
-                <Input
-                  placeholder="Enter Ration"
-                  className="text-center"
-                  id="dailyRation"
-                  type="number"
-                />
-                <InputLeftElement width={"6rem"}>
-                  <MeasuringUnitSelect
-                    onchange={(value: string) => {
-                      // Handle measuring unit selection
-                    }}
+        <Form {...saleForm}>
+          <form onSubmit={saleForm.handleSubmit(onSubmit)}>
+            <div className="grid w-full items-center gap-4">
+              <div className="flex flex-col space-y-1.5 pt-2">
+                <Label htmlFor="amount">Amount</Label>
+                <InputGroup>
+                  <Input
+                    placeholder="Enter Amount"
+                    className="text-center"
+                    id="amount"
+                    type="number"
+                    {...saleForm.register("amount")}
                   />
-                </InputLeftElement>
-              </InputGroup>
-            </div>
+                </InputGroup>
+              </div>
 
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Quantity</Label>
-              <Input id="name" placeholder="Enter Quantity" />
-            </div>
-            <div className="flex flex-col space-y-1.5 pt-2">
-              <Label htmlFor="framework">Description</Label>
-              <Input id="name" placeholder="Enter Transaction Description" />
-            </div>
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="quantity">Quantity</Label>
+                <Input
+                  id="quantity"
+                  placeholder="Enter Quantity"
+                  {...saleForm.register("quantity")}
+                />
+              </div>
 
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="name">Notes</Label>
-              <Textarea placeholder="Write Something" />
-            </div>
+              <div className="flex flex-col space-y-1.5 pt-2">
+                <Label htmlFor="description">Description</Label>
+                <Input
+                  id="description"
+                  placeholder="Enter Description"
+                  {...saleForm.register("description")}
+                />
+              </div>
 
-            <div className="flex  mt-8 gap-[20px]">
-              <DialogClose asChild>
-                <Btn className="w-full text-black border-[3px]border-gray-200">
-                  Cancel
-                </Btn>
-              </DialogClose>
+              <div className="flex flex-col space-y-1.5">
+                <Label htmlFor="notes">Notes</Label>
+                <Textarea
+                  id="notes"
+                  placeholder="Write Something"
+                  {...saleForm.register("notes")}
+                />
+              </div>
 
-              <Button className="w-full">Save Transaction</Button>
+              <div className="flex mt-8 gap-[20px]">
+                <DialogClose asChild>
+                  <Btn className="w-full text-black border-[3px] border-gray-200">
+                    Cancel
+                  </Btn>
+                </DialogClose>
+                <Button
+                  className="w-full"
+                  disabled={saleForm.formState.isSubmitting}
+                  onClick={(e) => {
+                    e.preventDefault(); 
+                    saleForm.handleSubmit(onSubmit)();
+                  }}
+                >
+                  Save Transaction
+                </Button>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </Form>
       </CardContent>
     </div>
   );
