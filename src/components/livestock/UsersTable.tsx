@@ -17,9 +17,10 @@ const filterState = {
 
 interface IProp {
   data: any[];
+  handleRationCreated:()=>void;
 }
 
-export default function UsersTable({ data = [] }: IProp) {
+export default function UsersTable({ data = [],handleRationCreated }: IProp) {
   const [pageSize, setPageSize] = useState(10);
 
   const onHeaderCellClick = (value: string) => ({
@@ -64,6 +65,7 @@ export default function UsersTable({ data = [] }: IProp) {
         onDeleteItem,
         onChecked: handleRowSelect,
         handleSelectAll,
+        handleRationCreated
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -74,6 +76,7 @@ export default function UsersTable({ data = [] }: IProp) {
       onDeleteItem,
       handleRowSelect,
       handleSelectAll,
+      handleRationCreated
     ]
   );
 
@@ -82,6 +85,13 @@ export default function UsersTable({ data = [] }: IProp) {
 
   return (
     <div className="mt-14">
+       <TableFooter
+            checkedItems={selectedRowKeys}
+            handleDelete={(ids: string[]) => {
+              setSelectedRowKeys([]);
+              handleDelete(ids);
+            }}
+          />
       <ControlledTable
         variant="modern"
         data={tableData}
@@ -96,15 +106,9 @@ export default function UsersTable({ data = [] }: IProp) {
           current: currentPage,
           onChange: (page: number) => handlePaginate(page),
         }}
-        tableFooter={
-          <TableFooter
-            checkedItems={selectedRowKeys}
-            handleDelete={(ids: string[]) => {
-              setSelectedRowKeys([]);
-              handleDelete(ids);
-            }}
-          />
-        }
+        // tableFooter={
+         
+        // }
         className="overflow-hidden rounded-md border border-gray-200 text-sm shadow-sm [&_.rc-table-placeholder_.rc-table-expanded-row-fixed>div]:h-60 [&_.rc-table-placeholder_.rc-table-expanded-row-fixed>div]:justify-center [&_.rc-table-row:last-child_td.rc-table-cell]:border-b-0 [&_thead.rc-table-thead]:border-t-0"
       />
     </div>
