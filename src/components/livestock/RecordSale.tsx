@@ -1,5 +1,21 @@
 import * as React from "react";
 import { Button } from "@/components/ui/button";
+import { RiExchangeDollarLine } from "react-icons/ri";
+import { Button as Btn } from "rizzui";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  InputGroup,
+  InputRightElement,
+  InputLeftElement,
+} from "@chakra-ui/react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogClose,
+  DialogTrigger,
+} from "../ui/dialog";
 import {
   Card,
   CardContent,
@@ -18,82 +34,69 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { MeasuringUnitSelect } from "../FormInput/AcreSelect";
 
 const RecordSale = () => {
   return (
     <div className=" rounded-2xl">
- <CardHeader>
-      <CardTitle className="flex">
-        <span className="mr-2 bg-[#CCE6DA]  border-b rounded-full p-2">
-          <BiSolidBowlRice   className="text-green-500"/>
-        </span>
-        <span className="mt-2">Add Sale Transaction</span>
-       
-      </CardTitle>
-    </CardHeader>
-    <CardContent>
-    <form>
-  <div className="grid w-full items-center gap-4">
-    <div className="flex flex-col space-y-1.5">
-      <Label htmlFor="name">Recipe Name or ID</Label>
-      <Input id="name" placeholder="eg Ultima DIY" />
+      <CardHeader>
+        <CardTitle className="flex">
+          <span className="mr-2 bg-[#CCE6DA]  border-b rounded-full p-2">
+            <RiExchangeDollarLine className="text-green-500" />
+          </span>
+          <span className="mt-2">Add Sale Transaction</span>
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <form>
+          <div className="grid w-full items-center gap-4">
+            <div className="flex flex-col space-y-1.5 pt-2">
+              <Label htmlFor="dailyRation">Amount</Label>
+              <InputGroup>
+                <Input
+                  placeholder="Enter Ration"
+                  className="text-center"
+                  id="dailyRation"
+                  type="number"
+                />
+                <InputLeftElement width={"6rem"}>
+                  <MeasuringUnitSelect
+                    onchange={(value: string) => {
+                      // Handle measuring unit selection
+                    }}
+                  />
+                </InputLeftElement>
+              </InputGroup>
+            </div>
+
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="name">Quantity</Label>
+              <Input id="name" placeholder="Enter Quantity" />
+            </div>
+            <div className="flex flex-col space-y-1.5 pt-2">
+              <Label htmlFor="framework">Description</Label>
+              <Input id="name" placeholder="Enter Transaction Description" />
+            </div>
+
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="name">Notes</Label>
+              <Textarea placeholder="Write Something" />
+            </div>
+
+            <div className="flex  mt-8 gap-[20px]">
+              <DialogClose asChild>
+                <Btn className="w-full text-black border-[3px]border-gray-200">
+                  Cancel
+                </Btn>
+              </DialogClose>
+
+              <Button className="w-full">Save Transaction</Button>
+            </div>
+          </div>
+        </form>
+      </CardContent>
     </div>
+  );
+};
 
-    <div className="flex space-x-4 pt-2">
-      {/* Livestock Type */}
-      <span className="flex flex-col space-y-1.5 w-full">
-        <Label htmlFor="livestock-type">Livestock Type</Label>
-        <Select>
-          <SelectTrigger id="livestock-type">
-            <SelectValue placeholder="Select type" />
-          </SelectTrigger>
-          <SelectContent position="popper">
-            <SelectItem value="next">Next.js</SelectItem>
-            <SelectItem value="sveltekit">SvelteKit</SelectItem>
-            <SelectItem value="astro">Astro</SelectItem>
-            <SelectItem value="nuxt">Nuxt.js</SelectItem>
-          </SelectContent>
-        </Select>
-      </span>
-
-      {/* Livestock Maturity */}
-      <span className="flex flex-col space-y-1.5 w-full">
-        <Label htmlFor="livestock-maturity">Livestock Maturity</Label>
-        <Select>
-          <SelectTrigger id="livestock-maturity">
-            <SelectValue placeholder="Select maturity" />
-          </SelectTrigger>
-          <SelectContent position="popper">
-            <SelectItem value="next">Next.js</SelectItem>
-            <SelectItem value="sveltekit">SvelteKit</SelectItem>
-            <SelectItem value="astro">Astro</SelectItem>
-            <SelectItem value="nuxt">Nuxt.js</SelectItem>
-          </SelectContent>
-        </Select>
-      </span>
-    </div>
-
-    <div className="flex flex-col space-y-1.5 pt-2">
-      <Label htmlFor="framework">Recipe Quantity</Label>
-      <Select>
-        <SelectTrigger id="framework">
-          <SelectValue placeholder="Enter Quantity" />
-        </SelectTrigger>
-        <SelectContent position="popper">
-          <SelectItem value="next">Next.js</SelectItem>
-          <SelectItem value="sveltekit">SvelteKit</SelectItem>
-          <SelectItem value="astro">Astro</SelectItem>
-          <SelectItem value="nuxt">Nuxt.js</SelectItem>
-        </SelectContent>
-      </Select>
-    </div>
-  </div>
-</form>
-
-    </CardContent>
- 
-  </div>
-  )
-}
-
-export default RecordSale
+export default RecordSale;
