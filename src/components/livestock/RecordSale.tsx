@@ -1,4 +1,6 @@
 import * as React from "react";
+import { useEffect, useState } from "react";
+import { getTransactionUtils } from "@/services/livestockService";
 import { Button } from "@/components/ui/button";
 import { RiExchangeDollarLine } from "react-icons/ri";
 import { Button as Btn } from "rizzui";
@@ -37,6 +39,22 @@ import {
 import { MeasuringUnitSelect } from "../FormInput/AcreSelect";
 
 const RecordSale = () => {
+    const [transactionUtils, setTransactionUtils] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
+    
+    useEffect(() => {
+        getTransactionUtils()
+          .then((data) => {
+            setTransactionUtils(data);
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.error('Error fetching transaction utilities:', error);
+            setIsLoading(false);
+          });
+      }, []);
+    
+
   return (
     <div className=" rounded-2xl">
       <CardHeader>

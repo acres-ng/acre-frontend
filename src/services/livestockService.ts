@@ -105,3 +105,22 @@ export const getFarmFeed = async (farmId?: number) => {
     toast.error(data.message);
   }
 };
+
+export async function getTransactionUtils() {
+  try {
+    const activeFarmId = getActiveFarm().id;
+    const url = `${config.API_URL}farms/${activeFarmId}/transactions/utils`;
+    const response = await http.get(url, getDefaultOptions());
+    if (response.data.status === "success") {
+      return response.data.data;
+    } else {
+      toast.error(response.data.message);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching transaction utilities:", error);
+    throw error;
+  }
+}
+
+
