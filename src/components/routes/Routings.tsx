@@ -18,6 +18,7 @@ import Layyout from "@/layout/sidebar/layyout";
 import InventoryList from "../livestock/Feeding/InventoryList";
 import Rations from "../livestock/Rations";
 import RecipeBuilder from "../livestock/RecipeBuilder";
+import Edit from "../livestock/Edit";
 
 const PublicRoutes = () => {
   return (
@@ -54,6 +55,14 @@ const PublicRoutes = () => {
           element={
             <Layyout>
               <Add />
+            </Layyout>
+          }
+        />
+        <Route
+          path="edit/:id"
+          element={
+            <Layyout>
+              <Edit />
             </Layyout>
           }
         />
