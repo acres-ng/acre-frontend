@@ -80,6 +80,7 @@ type LiveStockHousing = { id: string; name: string; type?: string };
 const Edit = () => {
   const location = useLocation();
   const { id } = useParams();
+  const { uuid } = useParams();
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const animalsList: Animal[] = getAnimalsLocal()?.animals;
@@ -122,24 +123,22 @@ const Edit = () => {
       livestockForm.setValue("sex", res?.sex || "");
       livestockForm.setValue("housing_id", res?.housing_id || "");
       livestockForm.setValue("animal_type", parseInt(res?.animal_id) || 0);
+      livestockForm.setValue("status", res?.status || "");
 
       const breeds: AnimalBreed[] = getAnimalsLocal().breeds.filter(
         (breed: AnimalBreed) => {
           return breed.animal_type === parseInt(res?.animal_id) || 0;
         }
       );
-      const breedObj = breeds.filter(
-        (breed: AnimalBreed) => {
-          return breed.name === res?.breed;
-        }
-      )?.[0];
+      const breedObj = breeds.filter((breed: AnimalBreed) => {
+        return breed.name === res?.breed;
+      })?.[0];
 
       livestockForm.setValue("breed", breedObj?.id || 0);
       setAnimalTraits({
         ...animalTraits,
         breeds: breeds || [],
       });
-
     });
   }, []);
 
@@ -195,8 +194,8 @@ const Edit = () => {
         livestockForm.getValues().quantity === 1
           ? [postData] // Enclose in an array for single entries
           : postData;
-      const response = await HttpService.post(
-        `${API_URL}farms/${userActiveFarmId}/livestock`,
+      const response = await HttpService.put(
+        `${API_URL}farms/${userActiveFarmId}/livestock/${id}`,
         postDataToSend,
         HttpService.getDefaultOptions()
       );
@@ -419,7 +418,10 @@ const Edit = () => {
                             />
                             <InputRightElement width={"8rem"}>
                               <Select
-                                value={livestockForm.getValues().measuring_unit || "kg"}
+                                value={
+                                  livestockForm.getValues().measuring_unit ||
+                                  "kg"
+                                }
                                 onValueChange={(value) => {
                                   livestockForm.setValue(
                                     "measuring_unit",
@@ -528,9 +530,7 @@ const Edit = () => {
                       <FormLabel>Housing ID</FormLabel>
                       <Select
                         onValueChange={field.onChange}
-                        value={housingData?.filter((housing) => {
-                          return housing.id === field.value;
-                        })?.[0]?.name}
+                        value={livestockForm.getValues().housing_id}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -556,7 +556,10 @@ const Edit = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Animal status</FormLabel>
-                      <Select onValueChange={field.onChange}>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value ?? ""}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select status" />
