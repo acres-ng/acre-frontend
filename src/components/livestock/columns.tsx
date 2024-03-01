@@ -54,7 +54,7 @@ type Columns = {
   sortConfig?: any;
   handleSelectAll: any;
   checkedItems: string[];
-  onDeleteItem: (id: string) => void;
+  onDeleteItem: (id: string | string[]) => void;
   onHeaderCellClick: (value: string) => void;
   onChecked?: (id: string) => void;
   handleRationCreated : () => void;
@@ -84,12 +84,12 @@ export const getColumns = ({
     dataIndex: "checked",
     key: "checked",
     width: 30,
-    render: (_: any, row: User) => (
+    render: (_: any, row: any) => (
       <div className="inline-flex ps-2">
         <Checkbox
           className="cursor-pointer"
-          checked={checkedItems.includes(row.id)}
-          {...(onChecked && { onChange: () => onChecked(row.id) })}
+          checked={checkedItems.includes(row.uuid)}
+          {...(onChecked && { onChange: () => onChecked(row.uuid) })}
           // label={`${row.id}`}
         />
       </div>
@@ -327,7 +327,7 @@ export const getColumns = ({
                     <Btn className="bg-white text-black shadow-md w-full">
                       Cancel
                     </Btn>
-                    <Btn className="bg-red-500 w-full"  onClick={() => onDeleteItem(row.id)}>Delete</Btn>
+                    <Btn className="bg-red-500 w-full"  onClick={() => onDeleteItem([row.uuid])}>Delete</Btn>
                   </CardFooter>
                 </DialogContent>
               </Dialog>

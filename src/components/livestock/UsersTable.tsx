@@ -1,5 +1,3 @@
-
-
 import { useCallback, useMemo, useState } from "react";
 import React, { lazy } from "react";
 import { useTable } from "../hooks/use-table";
@@ -20,10 +18,10 @@ const filterState = {
 
 interface IProp {
   data: any[];
-  handleRationCreated:()=>void;
+  handleRationCreated: () => void;
 }
 
-export default function UsersTable({ data = [],handleRationCreated }: IProp) {
+export default function UsersTable({ data = [], handleRationCreated }: IProp) {
   const [pageSize, setPageSize] = useState(10);
 
   const onHeaderCellClick = (value: string) => ({
@@ -32,24 +30,6 @@ export default function UsersTable({ data = [],handleRationCreated }: IProp) {
     },
   });
 
-  const onDeleteItem = useCallback(async (uuid: string) => {
-    try {
-      const userActiveFarmId = getActiveFarm().id;
-      const response = await HttpService.delete(
-        `${API_URL}farms/${userActiveFarmId}/livestock/${uuid}`,
-        HttpService.getDefaultOptions()
-      );
-  
-      if (response.data) {
-        console.log("Livestock deleted successfully");
-      } else {
-        console.error("Failed to delete livestock");
-      }
-    } catch (error) {
-      console.error("Error deleting livestock:", error);
-    }
-  }, []);
-  
   const {
     isLoading,
     isFiltered,
@@ -71,6 +51,30 @@ export default function UsersTable({ data = [],handleRationCreated }: IProp) {
     handleReset,
   } = useTable(data, pageSize, filterState);
 
+  const onDeleteItem = useCallback(async (uuid: string | string[]) => {
+    console.log("Deleting livestock", uuid);
+    try {
+      const userActiveFarmId = getActiveFarm().id;
+      const response = await HttpService.delete(
+        `${API_URL}farms/${userActiveFarmId}/livestock`,
+        {
+          ...HttpService.getDefaultOptions(),
+          data: uuid,
+        }
+      );
+
+      if (response.data) {
+        handleDelete(uuid, "uuid");
+        setSelectedRowKeys([]);
+        console.log("Livestock deleted successfully");
+      } else {
+        console.error("Failed to delete livestock");
+      }
+    } catch (error) {
+      console.error("Error deleting livestock:", error);
+    }
+  }, []);
+
   const columns = useMemo(
     () =>
       getColumns({
@@ -81,7 +85,7 @@ export default function UsersTable({ data = [],handleRationCreated }: IProp) {
         onDeleteItem,
         onChecked: handleRowSelect,
         handleSelectAll,
-        handleRationCreated
+        handleRationCreated,
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -92,7 +96,7 @@ export default function UsersTable({ data = [],handleRationCreated }: IProp) {
       onDeleteItem,
       handleRowSelect,
       handleSelectAll,
-      handleRationCreated
+      handleRationCreated,
     ]
   );
 
@@ -101,14 +105,7 @@ export default function UsersTable({ data = [],handleRationCreated }: IProp) {
 
   return (
     <div className="mt-14">
-       <TableFooter
-            checkedItems={selectedRowKeys}
-            handleDelete={(uuid: string[]) => {
-              setSelectedRowKeys([]);
-              handleDelete(uuid);
-            }}
-            onDeleteItem={onDeleteItem}
-          />
+      <TableFooter checkedItems={selectedRowKeys} onDeleteItem={onDeleteItem} />
       <ControlledTable
         variant="modern"
         data={tableData}
@@ -124,7 +121,7 @@ export default function UsersTable({ data = [],handleRationCreated }: IProp) {
           onChange: (page: number) => handlePaginate(page),
         }}
         // tableFooter={
-         
+
         // }
         className="overflow-hidden rounded-md border border-gray-200 text-sm shadow-sm [&_.rc-table-placeholder_.rc-table-expanded-row-fixed>div]:h-60 [&_.rc-table-placeholder_.rc-table-expanded-row-fixed>div]:justify-center [&_.rc-table-row:last-child_td.rc-table-cell]:border-b-0 [&_thead.rc-table-thead]:border-t-0"
       />

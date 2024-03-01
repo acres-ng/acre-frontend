@@ -24,19 +24,18 @@ import { getActiveFarm } from "@/services/farmService";
 
 interface TableFooterProps {
   checkedItems: string[];
-  onDeleteItem: (id: string) => void;
-  handleDelete: (uuid: string[]) => void;
+  onDeleteItem: (id: string | string[]) => void;
 }
 
 export default function TableFooter({
   checkedItems,
   onDeleteItem,
-  handleDelete,
   children,
 }: React.PropsWithChildren<TableFooterProps>) {
   const onDelete = async () => {
+    console.log("Happending here>>>", checkedItems)
     try {
-      handleDelete(checkedItems);
+      onDeleteItem(checkedItems)
     } catch (error) {
       console.error("Error deleting livestock:", error);
     }
@@ -44,7 +43,6 @@ export default function TableFooter({
   if (checkedItems.length === 0) {
     return null;
   }
-
 
   return (
     <div className="sticky bottom-0 left-0 z-10 mt-2.5 flex justify-end w-full items-center  ">
@@ -73,10 +71,7 @@ export default function TableFooter({
               <Button className="bg-white text-black shadow-md w-full">
                 Cancel
               </Button>
-              <Button
-                className="bg-red-500 w-full"
-                onClick={onDelete}
-              >
+              <Button className="bg-red-500 w-full" onClick={onDelete}>
                 Delete
               </Button>
             </CardFooter>
