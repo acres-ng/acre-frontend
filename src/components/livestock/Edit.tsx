@@ -48,7 +48,13 @@ const livestockSchema = z.object({
   breed: z.number(),
   sex: z.string().min(1),
   housing_id: z.string().min(1),
-  weight: z.number().min(1),
+  weight: z
+    .number()
+    .min(0.1)
+    .refine((value) => value !== 0, {
+      message: "Weight must be greater than zero.",
+    }),
+
   age: z.number().min(1).optional(),
   combinedAgeInDays: z.number().int().optional(),
   ageUnit: z.string().min(1).optional(),
@@ -211,50 +217,39 @@ const Edit = () => {
       toast.error("An error occurred. Please try again later.");
     }
   };
-
   const AddQuantityField = () => {
-    if (livestockForm.getValues().quantity > 1) {
-      return (
-        <FormField
-          control={livestockForm.control}
-          name="quantity"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Quantity</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="Enter quantity"
-                  {...field}
-                  onChange={(e: any) => {
-                    if (e.target.value.length === 0) {
-                      field.onChange(e);
-                    } else {
-                      field.onChange({
-                        ...e,
-                        target: {
-                          ...e.target,
-                          value: parseInt(e.target.value),
-                        },
-                      });
-                    }
+    const quantityValue = livestockForm.getValues().quantity;
 
-                    if (
-                      e.target.value.length > 0 &&
-                      parseInt(e.target.value) === 1
-                    ) {
-                      livestockForm.setError("quantity", {
-                        message: "Ise kushe len she yi oo",
-                      });
-                    }
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      );
-    }
+    // Check if the quantity is set to 1
+    const isQuantityOne = quantityValue === 1;
+
+    return (
+      <FormField
+        control={livestockForm.control}
+        name="quantity"
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Quantity</FormLabel>
+            <FormControl>
+              <Input
+                placeholder="Enter quantity"
+                {...field}
+                disabled={isQuantityOne}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value =
+                    e.target.value.trim() !== ""
+                      ? parseInt(e.target.value)
+                      : "";
+
+                  field.onChange(value);
+                }}
+              />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    );
   };
 
   return (
@@ -410,6 +405,58 @@ const Edit = () => {
                               {...field}
                               onChange={(e) => {
                                 const inputWeightValue = e.target.value;
+                                if (inputWeightValue === "") {
+                                  livestockForm.setValue("weight", 0); // Set value to 0 if input is cleared
+                                } else {
+                                  livestockForm.setValue(
+                                    "weight",
+                                    parseInt(inputWeightValue, 10)
+                                  ); // Parse the input value as an integer
+                                }
+                              }}
+                            />
+                            <InputRightElement width={"8rem"}>
+                              <Select
+                                value={
+                                  livestockForm.getValues().measuring_unit ||
+                                  "kg"
+                                }
+                                onValueChange={(value) => {
+                                  livestockForm.setValue(
+                                    "measuring_unit",
+                                    value
+                                  );
+                                }}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="kg">Kilogram</SelectItem>
+                                  <SelectItem value="g">Gram</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </InputRightElement>
+                          </InputGroup>
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* <FormField
+                    control={livestockForm.control}
+                    name="weight"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Weight at stocking</FormLabel>
+                        <FormControl>
+                          <InputGroup>
+                            <Input
+                              placeholder="Enter weight"
+                              {...field}
+                              onChange={(e) => {
+                                const inputWeightValue = e.target.value;
                                 livestockForm.setValue(
                                   "weight",
                                   parseInt(inputWeightValue)
@@ -443,7 +490,7 @@ const Edit = () => {
                         <FormMessage />
                       </FormItem>
                     )}
-                  />
+                  /> */}
 
                   <FormField
                     control={livestockForm.control}
@@ -501,7 +548,21 @@ const Edit = () => {
                     <FormItem>
                       <FormLabel>Price (optional)</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter price" {...field} />
+                        <Input
+                          placeholder="Enter price"
+                          {...field}
+                          onChange={(e) => {
+                            const inputPriceValue = e.target.value;
+                            if (inputPriceValue === "") {
+                              livestockForm.setValue("price", ""); // Clear the value
+                            } else if (!isNaN(parseFloat(inputPriceValue))) {
+                              livestockForm.setValue(
+                                "price",
+                                parseFloat(inputPriceValue)
+                              );
+                            }
+                          }}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
