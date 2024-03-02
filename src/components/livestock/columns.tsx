@@ -28,6 +28,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import SetFeedRation from "./SetRationForm";
+import { User } from "./users-data";
 
 type Columns = {
   data: any[];
