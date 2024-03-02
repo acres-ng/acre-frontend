@@ -58,7 +58,7 @@ type Columns = {
   onDeleteItem: (id: string) => void;
   onHeaderCellClick: (value: string) => void;
   onChecked?: (id: string) => void;
-  handleRationCreated : () => void;
+  handleRationCreated: () => void;
 };
 
 export const getColumns = ({
@@ -268,8 +268,10 @@ export const getColumns = ({
                   </CardHeader>
 
                   <CardContent>
-                    
-                    <SetFeedRation row={row} onRationCreated={handleRationCreated} />
+                    <SetFeedRation
+                      row={row}
+                      onRationCreated={handleRationCreated}
+                    />
                   </CardContent>
                 </DialogContent>
               </Dialog>
@@ -286,19 +288,7 @@ export const getColumns = ({
                 </DialogTrigger>
 
                 <DialogContent className=" rounded-2xl">
-                  {/* <CardHeader>
-                    <CardTitle className="flex">
-                      <span className="mr-2 bg-[#CCE6DA]  border-b rounded-full p-2">
-                        <BiSolidBowlRice className="text-green-500" />
-                      </span>
-                      <span className="mt-2"> Set Feed Ration</span>
-                    </CardTitle>
-                  </CardHeader> */}
-
-               
-                    
-                    <RecordSale />
-                  
+                  <RecordSale row={row} /> 
                 </DialogContent>
               </Dialog>
 
@@ -322,7 +312,6 @@ export const getColumns = ({
                   <Button
                     variant="text"
                     className="flex w-full items-center justify-start px-2 py-2 text-red-500 hover:bg-gray-100 focus:outline-none dark:hover:bg-gray-50"
-                   
                   >
                     <FaRegTrashAlt className="mr-2 h-5 w-5 text-red-500" />
                     Delete Livestock
@@ -349,7 +338,12 @@ export const getColumns = ({
                     <Btn className="bg-white text-black shadow-md w-full">
                       Cancel
                     </Btn>
-                    <Btn className="bg-red-500 w-full"  onClick={() => onDeleteItem(row.id)}>Delete</Btn>
+                    <Btn
+                      className="bg-red-500 w-full"
+                      onClick={() => onDeleteItem(row.id)}
+                    >
+                      Delete
+                    </Btn>
                   </CardFooter>
                 </DialogContent>
               </Dialog>
