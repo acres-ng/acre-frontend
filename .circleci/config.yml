@@ -61,12 +61,12 @@ jobs:
       - run:
           name: List dir
           command: ls -R
-          # Deploy to Heroku
-      - run:
-          name: Deploy to Heroku
-          command: |
-            docker login --username=${HEROKU_USERNAME} --password=${HEROKU_API_KEY2} registry.heroku.com
-            git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-staging.git main --force
+          # Deploy to Heroku 
+      #- run:
+      #    name: Deploy to Heroku
+      #    command: |
+      #      docker login --username=${HEROKU_USERNAME} --password=${HEROKU_API_KEY2} registry.heroku.com
+      #      git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-staging.git main --force
       - slack/notify: *slack-notify-only-main-fail
       - persist_to_workspace:
           root: ~/app
@@ -80,12 +80,12 @@ jobs:
         type: enum
         enum: ["staging", "production"]
     steps:
-      - checkout
+      # - checkout
+      - attach_workspace:
+          at: ~/app
       - restore_cache:
           keys:
             - node_modules-{{ checksum "package.json" }}
-      - attach_workspace:
-          at: ~/app
       - run:
           name: List dir
           command: ls -R
@@ -94,7 +94,7 @@ jobs:
           name: Deploy to Heroku
           command: |
             docker login --username=${HEROKU_USERNAME} --password=${HEROKU_API_KEY2} registry.heroku.com
-            git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-<< parameters.env >>.git main --force
+            git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-staging.git main --force
       - slack/notify: *slack-notify-only-main-fail
 
   deploy-notifier:
@@ -117,12 +117,39 @@ workflows:
           context:
             - heroku
             - slack
+      - deploy-frontend-staging:
+          matrix:
+            parameters:
+              env: ["staging"]
+          requires:
+            - build-frontend
+          context:
+            - heroku
+            - slack 
+      - deploy-notifier:
+          requires:
+            - deploy-frontend-staging
+          context:
+            - heroku
+            - slack
+
+  feature-branch:
+    jobs:
+      - build-frontend:
+          filters:
+            branches:
+              ignore:
+                - main
+          context:
+            - heroku
+            - slack
       - deploy-notifier:
           requires:
             - build-frontend
           context:
             - heroku
             - slack
+
       # - slack/on-hold:
       #     channel: C052YJH1LBC
       #     context: slack
