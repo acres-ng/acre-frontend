@@ -1,11 +1,12 @@
 // import { Button } from "rizzui";
 import { Title, Text } from "rizzui";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { Button } from "@/components/ui/button";
+import { Button } from "rizzui";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogClose,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
@@ -33,9 +34,9 @@ export default function TableFooter({
   children,
 }: React.PropsWithChildren<TableFooterProps>) {
   const onDelete = async () => {
-    console.log("Happending here>>>", checkedItems)
+    console.log("Happending here>>>", checkedItems);
     try {
-      onDeleteItem(checkedItems)
+      onDeleteItem(checkedItems);
     } catch (error) {
       console.error("Error deleting livestock:", error);
     }
@@ -68,10 +69,13 @@ export default function TableFooter({
               </DialogDescription>
             </CardContent>
             <CardFooter className="flex justify-between gap-4">
-              <Button className="bg-white text-black shadow-md w-full">
-                Cancel
-              </Button>
-              <Button className="bg-red-500 w-full" onClick={onDelete}>
+              <DialogClose asChild>
+                <Button className="bg-white text-black shadow-md w-full">
+                  Cancel
+                </Button>
+              </DialogClose>
+
+              <Button className="bg-red-500 text-white w-full" onClick={onDelete}>
                 Delete
               </Button>
             </CardFooter>
