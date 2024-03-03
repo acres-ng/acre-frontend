@@ -75,6 +75,8 @@ const RecordSale: React.FC<RecordSaleProps> = ({ row }) => {
         const data = await getTransactionUtils();
         setTransactionUtils(data);
         setIsLoading(false);
+
+        
         setValue(
           "category_id",
           data?.data?.transaction_categories[0].children.find(
@@ -91,6 +93,14 @@ const RecordSale: React.FC<RecordSaleProps> = ({ row }) => {
     fetchData();
   }, []);
 
+  
+ 
+
+
+  
+  
+  
+  
   const onSubmit: SubmitHandler<z.infer<typeof transactionSchema>> = async (
     data
   ) => {
