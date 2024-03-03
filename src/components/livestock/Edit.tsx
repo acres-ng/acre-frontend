@@ -79,6 +79,8 @@ const livestockSchema = z.object({
     .refine((value) => value > 0, {
       message: "Quantity must be greater than 0.",
     }),
+
+
 });
 
 type LiveStockHousing = { id: string; name: string; type?: string };
@@ -217,6 +219,8 @@ const Edit = () => {
       toast.error("An error occurred. Please try again later.");
     }
   };
+
+
   const AddQuantityField = () => {
     const quantityValue = livestockForm.getValues().quantity;
 
@@ -251,6 +255,27 @@ const Edit = () => {
       />
     );
   };
+
+
+
+  
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+  
 
   return (
     <div className="h-auto px-4 py-6 lg:px-8">
@@ -444,54 +469,6 @@ const Edit = () => {
                     )}
                   />
 
-                  {/* <FormField
-                    control={livestockForm.control}
-                    name="weight"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Weight at stocking</FormLabel>
-                        <FormControl>
-                          <InputGroup>
-                            <Input
-                              placeholder="Enter weight"
-                              {...field}
-                              onChange={(e) => {
-                                const inputWeightValue = e.target.value;
-                                livestockForm.setValue(
-                                  "weight",
-                                  parseInt(inputWeightValue)
-                                );
-                              }}
-                            />
-                            <InputRightElement width={"8rem"}>
-                              <Select
-                                value={
-                                  livestockForm.getValues().measuring_unit ||
-                                  "kg"
-                                }
-                                onValueChange={(value) => {
-                                  livestockForm.setValue(
-                                    "measuring_unit",
-                                    value
-                                  );
-                                }}
-                              >
-                                <SelectTrigger>
-                                  <SelectValue />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="kg">Kilogram</SelectItem>
-                                  <SelectItem value="g">Gram</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </InputRightElement>
-                          </InputGroup>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  /> */}
-
                   <FormField
                     control={livestockForm.control}
                     name="age"
@@ -554,7 +531,7 @@ const Edit = () => {
                           onChange={(e) => {
                             const inputPriceValue = e.target.value;
                             if (inputPriceValue === "") {
-                              livestockForm.setValue("price", ""); // Clear the value
+                              livestockForm.setValue("price", ""); 
                             } else if (!isNaN(parseFloat(inputPriceValue))) {
                               livestockForm.setValue(
                                 "price",
