@@ -74,14 +74,14 @@ const livestockSchema = z.object({
         "Please enter a valid date of stocking that is today or earlier.",
     }
   ),
-  // quantity: z
-  //   .number()
-  //   .int()
-  //   .refine((value) => value > 0, {
-  //     message: "Quantity must be greater than 0.",
-  //   }),
+  quantity: z
+    .number()
+    .int()
+    .refine((value) => value > 1, {
+      message: "Quantity must be greater than 1.",
+    }),
 
-  quantity: z.number()
+  // quantity: z.number()
 });
 
 type LiveStockHousing = { id: string; name: string; type?: string };
@@ -238,7 +238,8 @@ const Edit = () => {
                 {...field}
                 disabled={entryType === "single"}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  field.onChange(e.target.value);
+                  const value = e.target.value;
+                  field.onChange(value.length > 0 ? Number(value) : 0);
                 }}
               />
             </FormControl>
