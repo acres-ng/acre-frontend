@@ -29,6 +29,7 @@ import { API_URL } from "@/config";
 import { getActiveFarm } from "@/services/farmService";
 import HttpService from "@/services/HttpService";
 import SucessDialogue from "./SucessDialogue";
+import { LivestockStatusSelect } from "../FormInput/AcreSelect";
 
 type AddProps = {
   entryType?: string;
@@ -527,7 +528,7 @@ const Add = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Animal status</FormLabel>
-                      <Select onValueChange={field.onChange}>
+                      {/* <Select onValueChange={field.onChange}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select status" />
@@ -536,7 +537,10 @@ const Add = () => {
                         <SelectContent>
                           <SelectItem value="okay">Okay</SelectItem>
                         </SelectContent>
-                      </Select>
+                      </Select> */}
+                      <LivestockStatusSelect
+                      onchange={field.onChange}
+                      />
                       <FormMessage />
                     </FormItem>
                   )}

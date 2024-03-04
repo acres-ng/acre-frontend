@@ -1,6 +1,6 @@
 
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import React, { lazy } from "react";
 import { useTable } from "../hooks/use-table";
 import { useColumn } from "../hooks/use-column";
@@ -19,8 +19,9 @@ interface IProp {
   data: any[];
 }
 
-export default function UsersTable({ data = [] }: IProp) {
+export default function LivestockTable({ data = [] }: IProp) {
   const [pageSize, setPageSize] = useState(10);
+  const [livestockStatus, setLivestockStatus] = useState("");
 
   const onHeaderCellClick = (value: string) => ({
     onClick: () => {
@@ -28,10 +29,18 @@ export default function UsersTable({ data = [] }: IProp) {
     },
   });
 
+  const handleLivestockStatusUpdate = (newStatus:string) => {
+    setLivestockStatus(newStatus);
+  }
+
   const onDeleteItem = useCallback((id: string) => {
     handleDelete(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    //rerender
+  }, [livestockStatus]);
 
   const {
     isLoading,
@@ -64,6 +73,7 @@ export default function UsersTable({ data = [] }: IProp) {
         onDeleteItem,
         onChecked: handleRowSelect,
         handleSelectAll,
+        // onLivestockStatusUpdate: handleLivestockStatusUpdate
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [

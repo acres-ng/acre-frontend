@@ -16,13 +16,14 @@ import { cn } from "@/lib/utils";
 import { useNavigate } from "react-router-dom";
 import {
   getAnimals,
+  getBasicUtils,
   getFarmLivestock,
   getLivestockHousing,
 } from "@/services/livestockService";
 import { useEffect, useState } from "react";
 import { AcreLoader } from "../ui/acreLoader";
-import UsersTable from "./UsersTable";
-import { getAnimalLocal } from "@/services/localCacheService";
+import LivestockTable from "./LivestockTable";
+import { getAnimalLocal, setLocalItem } from "@/services/localCacheService";
 import { Select } from "antd";
 import { NoFilterResultsCard, NoResourcesCard } from "./Tables";
 
@@ -60,6 +61,9 @@ const Livestock = () => {
         };
       });
       setHousing(housings);
+    });
+    getBasicUtils().then((data) => {
+      setLocalItem("statuses", data?.statuses);
     });
   }, []);
 
@@ -166,7 +170,7 @@ const Livestock = () => {
   const LivestockTable = () => {
     return (
       <div className="w-full">
-        <UsersTable data={livestock} />
+        <LivestockTable data={livestock} />
       </div>
     );
   };

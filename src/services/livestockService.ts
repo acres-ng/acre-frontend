@@ -101,7 +101,32 @@ export const getFarmFeed = async (farmId?: number) => {
   if (data.status === "success") {
     return data.data;
   } else {
+        toast.error(data.message);
     return null;
-    toast.error(data.message);
   }
 };
+
+export const getBasicUtils = async (farmId?: number) => {
+  const activeFarmId = farmId ?? getActiveFarm().id;
+  const url = `${config.API_URL}farms/${activeFarmId}/livestock/utils`;
+  const { data } = await http.get(url, getDefaultOptions());
+  if (data.status === "success") {
+    return data.data;
+  } else {
+    toast.error(data.message);
+    return null;
+  }
+};
+
+export const updateLivestock = async (livestockId: string, updateData:object) => {
+  const activeFarmId = getActiveFarm().id;
+  const url = `${config.API_URL}farms/${activeFarmId}/livestock/${livestockId}`;
+  const {data} = await http.put(url, updateData, getDefaultOptions());
+  if (data.status === "success") {
+    toast.success(data.message);
+    return data.data;
+  } else {
+    toast.error(data.message);
+    return null;
+  }
+  };

@@ -18,7 +18,7 @@ import { Popover } from "rizzui";
 import { Button } from "rizzui";
 import * as React from "react";
 import { Button as Btn } from "@/components/ui/button";
-import { getFarmFeed } from "@/services/livestockService";
+import { getFarmFeed, updateLivestock } from "@/services/livestockService";
 import {
   Card,
   CardContent,
@@ -48,6 +48,9 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import SetFeedRation from "./SetRationForm";
+import { LivestockStatusSelect } from "../FormInput/AcreSelect";
+import { statusColours } from "@/lib/enums";
+import { getLocalItem } from "@/services/localCacheService";
 
 type Columns = {
   data: any[];
@@ -57,7 +60,21 @@ type Columns = {
   onDeleteItem: (id: string) => void;
   onHeaderCellClick: (value: string) => void;
   onChecked?: (id: string) => void;
+  // onLivestockStatusUpdate: (status: string) => void;
 };
+export const getStatusClassName = (status: string) => {
+  const statuses = getLocalItem("statuses");
+  const stat = statuses.filter((s: any) => s.name === status)[0];
+  const statusClass: { [key: string]: string } = {
+    warning: "bg-red-200 text-red-700",
+    success: "bg-green-200 text-green-700",
+    danger: "bg-orange-200 text-orange-700",
+  };
+  const statusKey = JSON.parse(stat.meta_data).classification;
+
+  return statusClass[statusKey];
+};
+
 
 export const getColumns = ({
   data,
@@ -67,6 +84,7 @@ export const getColumns = ({
   onHeaderCellClick,
   handleSelectAll,
   onChecked,
+  // onLivestockStatusUpdate
 }: Columns) => [
   {
     title: (
@@ -142,8 +160,6 @@ export const getColumns = ({
     dataIndex: "quantity",
     key: "quantity",
     width: 80,
-    // render: (value: Date) => <DateCell date={value} />,
-    // render: (value: string) => price(value),
     render: (quantity: number) => quantity,
   },
   {
@@ -213,16 +229,16 @@ export const getColumns = ({
     dataIndex: "status",
     key: "status",
     width: 120,
-    render: (status: "okay" | "sick") =>
-      status === "okay" ? (
-        <div className="w-max flex justify-center px-2.5 py-1.5 rounded-xl bg-green-300 text-green-800">
-          Healthy
-        </div>
-      ) : (
-        <div className="w-max flex justify-center px-2.5 py-1.5 rounded-md bg-yellow-200 text-yellow-500">
-          Sick
-        </div>
-      ),
+    render: (status: string, row: any) => (
+      <LivestockStatusSelect
+        onchange={(e) => {
+         updateLivestock(row.uuid, { status: e })
+        //  onLivestockStatusUpdate(e)
+        }}
+        preSelectedOption={status}
+        className={getStatusClassName(status)}
+      />
+    ),
   },
   {
     title: <></>,
