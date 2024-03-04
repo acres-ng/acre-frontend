@@ -29,7 +29,7 @@ export default function UsersTable({ data = [], handleRationCreated }: IProp) {
       handleSort(value);
     },
   });
-
+  
   const {
     isLoading,
     isFiltered,
@@ -62,6 +62,7 @@ export default function UsersTable({ data = [], handleRationCreated }: IProp) {
           data: uuid,
         }
       );
+
 
       if (response.data) {
         handleDelete(uuid, "uuid");

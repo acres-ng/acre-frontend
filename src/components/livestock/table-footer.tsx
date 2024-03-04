@@ -45,6 +45,7 @@ export default function TableFooter({
     return null;
   }
 
+
   return (
     <div className="sticky bottom-0 left-0 z-10 mt-2.5 flex justify-end w-full items-center  ">
       <div>
