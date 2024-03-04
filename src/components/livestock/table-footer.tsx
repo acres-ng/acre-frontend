@@ -1,11 +1,12 @@
 // import { Button } from "rizzui";
 import { Title, Text } from "rizzui";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { Button } from "@/components/ui/button";
+import { Button } from "rizzui";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogClose,
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
@@ -24,19 +25,18 @@ import { getActiveFarm } from "@/services/farmService";
 
 interface TableFooterProps {
   checkedItems: string[];
-  onDeleteItem: (id: string) => void;
-  handleDelete: (uuid: string[]) => void;
+  onDeleteItem: (ids:string[]) => void;
 }
 
 export default function TableFooter({
   checkedItems,
   onDeleteItem,
-  handleDelete,
   children,
 }: React.PropsWithChildren<TableFooterProps>) {
   const onDelete = async () => {
+    console.log("Happending here>>>", checkedItems);
     try {
-      handleDelete(checkedItems);
+      onDeleteItem(checkedItems);
     } catch (error) {
       console.error("Error deleting livestock:", error);
     }
@@ -70,13 +70,13 @@ export default function TableFooter({
               </DialogDescription>
             </CardContent>
             <CardFooter className="flex justify-between gap-4">
-              <Button className="bg-white text-black shadow-md w-full">
-                Cancel
-              </Button>
-              <Button
-                className="bg-red-500 w-full"
-                onClick={onDelete}
-              >
+              <DialogClose asChild>
+                <Button className="bg-white text-black shadow-md w-full">
+                  Cancel
+                </Button>
+              </DialogClose>
+
+              <Button className="bg-red-500 text-white w-full" onClick={onDelete}>
                 Delete
               </Button>
             </CardFooter>
