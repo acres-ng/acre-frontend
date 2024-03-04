@@ -25,6 +25,8 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogClose,
+  DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
 import SetFeedRation from "./SetRationForm";
@@ -37,7 +39,7 @@ type Columns = {
   sortConfig?: any;
   handleSelectAll: any;
   checkedItems: string[];
-  onDeleteItem: (id: string) => void;
+  onDeleteItem: (id: string | string[]) => void;
   onHeaderCellClick: (value: string) => void;
   onChecked?: (id: string) => void;
   handleRationCreated: () => void;
@@ -67,12 +69,12 @@ export const getColumns = ({
     dataIndex: "checked",
     key: "checked",
     width: 30,
-    render: (_: any, row: User) => (
+    render: (_: any, row: any) => (
       <div className="inline-flex ps-2">
         <Checkbox
           className="cursor-pointer"
-          checked={checkedItems.includes(row.id)}
-          {...(onChecked && { onChange: () => onChecked(row.id) })}
+          checked={checkedItems.includes(row.uuid)}
+          {...(onChecked && { onChange: () => onChecked(row.uuid) })}
           // label={`${row.id}`}
         />
       </div>
@@ -317,15 +319,18 @@ export const getColumns = ({
                     </DialogDescription>
                   </CardContent>
                   <CardFooter className="flex justify-between gap-4">
-                    <Btn className="bg-white text-black shadow-md w-full">
-                      Cancel
-                    </Btn>
-                    <Btn
-                      className="bg-red-500 w-full"
-                      onClick={() => onDeleteItem(row.id)}
+                    <DialogClose asChild>
+                      <Button className="bg-white text-black shadow-md w-full">
+                        Cancel
+                      </Button>
+                    </DialogClose>
+
+                    <Button
+                      className="bg-red-500 w-full text-white"
+                      onClick={() => onDeleteItem([row.uuid])}
                     >
                       Delete
-                    </Btn>
+                    </Button>
                   </CardFooter>
                 </DialogContent>
               </Dialog>
