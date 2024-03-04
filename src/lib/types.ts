@@ -46,3 +46,14 @@ export type Farm = {
     breeds: AnimalBreed[];
     maturity?: AnimalMaturity[];
   };
+  export type ApiResponse = {
+    data: any,
+    status?: string;
+    message?: string;
+  };
+
+  export type Feeds = {
+    id: string;
+    name: string;
+    description?: string;
+  }
