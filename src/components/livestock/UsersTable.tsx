@@ -29,24 +29,6 @@ export default function UsersTable({ data = [], handleRationCreated }: IProp) {
       handleSort(value);
     },
   });
-
-  const onDeleteItem = useCallback(async (uuid: string) => {
-    try {
-      const userActiveFarmId = getActiveFarm().id;
-      const response = await HttpService.delete(
-        `${API_URL}farms/${userActiveFarmId}/livestock/${uuid}`,
-        HttpService.getDefaultOptions()
-      );
-  
-      if (response.data) {
-        console.log("Livestock deleted successfully");
-      } else {
-        console.error("Failed to delete livestock");
-      }
-    } catch (error) {
-      console.error("Error deleting livestock:", error);
-    }
-  }, []);
   
   const {
     isLoading,
@@ -80,6 +62,7 @@ export default function UsersTable({ data = [], handleRationCreated }: IProp) {
           data: uuid,
         }
       );
+
 
       if (response.data) {
         handleDelete(uuid, "uuid");
