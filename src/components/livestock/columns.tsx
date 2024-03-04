@@ -1,7 +1,4 @@
-import { STATUSES, type User } from "./users-data";
-import { useState, useEffect } from "react";
 // import { routes } from '@/config/routes';
-import { Text } from "rizzui";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
 import { BiBowlRice } from "react-icons/bi";
@@ -9,8 +6,6 @@ import { LuCircleDollarSign } from "react-icons/lu";
 
 import { LiaBabySolid } from "react-icons/lia";
 import { TbGrave2 } from "react-icons/tb";
-import { Badge } from "rizzui";
-import { Tooltip } from "rizzui";
 import { HeaderCell } from "./table";
 import { Checkbox } from "rizzui";
 import { ActionIcon } from "rizzui";
@@ -18,27 +13,13 @@ import { Popover } from "rizzui";
 import { Button } from "rizzui";
 import * as React from "react";
 import { Button as Btn } from "@/components/ui/button";
-import { getFarmFeed } from "@/services/livestockService";
 import {
-  Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { BiSolidBowlRice } from "react-icons/bi";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import {
   Dialog,
@@ -49,6 +30,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import SetFeedRation from "./SetRationForm";
+import { User } from "./users-data";
 
 type Columns = {
   data: any[];

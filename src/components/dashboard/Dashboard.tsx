@@ -86,7 +86,6 @@ const Dashboard = () => {
         {/* main content */}
         <div className="flex flex-col items-center justify-between w-full space-y-10 mx-auto">
           <div className="w-full">
-            <p className="font-light text-gray-500 text-lg">Welcome to</p>
             <p className="font-bold text-gray-700 text-lg tracking-tight">
               {farms?.farm_name}
             </p>
