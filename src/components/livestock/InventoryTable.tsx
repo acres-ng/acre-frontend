@@ -111,7 +111,7 @@ export default function InventoryTable({ data = [] }: { data: any[] }) {
         tableFooter={
           <TableFooter
             checkedItems={selectedRowKeys}
-            handleDelete={(ids: string[]) => {
+            onDeleteItem={(ids: string[]) => {
               setSelectedRowKeys([]);
               handleDelete(ids);
             }}

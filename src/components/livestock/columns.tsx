@@ -25,6 +25,8 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogClose,
+  DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
 import SetFeedRation from "./SetRationForm";
@@ -35,10 +37,10 @@ type Columns = {
   sortConfig?: any;
   handleSelectAll: any;
   checkedItems: string[];
-  onDeleteItem: (id: string) => void;
+  onDeleteItem: (id: string | string[]) => void;
   onHeaderCellClick: (value: string) => void;
   onChecked?: (id: string) => void;
-  handleRationCreated : () => void;
+  handleRationCreated: () => void;
 };
 
 export const getColumns = ({
@@ -65,12 +67,12 @@ export const getColumns = ({
     dataIndex: "checked",
     key: "checked",
     width: 30,
-    render: (_: any, row: User) => (
+    render: (_: any, row: any) => (
       <div className="inline-flex ps-2">
         <Checkbox
           className="cursor-pointer"
-          checked={checkedItems.includes(row.id)}
-          {...(onChecked && { onChange: () => onChecked(row.id) })}
+          checked={checkedItems.includes(row.uuid)}
+          {...(onChecked && { onChange: () => onChecked(row.uuid) })}
           // label={`${row.id}`}
         />
       </div>
@@ -248,8 +250,10 @@ export const getColumns = ({
                   </CardHeader>
 
                   <CardContent>
-                    
-                    <SetFeedRation row={row} onRationCreated={handleRationCreated} />
+                    <SetFeedRation
+                      row={row}
+                      onRationCreated={handleRationCreated}
+                    />
                   </CardContent>
                 </DialogContent>
               </Dialog>
@@ -281,7 +285,6 @@ export const getColumns = ({
                   <Button
                     variant="text"
                     className="flex w-full items-center justify-start px-2 py-2 text-red-500 hover:bg-gray-100 focus:outline-none dark:hover:bg-gray-50"
-                    // onClick={() => onDeleteItem(user.id)}
                   >
                     <FaRegTrashAlt className="mr-2 h-5 w-5 text-red-500" />
                     Delete Livestock
@@ -305,10 +308,18 @@ export const getColumns = ({
                     </DialogDescription>
                   </CardContent>
                   <CardFooter className="flex justify-between gap-4">
-                    <Btn className="bg-white text-black shadow-md w-full">
-                      Cancel
-                    </Btn>
-                    <Btn className="bg-red-500 w-full">Delete</Btn>
+                    <DialogClose asChild>
+                      <Button className="bg-white text-black shadow-md w-full">
+                        Cancel
+                      </Button>
+                    </DialogClose>
+
+                    <Button
+                      className="bg-red-500 w-full text-white"
+                      onClick={() => onDeleteItem([row.uuid])}
+                    >
+                      Delete
+                    </Button>
                   </CardFooter>
                 </DialogContent>
               </Dialog>
