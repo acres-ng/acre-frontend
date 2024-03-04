@@ -41,124 +41,109 @@ import { API_URL } from "@/config";
 import { getActiveFarm } from "@/services/farmService";
 import { toast } from "sonner";
 import * as z from "zod";
-
-type FeedItem = {
-  value: string;
-  label: string;
-};
+import { ApiResponse, Feeds } from "@/lib/types";
 
 interface SetFeedRationProps {
   row: any;
-  onRationCreated: () => void; // Accepts one argument of type any
+  onRationCreated: () => void;
 }
 
-interface FormData {
-  feed_id: string;
-  dailyRation: number;
-  editedName: string;
-}
-
-// const setRationSchema = z.object({
-//   feedName: z.string(),
-//   dailyRation: z.number(),
-// });
 const setRationSchema = z.object({
-  feed_id: z.string().nonempty(), // Required field
-  dailyRation: z.number(),
-  editedName: z.string().nonempty(), // Required field
+  name: z.string().min(1, { message: "The Name field is required" }),
+  feed_id: z.string().min(1, { message: "The feed field is required" }),
+  daily_ration_weight: z
+    .number()
+    .min(0.1, { message: "The ration weight must be greater than 0" }),
+  animal_type: z.number().min(1),
+  animal_maturity: z.number().min(1),
+  weight_measuring_unit: z.string().min(1),
 });
 
 const SetFeedRation: React.FC<SetFeedRationProps> = ({
   row,
   onRationCreated,
 }) => {
-  const [feedNames, setFeedNames] = useState<string[]>([]);
+  const rationAutoName = `${row.animal_type}-${row.maturity_public_name}`;
+  const [feedData, setFeedData] = useState<Feeds[]>([]);
   const [selectedFeed, setSelectedFeed] = useState<string | null>(null);
   const [editMode, setEditMode] = useState<boolean>(false);
-  const [editedName, setEditedName] = useState<string>("");
-  const [selectedMeasuringUnit, setSelectedMeasuringUnit] =
-    useState<string>("");
+  const [rationName, setRationName] = useState<string>(rationAutoName);
+  const [formError, setFormError] = useState<string>("");
+  const [selectedUnit, setSelectedUnit] = useState<string>("");
 
-  const handleMeasuringUnitSelect = (value: string) => {
-    setSelectedMeasuringUnit(value);
+  const fetchFeedData = async () => {
+    try {
+      const data: any[] = await getFarmFeed();
+      const feeds: Feeds[] = data.map((feed) => {
+        return {
+          id: feed.id,
+          name: feed.name,
+        };
+      });
+      setFeedData(feeds);
+    } catch (error) {
+      console.error("Error fetching feed data:", error);
+    }
   };
 
-  const rationForm = useForm<FormData>({
+  const rationForm = useForm<z.infer<typeof setRationSchema>>({
     resolver: zodResolver(setRationSchema),
     defaultValues: {
       feed_id: "",
-      dailyRation: 0,
+      name: rationAutoName,
+      daily_ration_weight: 1.0,
+      animal_type: row.animal_id,
+      animal_maturity: row.maturity_id,
+      weight_measuring_unit: selectedUnit,
     },
   });
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data: any[] = await getFarmFeed();
-        const names: string[] = data.map((feed) => feed.name);
-        setFeedNames(names);
-      } catch (error) {
-        console.error("Error fetching feed data:", error);
-      }
-    };
-
-    fetchData();
+    fetchFeedData();
+    rationForm.setValue("animal_maturity", parseInt(row.maturity_id));
+    rationForm.setValue("animal_type", parseInt(row.animal_id));
   }, []);
+
+  useEffect(() => {
+  }, [rationName, formError, selectedUnit]);
 
   const handleFeedSelection = (value: string) => {
     rationForm.setValue("feed_id", value);
-    setSelectedFeed(value);
-    setEditedName(value);
+    const feedItem = feedData.find((feed) => feed.id === value);
+    setSelectedFeed(feedItem!.name);
+    if (!editMode) {
+      const updatedRationName = feedItem!.name + "-" + rationAutoName;
+      setRationName(updatedRationName);
+      rationForm.setValue("name", updatedRationName);
+    }
   };
 
   const handleEditName = () => {
     setEditMode(true);
-
-    setEditedName(
-      selectedFeed
-        ? `${selectedFeed}-${row.animal_type}-${row.maturity_public_name}`
-        : row.animal_type
-    );
   };
 
   const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditedName(event.target.value);
+    setRationName(event.target.value);
+    rationForm.setValue("name", event.target.value);
   };
 
   const onSubmit: SubmitHandler<z.infer<typeof setRationSchema>> = async (
-    data,
-    uuid
+    postData
   ) => {
     try {
-      if (!data.dailyRation) {
-        toast.error("Daily Ration is required.");
-        return;
-      }
       const userActiveFarmId = getActiveFarm().id;
-      const measuringUnit = selectedMeasuringUnit;
-
-      const postData = {
-        name: editedName,
-        feed_id: data.feed_id,
-        animal_type: 1,
-        animal_maturity: 7,
-        daily_ration_weight: data.dailyRation,
-        weight_measuring_unit: measuringUnit,
-      };
-      const response = await HttpService.put(
-        `${API_URL}farms/${userActiveFarmId}/livestock/${uuid}`,
+      const { data } = await HttpService.post(
+        `${API_URL}farms/${userActiveFarmId}/rations`,
         postData,
         HttpService.getDefaultOptions()
       );
 
-      if (response.data) {
-        toast.success("Ration added successfully!");
+      if (data.data && data.status === "success") {
+        toast.success(data.message);
         onRationCreated();
       } else {
-        toast.error("Failed to add feed. Please try again.");
+        toast.error(data.message);
       }
-
-      return response.data;
     } catch (error) {
       console.error("Error:", error);
       toast.error("An error occurred. Please try again later.");
@@ -174,18 +159,11 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
             {editMode ? (
               <input
                 type="text"
-                value={editedName}
+                value={rationName}
                 onChange={handleNameChange}
               />
             ) : (
-              <>
-                {selectedFeed &&
-                  `${editedName || selectedFeed}-${row.animal_type} -${
-                    row.maturity_public_name
-                  }`}
-                {!selectedFeed &&
-                  `${row.animal_type}-${row.maturity_public_name}`}
-              </>
+              <>{rationName}</>
             )}
           </span>
 
@@ -200,7 +178,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
             <Input
               type="text"
               id="editedName"
-              value={editedName}
+              value={rationName}
               onChange={handleNameChange}
             />
           </div>
@@ -216,9 +194,9 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
                 <SelectValue placeholder="Select Feed" />
               </SelectTrigger>
               <SelectContent position="popper">
-                {feedNames.map((name, index) => (
-                  <SelectItem key={index} value={name}>
-                    {name}
+                {feedData.map((feed, index) => (
+                  <SelectItem key={index} value={feed.id}>
+                    {feed.name}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -229,26 +207,27 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
           </div>
 
           <div className="flex flex-col space-y-1.5 pt-2">
-            <Label htmlFor="dailyRation">Daily Ration</Label>
+            <Label htmlFor="daily_ration_weight">Daily Ration</Label>
             <InputGroup>
               <Input
                 placeholder="Enter Ration"
                 className="text-center"
-                id="dailyRation"
+                id="daily_ration_weight"
                 type="number"
-                {...rationForm.register("dailyRation", {
-                  setValueAs: (value: string) => parseInt(value) || 0,
+                {...rationForm.register("daily_ration_weight", {
+                  setValueAs: (value: string) => parseFloat(value) || 0,
                 })}
               />
-              {rationForm.formState.errors.dailyRation && (
-                <span>{rationForm.formState.errors.dailyRation.message}</span>
+              {rationForm.formState.errors.daily_ration_weight && (
+                <span>
+                  {rationForm.formState.errors.daily_ration_weight.message}
+                </span>
               )}
               <InputRightElement width={"6rem"}>
                 <MeasuringUnitSelect
                   onchange={(value: string) => {
-                    // Handle measuring unit selection
-                    handleMeasuringUnitSelect(value);
-                    rationForm.setValue("dailyRation", parseInt(value));
+                    setSelectedUnit(value);
+                    rationForm.setValue("weight_measuring_unit", value);
                   }}
                 />
               </InputRightElement>
@@ -256,7 +235,14 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
           </div>
         </div>
 
-        <div className="flex  mt-8 gap-[20px]">
+        {/* error pane */}
+        {formError !== "" && (
+          <div className="flex justify-center mt-3 items-center">
+            <span className="text-red-600 ">{formError}</span>
+          </div>
+        )}
+
+        <CardFooter className="flex justify-between mt-8 gap-9">
           <DialogClose asChild>
             <Btn className="w-full text-black border-[3px]border-gray-200">
               Cancel
@@ -267,12 +253,22 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
             className="w-full"
             onClick={(e) => {
               e.preventDefault();
-              onSubmit(rationForm.getValues(), row.uuid);
+              try {
+                setFormError("");
+                setRationSchema.parse(rationForm.getValues());
+                onSubmit(rationForm.getValues());
+              } catch (error) {
+                if (error instanceof z.ZodError) {
+                  console.error(error.errors);
+                  setFormError(error.errors[0].message);
+                }
+                return;
+              }
             }}
           >
             Save Ration
           </Button>
-        </div>
+        </CardFooter>
       </Form>
     </div>
   );

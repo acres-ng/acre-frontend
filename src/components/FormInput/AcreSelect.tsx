@@ -24,24 +24,26 @@ const MeasuringUnitSelect: React.FC<MeasuringUnitFilter> = ({
   system,
   onchange
 }) => {
-  const [measuringUnits, setMeasuringUnits] = useState([]);
-  const [defaultValue, setDefaultValue] = useState();
+  const [measuringUnits, setUnits] = useState<object[]>([]);
+  const [defaultValue, setDefaultValue] = useState<string>("kg");
   const [isLoading, setIsLoading] = useState(true);
 
+  const getUnits = async () => {
+    const result = await getMeasuringUnits(
+          type ?? defaultMeasuringUnitType,
+          system ?? defaultMeasuringUnitSystem);
+    setUnits(result);
+    setDefaultValue(result[0].symbol);
+    onchange(result[0].symbol);
+  };
+
+
   useEffect(() => {
-    getMeasuringUnits(
-      type ?? defaultMeasuringUnitType,
-      system ?? defaultMeasuringUnitSystem
-    ).then((data) => {
-      setMeasuringUnits(data);
-      setDefaultValue(data[0].symbol);
-      onchange(data[0].symbol);
-      setIsLoading(false);
-    });
+    getUnits().then(() => setIsLoading(false));
   }, []);
 
   const options = () => {
-    return measuringUnits.map((unit: any, index) => (
+    return measuringUnits?.map((unit: any, index) => (
       <SelectItem key={index} value={unit.symbol}>{unit.symbol}</SelectItem>
     ));
   };
