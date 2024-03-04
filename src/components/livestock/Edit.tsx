@@ -55,7 +55,8 @@ const livestockSchema = z.object({
       message: "Weight must be greater than zero.",
     }),
 
-  age: z.number().min(1).optional(),
+  // age: z.number().min(1).optional(),
+  age: z.number().min(1),
   combinedAgeInDays: z.number().int().optional(),
   ageUnit: z.string().min(1).optional(),
   status: z.string().min(1).nullable(),
@@ -73,14 +74,14 @@ const livestockSchema = z.object({
         "Please enter a valid date of stocking that is today or earlier.",
     }
   ),
-  quantity: z
-    .number()
-    .int()
-    .refine((value) => value > 0, {
-      message: "Quantity must be greater than 0.",
-    }),
+  // quantity: z
+  //   .number()
+  //   .int()
+  //   .refine((value) => value > 0, {
+  //     message: "Quantity must be greater than 0.",
+  //   }),
 
-
+  quantity: z.number()
 });
 
 type LiveStockHousing = { id: string; name: string; type?: string };
@@ -89,6 +90,7 @@ const Edit = () => {
   const location = useLocation();
   const { id } = useParams();
   const { uuid } = useParams();
+
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const animalsList: Animal[] = getAnimalsLocal()?.animals;
@@ -99,6 +101,8 @@ const Edit = () => {
     breeds: [],
   });
   const [ageUnit, setAgeUnit] = useState("days");
+
+  const [entryType, setEntryType] = useState<"single" | "flock" | "">("");
 
   useEffect(() => {
     getLivestockHousing().then((housing) => {
@@ -128,6 +132,7 @@ const Edit = () => {
       livestockForm.setValue("price", res?.price || 0);
       livestockForm.setValue("date_of_stocking", res?.stocking_date || 0);
       livestockForm.setValue("quantity", res?.quantity || 0);
+      setEntryType(res?.quantity === 1 ? "single" : "flock");
       livestockForm.setValue("sex", res?.sex || "");
       livestockForm.setValue("housing_id", res?.housing_id || "");
       livestockForm.setValue("animal_type", parseInt(res?.animal_id) || 0);
@@ -149,8 +154,6 @@ const Edit = () => {
       });
     });
   }, []);
-
-  console.log("Livestock Form>>", livestockForm.getValues());
 
   const breedOptions = animalTraits?.breeds.map((breed, index) => (
     <SelectItem key={index} value={breed.name}>
@@ -220,13 +223,7 @@ const Edit = () => {
     }
   };
 
-
   const AddQuantityField = () => {
-    const quantityValue = livestockForm.getValues().quantity;
-
-    // Check if the quantity is set to 1
-    const isQuantityOne = quantityValue === 1;
-
     return (
       <FormField
         control={livestockForm.control}
@@ -237,15 +234,11 @@ const Edit = () => {
             <FormControl>
               <Input
                 placeholder="Enter quantity"
+                type="number"
                 {...field}
-                disabled={isQuantityOne}
+                disabled={entryType === "single"}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const value =
-                    e.target.value.trim() !== ""
-                      ? parseInt(e.target.value)
-                      : "";
-
-                  field.onChange(value);
+                  field.onChange(e.target.value);
                 }}
               />
             </FormControl>
@@ -256,26 +249,6 @@ const Edit = () => {
     );
   };
 
-
-
-  
-
-
-
-
-
-
-
-  
-
-
-  
-
-
-
-  
-  
-  
 
   return (
     <div className="h-auto px-4 py-6 lg:px-8">
@@ -482,11 +455,16 @@ const Edit = () => {
                               placeholder="Enter age"
                               {...field}
                               onChange={(e) => {
-                                const inputAgeValue = e.target.value;
-                                livestockForm.setValue(
-                                  "age",
-                                  parseInt(inputAgeValue)
-                                );
+                                const inputAgeValue = e.target.value.trim();
+                                if (inputAgeValue === "") {
+                                  livestockForm.setValue("age", 0);
+                                } else {
+                                  const parsedValue = parseInt(inputAgeValue);
+                                  if (!isNaN(parsedValue)) {
+                                    livestockForm.setValue("age", parsedValue);
+                                  } else {
+                                  }
+                                }
                               }}
                             />
                             <InputRightElement width={"8rem"}>
@@ -529,9 +507,9 @@ const Edit = () => {
                           placeholder="Enter price"
                           {...field}
                           onChange={(e) => {
-                            const inputPriceValue = e.target.value;
+                            const inputPriceValue = e.target.value.trim();
                             if (inputPriceValue === "") {
-                              livestockForm.setValue("price", ""); 
+                              livestockForm.setValue("price", 0);
                             } else if (!isNaN(parseFloat(inputPriceValue))) {
                               livestockForm.setValue(
                                 "price",
