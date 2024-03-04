@@ -31,9 +31,8 @@ import {
 } from "../ui/dialog";
 import SetFeedRation from "./SetRationForm";
 import RecordSale from "./RecordSale";
-import { useNavigate } from "react-router-dom";
-=======
 import { User } from "./users-data";
+
 
 type Columns = {
   data: any[];
@@ -436,20 +435,36 @@ export const getColumns = ({
                 </DialogContent>
               </Dialog>
 
-                <Button
-                  variant="text"
-                  className="flex w-full items-center justify-start px-2 py-2 hover:bg-gray-100 focus:outline-none dark:hover:bg-gray-50"
-                >
-                  <LiaBabySolid className="mr-2 h-5 w-5 text-gray-500" />
-                  Record Birth
-                </Button>
-                <Button
-                  variant="text"
-                  className="flex w-full items-center justify-start px-2 py-2 hover:bg-gray-100 focus:outline-none dark:hover:bg-gray-50"
-                >
-                  <TbGrave2 className="mr-2 h-5 w-5 text-gray-500" />
-                  Record Death
-                </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="text"
+                    className="flex w-full items-center justify-start px-2 py-2 hover:bg-gray-100 focus:outline-none dark:hover:bg-gray-50"
+                  >
+                    <BiBowlRice className="mr-2 h-5 w-5 text-gray-500" />
+                    Record Sale
+                  </Button>
+                </DialogTrigger>
+
+                <DialogContent className=" rounded-2xl">
+                  <RecordSale row={row} /> 
+                </DialogContent>
+              </Dialog>
+
+              <Button
+                variant="text"
+                className="flex w-full items-center justify-start px-2 py-2 hover:bg-gray-100 focus:outline-none dark:hover:bg-gray-50"
+              >
+                <LiaBabySolid className="mr-2 h-5 w-5 text-gray-500" />
+                Record Birth
+              </Button>
+              <Button
+                variant="text"
+                className="flex w-full items-center justify-start px-2 py-2 hover:bg-gray-100 focus:outline-none dark:hover:bg-gray-50"
+              >
+                <TbGrave2 className="mr-2 h-5 w-5 text-gray-500" />
+                Record Death
+              </Button>
 
               <Dialog>
                 <DialogTrigger asChild>
