@@ -75,15 +75,15 @@ const RecordSale: React.FC<RecordSaleProps> = ({ row }) => {
         const data = await getTransactionUtils();
         setTransactionUtils(data);
         setIsLoading(false);
-
-        
-        setValue(
-          "category_id",
-          data?.data?.transaction_categories[0].children.find(
-            (category: { name: string }) => category.name === "sale"
-          )?.id || 0
-        );
-        setValue("transactionable_type", "Livestock");
+        setValue("category_id", data?.transaction_categories?.find((category: { name: string }) => category.name === "sale")?.id || 0);
+        // setValue(
+        //   "category_id",
+        //   data?.transaction_categories?.find(
+        //     (category: { name: string }) => category.name === "sale"
+        //   )?.id || 0
+        // );
+        // setValue("transactionable_type", "Livestock");
+        setValue("transactionable_type", "livestock");
         setValue("transactionable_id", row.uuid);
       } catch (error) {
         console.error("Error fetching transaction utilities:", error);
