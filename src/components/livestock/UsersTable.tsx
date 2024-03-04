@@ -7,6 +7,7 @@ import ControlledTable from "./ControlledTable";
 import { getColumns } from "./columns";
 import HttpService from "@/services/HttpService";
 import { API_URL } from "@/config";
+import { toast } from "sonner";
 import { getActiveFarm } from "@/services/farmService";
 
 const TableFooter = lazy(() => import("./table-footer"));
@@ -51,30 +52,29 @@ export default function UsersTable({ data = [], handleRationCreated }: IProp) {
     handleReset,
   } = useTable(data, pageSize, filterState);
 
+
   const onDeleteItem = useCallback(async (uuid: string | string[]) => {
     console.log("Deleting livestock", uuid);
     try {
-      const userActiveFarmId = getActiveFarm().id;
-      const response = await HttpService.delete(
-        `${API_URL}farms/${userActiveFarmId}/livestock`,
-        {
-          ...HttpService.getDefaultOptions(),
-          data: uuid,
+        const userActiveFarmId = getActiveFarm().id;
+        const response = await HttpService.delete(
+            `${API_URL}farms/${userActiveFarmId}/livestock`,
+            {
+                ...HttpService.getDefaultOptions(),
+                data: uuid,
+            }
+        );
+
+        if (response.data) {
+            handleDelete(uuid, "uuid");
+            setSelectedRowKeys([]);
+            toast.success("Livestock deleted successfully!"); 
+        } else {
         }
-      );
-
-
-      if (response.data) {
-        handleDelete(uuid, "uuid");
-        setSelectedRowKeys([]);
-        console.log("Livestock deleted successfully");
-      } else {
-        console.error("Failed to delete livestock");
-      }
     } catch (error) {
-      console.error("Error deleting livestock:", error);
     }
-  }, []);
+}, []);
+
 
   const columns = useMemo(
     () =>

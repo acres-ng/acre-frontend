@@ -34,11 +34,9 @@ export default function TableFooter({
   children,
 }: React.PropsWithChildren<TableFooterProps>) {
   const onDelete = async () => {
-    console.log("Happending here>>>", checkedItems);
     try {
       onDeleteItem(checkedItems);
     } catch (error) {
-      console.error("Error deleting livestock:", error);
     }
   };
   if (checkedItems.length === 0) {
@@ -51,13 +49,13 @@ export default function TableFooter({
       <div>
         <Dialog>
           <DialogTrigger asChild>
-            <RiDeleteBin6Line className="text-red-500" />
+            <RiDeleteBin6Line className="text-red-500 w-6 h-8" />
           </DialogTrigger>
           <DialogContent className=" rounded-2xl">
             <CardHeader>
               <CardTitle className="flex">
-                <span className="mr-2 bg-red-200  border-b rounded-full p-2">
-                  <FaRegTrashAlt className="text-red-500" />
+                <span className="mr-2 bg-red-200  border-b rounded-full p-2 w-6 h-8">
+                  <FaRegTrashAlt className="text-red-500 " />
                 </span>
                 <span className="mt-2"> Delete Livestock</span>
               </CardTitle>
@@ -65,7 +63,7 @@ export default function TableFooter({
             <CardContent>
               <Text as="strong">{checkedItems.length}</Text> selected{" "}
               <DialogDescription className="font-medium text-black">
-                Are you sure you want to permanently delete Livestock Name/ID
+                Are you sure you want to permanently delete {checkedItems.length} livestock
                 from your farm?
               </DialogDescription>
             </CardContent>
