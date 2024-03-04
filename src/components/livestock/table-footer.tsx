@@ -25,7 +25,7 @@ import { getActiveFarm } from "@/services/farmService";
 
 interface TableFooterProps {
   checkedItems: string[];
-  onDeleteItem: (id: string | string[]) => void;
+  onDeleteItem: (ids:string[]) => void;
 }
 
 export default function TableFooter({
