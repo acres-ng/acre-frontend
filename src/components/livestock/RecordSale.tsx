@@ -76,8 +76,10 @@ const RecordSale: React.FC<RecordSaleProps> = ({ row }) => {
         setTransactionUtils(data);
         setIsLoading(false);
         setValue("category_id", data?.transaction_categories?.find((category: { name: string }) => category.name === "sale")?.id || 0);
+
       
         setValue("transactionable_type", data?.transactionable_types?.livestock || "");
+
         setValue("transactionable_id", row.uuid);
       } catch (error) {
         console.error("Error fetching transaction utilities:", error);
@@ -86,13 +88,6 @@ const RecordSale: React.FC<RecordSaleProps> = ({ row }) => {
     };
     fetchData();
   }, []);
-
-  
- 
-
-
-  
-  
   
   
   const onSubmit: SubmitHandler<z.infer<typeof transactionSchema>> = async (
@@ -102,7 +97,7 @@ const RecordSale: React.FC<RecordSaleProps> = ({ row }) => {
     try {
       const userActiveFarmId = getActiveFarm().id;
       const response = await HttpService.post(
-        `${API_URL}farms/${userActiveFarmId}/transactions/`,
+        `${API_URL}farms/${userActiveFarmId}/transactions`,
         data,
         HttpService.getDefaultOptions()
       );
