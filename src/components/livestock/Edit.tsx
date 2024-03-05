@@ -74,6 +74,7 @@ const livestockSchema = z.object({
         "Please enter a valid date of stocking that is today or earlier.",
     }
   ),
+
   quantity: z
     .number()
     .int()
@@ -111,7 +112,8 @@ const Edit = () => {
   }, []);
 
   const livestockForm = useForm<z.infer<typeof livestockSchema>>({
-    resolver: zodResolver(livestockSchema),
+    resolver: entryType === "single" ? undefined : zodResolver(livestockSchema),
+    // resolver: zodResolver(livestockSchema),
     defaultValues: {
       weight: 0,
       age: 0,
@@ -249,7 +251,6 @@ const Edit = () => {
       />
     );
   };
-
 
   return (
     <div className="h-auto px-4 py-6 lg:px-8">
