@@ -1,16 +1,16 @@
 import { useCallback, useMemo, useState } from "react";
 import React, { lazy } from "react";
-import { useTable } from "../hooks/use-table";
-import { useColumn } from "../hooks/use-column";
+import { useTable } from "../../hooks/use-table";
+import { useColumn } from "../../hooks/use-column";
 import { Button } from "rizzui";
-import ControlledTable from "./ControlledTable";
+import ControlledTable from "../ControlledTable";
 import { getColumns } from "./columns";
 import HttpService from "@/services/HttpService";
 import { API_URL } from "@/config";
 import { toast } from "sonner";
 import { getActiveFarm } from "@/services/farmService";
 
-const TableFooter = lazy(() => import("./table-footer"));
+const TableFooter = lazy(() => import("../table-footer"));
 
 const filterState = {
   role: "",

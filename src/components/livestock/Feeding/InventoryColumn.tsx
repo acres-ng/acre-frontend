@@ -1,9 +1,9 @@
-import { STATUSES, type User } from "./users-data";
+import { STATUSES, type User } from "../users-data";
 // import { routes } from '@/config/routes';
 import { Text } from "rizzui";
 import { Badge } from "rizzui";
 import { Tooltip } from "rizzui";
-import { HeaderCell } from "./table";
+import { HeaderCell } from "../table";
 import { Checkbox } from "rizzui";
 import { ActionIcon } from "rizzui";
 import { Popover } from 'rizzui';
@@ -18,7 +18,7 @@ import EyeIcon from "@/components/icons/eye";
 import PencilIcon from "@/components/icons/pencil";
 import AvatarCard from "@/components/ui/avatar-card";
 import DateCell from "@/components/ui/date-cell";
-import DeletePopover from "./delete-popover";
+import DeletePopover from "../delete-popover";
 import { CiSquareMinus } from "react-icons/ci";
 import { CiSquarePlus } from "react-icons/ci";
 

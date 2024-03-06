@@ -1,6 +1,6 @@
 
 
-import { STATUSES, type User } from "./users-data";
+import { STATUSES, type User } from "../users-data";
 import { Text } from "rizzui";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
@@ -11,7 +11,7 @@ import { LiaBabySolid } from "react-icons/lia";
 import { TbGrave2 } from "react-icons/tb";
 import { Badge } from "rizzui";
 import { Tooltip } from "rizzui";
-import { HeaderCell } from "./table";
+import { HeaderCell } from "../table";
 import { Checkbox } from "rizzui";
 import { ActionIcon } from "rizzui";
 import { Popover } from "rizzui";
@@ -35,8 +35,8 @@ import {
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import SetFeedRation from "./SetRationForm";
+} from "../../ui/dialog";
+import SetFeedRation from "../SetRationForm";
 import RecordSale from "./RecordSale";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";

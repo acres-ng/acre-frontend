@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import InventoryTable from "../InventoryTable";
+import InventoryTable from "./InventoryTable";
 import { getFarmFeed } from "@/services/livestockService";
 import HttpService from "@/services/HttpService";
 import { API_URL } from "@/config";

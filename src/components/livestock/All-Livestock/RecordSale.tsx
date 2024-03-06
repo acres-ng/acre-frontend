@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import {
   DialogClose,
-} from "../ui/dialog";
+} from "../../ui/dialog";
 import {
   CardContent,
   CardHeader,

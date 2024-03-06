@@ -2,15 +2,15 @@
 
 import { useCallback, useMemo, useState } from "react";
 import React, { lazy } from "react";
-import { useTable } from "../hooks/use-table";
-import { useColumn } from "../hooks/use-column";
+import { useTable } from "../../hooks/use-table";
+import { useColumn } from "../../hooks/use-column";
 import { Button } from "rizzui";
-import ControlledTable from "./ControlledTable";
+import ControlledTable from "../ControlledTable";
 import { getInventoryColumns } from "./InventoryColumn";
 
 
-const FilterElement = lazy(() => import("./filter-element"));
-const TableFooter = lazy(() => import("./table-footer"));
+const FilterElement = lazy(() => import("../filter-element"));
+const TableFooter = lazy(() => import("../table-footer"));
 
 const filterState = {
   role: "",

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import UsersTable from "../UsersTable";
+import UsersTable from "../All-Livestock/UsersTable";
 import { usersData } from "../users-data";
 import InventoryList from "./InventoryList";
-import RecipeBuilder from "../RecipeBuilder";
-import Rations from "../Rations";
+import RecipeBuilder from "./RecipeBuilder";
+import Rations from "./Rations";
 
 const Menu = [
   {
