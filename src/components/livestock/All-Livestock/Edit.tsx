@@ -43,7 +43,40 @@ interface AddQuantityFieldProps {
   };
 }
 
-const livestockSchema = z.object({
+const singleEntrySchema = z.object({
+  animal_type: z.number(),
+  breed: z.number(),
+  sex: z.string().min(1),
+  housing_id: z.string().min(1),
+  weight: z
+    .number()
+    .min(0.1)
+    .refine((value) => value !== 0, {
+      message: "Weight must be greater than zero.",
+    }),
+
+  age: z.number().min(1),
+  combinedAgeInDays: z.number().int().optional(),
+  ageUnit: z.string().min(1).optional(),
+  status: z.string().min(1).nullable(),
+  measuring_unit: z.string().min(1),
+  price: z.number(),
+  date_of_stocking: z.string().refine(
+    (value) => {
+      const currentDate = new Date();
+      const inputDate = new Date(value);
+      // Check if inputDate is not in the future
+      return !isNaN(inputDate.getTime()) && inputDate <= currentDate;
+    },
+    {
+      message:
+        "Please enter a valid date of stocking that is today or earlier.",
+    }
+  ),
+
+  quantity: z.number(),
+});
+const flockEntrySchema = z.object({
   animal_type: z.number(),
   breed: z.number(),
   sex: z.string().min(1),
@@ -104,6 +137,10 @@ const Edit = () => {
   const [ageUnit, setAgeUnit] = useState("days");
 
   const [entryType, setEntryType] = useState<"single" | "flock" | "">("");
+  const resolver =
+    entryType === "single"
+      ? zodResolver(singleEntrySchema)
+      : zodResolver(flockEntrySchema);
 
   useEffect(() => {
     getLivestockHousing().then((housing) => {
@@ -111,9 +148,8 @@ const Edit = () => {
     });
   }, []);
 
-  const livestockForm = useForm<z.infer<typeof livestockSchema>>({
-    resolver: entryType === "single" ? undefined : zodResolver(livestockSchema),
-    // resolver: zodResolver(livestockSchema),
+  const livestockForm = useForm<z.infer<typeof singleEntrySchema>>({
+    resolver: resolver,
     defaultValues: {
       weight: 0,
       age: 0,
@@ -127,7 +163,6 @@ const Edit = () => {
 
   useEffect(() => {
     getOneFarmLivestock(id!).then((res) => {
-      console.log("Res>>", res);
       livestockForm.setValue("weight", res?.weight || 0);
       livestockForm.setValue("age", res?.age || 0);
       livestockForm.setValue("measuring_unit", res?.measuring_unit || "kg");
@@ -190,23 +225,22 @@ const Edit = () => {
     }
   };
 
-  const onSubmit: SubmitHandler<z.infer<typeof livestockSchema>> = async (
-    data
-  ) => {
+  const onSubmit: SubmitHandler<
+    z.infer<typeof singleEntrySchema> | z.infer<typeof flockEntrySchema>
+  > = async (data) => {
     try {
       const combinedAgeInDays = convertToDays(data.age, data.ageUnit);
 
       const postData = {
         ...data,
-        // date_of_stocking: data.date_of_stocking,
+
         age: combinedAgeInDays.toString(),
       };
 
       const userActiveFarmId = getActiveFarm().id;
       const postDataToSend =
-        livestockForm.getValues().quantity === 1
-          ? [postData] // Enclose in an array for single entries
-          : postData;
+        livestockForm.getValues().quantity === 1 ? [postData] : postData;
+
       const response = await HttpService.put(
         `${API_URL}farms/${userActiveFarmId}/livestock/${id}`,
         postDataToSend,
