@@ -9,7 +9,7 @@ import ControlledTable from "../ControlledTable";
 import { getInventoryColumns } from "./InventoryColumn";
 
 
-const FilterElement = lazy(() => import("../filter-element"));
+
 const TableFooter = lazy(() => import("../table-footer"));
 
 const filterState = {
@@ -33,7 +33,6 @@ export default function InventoryTable({ data = [] }: { data: any[] }) {
 
   const {
     isLoading,
-    isFiltered,
     tableData,
     currentPage,
     totalItems,

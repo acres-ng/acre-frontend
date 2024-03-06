@@ -14,13 +14,6 @@ import {
   PiShareFat,
   PiTrashSimple,
 } from 'react-icons/pi';
-import EyeIcon from "@/components/icons/eye";
-import PencilIcon from "@/components/icons/pencil";
-import AvatarCard from "@/components/ui/avatar-card";
-import DateCell from "@/components/ui/date-cell";
-import DeletePopover from "../delete-popover";
-import { CiSquareMinus } from "react-icons/ci";
-import { CiSquarePlus } from "react-icons/ci";
 
 function getStatusBadge(status: User["status"]) {
   switch (status) {

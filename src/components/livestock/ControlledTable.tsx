@@ -3,17 +3,17 @@ import isEmpty from "lodash/isEmpty";
 import Table, { type TableProps } from "./table";
 import { Title } from "rizzui";
 import Spinner from "@/components/ui/spinner";
-import type { TableFilterProps } from "./table-filter";
+
 import type { TablePaginationProps } from "./table-pagination";
 import { cn } from "@/lib/utils";
-const TableFilter = lazy(() => import("./table-filter"));
+
 const TablePagination = lazy(() => import("./table-pagination"));
 
 type ControlledTableProps = {
   isLoading?: boolean;
   showLoadingText?: boolean;
   filterElement?: React.ReactElement;
-  filterOptions?: TableFilterProps;
+
   paginatorOptions?: TablePaginationProps;
   tableFooter?: React.ReactNode;
   className?: string;
@@ -22,8 +22,8 @@ type ControlledTableProps = {
 
 export default function ControlledTable({
   // isLoading,
-  filterElement,
-  filterOptions,
+  // filterElement,
+
   paginatorOptions,
   tableFooter,
   showLoadingText,
@@ -46,10 +46,6 @@ export default function ControlledTable({
 
   return (
     <>
-      {!isEmpty(filterOptions) && (
-        <TableFilter {...filterOptions}>{filterElement}</TableFilter>
-      )}
-
       <div className="relative">
         <Table
           scroll={{ x: 1300 }}

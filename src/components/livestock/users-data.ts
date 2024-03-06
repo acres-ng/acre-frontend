@@ -1,6 +1,6 @@
 // import { ROLES } from "./constants";
-import { avatarIds } from "./get-avatar";
-import { getRandomArrayElement } from "./get-random-array-element";
+// import { avatarIds } from "./get-avatar";
+// import { getRandomArrayElement } from "./get-random-array-element";
 
 export type User = {
   id: string;

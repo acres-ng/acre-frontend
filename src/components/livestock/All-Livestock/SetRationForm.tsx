@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import {
   InputGroup,
   InputRightElement,
@@ -30,12 +30,12 @@ import {
   DialogTitle,
   DialogClose,
   DialogTrigger,
-} from "../ui/dialog";
+} from "../../ui/dialog";
 import { Label } from "@/components/ui/label";
 import { getFarmFeed } from "@/services/livestockService";
 import { Form, useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MeasuringUnitSelect } from "../FormInput/AcreSelect";
+import { MeasuringUnitSelect } from "../../FormInput/AcreSelect";
 import HttpService from "@/services/HttpService";
 import { API_URL } from "@/config";
 import { getActiveFarm } from "@/services/farmService";

@@ -12,7 +12,7 @@ import Layout from "../../layout/Layout";
 import Livestock from "../livestock/All-Livestock/Livestock";
 import Add from "../livestock/All-Livestock/Add";
 import Feeding from "../livestock/Feeding/Feeding";
-import Health from "../livestock/Health";
+import Health from "../livestock/Health/Health";
 import Housing from "../livestock/Housing/HousingList";
 import Layyout from "@/layout/sidebar/layyout";
 import InventoryList from "../livestock/Feeding/InventoryList";
