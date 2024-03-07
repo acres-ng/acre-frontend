@@ -111,66 +111,10 @@ export const getInventoryColumns = ({
     width: 150,
     render: (animal_type: string) => animal_type,
   },
-
   {
     title: (
       <HeaderCell
-        title="Unit Weight"
-        sortable
-        className="text-[#000000] font-medium"
-        ascending={
-          sortConfig?.direction === "asc" && sortConfig?.key === "unit_weight"
-        }
-      />
-    ),
-    onHeaderCell: () => onHeaderCellClick("unit_weight"),
-    dataIndex: "unit_weight",
-    key: "unit_weight",
-    width: 150,
-    // render: (value: Date) => <DateCell date={value} />,
-    // render: (value: string) => price(value),
-    render: (unit_weight: number) => unit_weight,
-  },
-
-  {
-    title: (
-      <HeaderCell
-        title="Price Per Unit"
-        sortable
-        className="text-[#000000] font-medium"
-        ascending={
-          sortConfig?.direction === "asc" && sortConfig?.key === "breed"
-        }
-      />
-    ),
-    onHeaderCell: () => onHeaderCellClick("breed"),
-    dataIndex: "breed",
-    key: "breed",
-    width: 150,
-    render: (breed: string) => breed,
-  },
-  {
-    title: (
-      <HeaderCell
-        title="Feed Stock"
-        sortable
-        className="text-[#000000] font-medium"
-        ascending={
-          sortConfig?.direction === "asc" &&
-          sortConfig?.key === "maturity_public_name"
-        }
-      />
-    ),
-    onHeaderCell: () => onHeaderCellClick("maturity_public_name"),
-    dataIndex: "maturity_public_name",
-    key: "maturity_public_name",
-    width: 150,
-    render: (name: string) => name,
-  },
-  {
-    title: (
-      <HeaderCell
-        title="Total Weight"
+        title="Weight in Stock"
         sortable
         className="text-[#000000] font-medium"
         ascending={
@@ -184,10 +128,30 @@ export const getInventoryColumns = ({
     width: 150,
     render: (stocking_date: string) => stocking_date,
   },
+
   {
     title: (
       <HeaderCell
-        title="Total Price"
+        title="Current Price (per kg)"
+        sortable
+        className="text-[#000000] font-medium"
+        ascending={
+          sortConfig?.direction === "asc" && sortConfig?.key === "breed"
+        }
+      />
+    ),
+    onHeaderCell: () => onHeaderCellClick("breed"),
+    dataIndex: "breed",
+    key: "breed",
+    width: 150,
+    render: (breed: string) => breed,
+  },
+ 
+
+  {
+    title: (
+      <HeaderCell
+        title="Price Trend"
         sortable
         className="text-[#000000] font-medium"
         ascending={

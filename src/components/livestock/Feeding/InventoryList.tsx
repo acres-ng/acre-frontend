@@ -57,6 +57,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { MeasuringUnitSelect,CurrencySelect } from "../../FormInput/AcreSelect";
+import { AcreLoader } from "@/components/ui/acreLoader";
 
 interface FormData {
   name: string;
@@ -305,15 +306,6 @@ const InventoryList = () => {
             <option value="type2">Type 2</option>
             <option value="type3">Type 3</option>
           </select>
-          {/* <select
-            className="items-stretch w-[10.5rem] border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
-            onChange={() => {}}
-          >
-            <option value="">Joined</option>
-            <option value="type1">Type 1</option>
-            <option value="type2">Type 2</option>
-            <option value="type3">Type 3</option>
-          </select> */}
           <select
             className="items-stretch w-full sm:w-[10.5rem] border-[color:var(--Grey-Grey-3,#E4E5E6)] flex gap-2.5 px-4 py-3.5 rounded-xl border-2 border-solid"
             onChange={() => {}}
@@ -327,6 +319,7 @@ const InventoryList = () => {
       </div>
 
       <TableInventory />
+      
       {/* {feedData[0] ? <TableInventory /> : <EmptyState />} */}
     </>
   );

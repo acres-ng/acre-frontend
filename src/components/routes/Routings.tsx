@@ -91,14 +91,6 @@ const PublicRoutes = () => {
           }
         />
 
-        <Route
-          path="house"
-          element={
-            <Layyout>
-              <InventoryList />
-            </Layyout>
-          }
-        />
       </Route>
 
       {/* <---- End of Protected Routes ---> */}
