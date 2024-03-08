@@ -23,31 +23,31 @@ import SimpleBar from '@/components/ui/simplebar';
 
 
  const data = [
-    {
-      month: 'Jan',
-      revenue: 5000,
-      expense: 1500,
-    },
-    {
-      month: 'Feb',
-      revenue: 4600,
-      expense: 3798,
-    },
-    {
-      month: 'Mar',
-      revenue: 5900,
-      expense: 1300,
-    },
-    {
-      month: 'Apr',
-      revenue: 5780,
-      expense: 3908,
-    },
-    {
-      month: 'May',
-      revenue: 4890,
-      expense: 2500,
-    },
+    // {
+    //   month: 'Jan',
+    //   revenue: 5000,
+    //   expense: 1500,
+    // },
+    // {
+    //   month: 'Feb',
+    //   revenue: 4600,
+    //   expense: 3798,
+    // },
+    // {
+    //   month: 'Mar',
+    //   revenue: 5900,
+    //   expense: 1300,
+    // },
+    // {
+    //   month: 'Apr',
+    //   revenue: 5780,
+    //   expense: 3908,
+    // },
+    // {
+    //   month: 'May',
+    //   revenue: 4890,
+    //   expense: 2500,
+    // },
     {
       month: 'Jun',
       revenue: 8000,

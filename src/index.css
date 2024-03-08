@@ -1,6 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* @import 'react-big-calendar/lib/css/react-big-calendar.css'; */
+
+
 
 @layer base {
   :root {
@@ -47,6 +50,7 @@
     --input: 240 3.7% 15.9%;
     --ring: 142.4 71.8% 29.2%;
   }
+  
 }
 
 @layer base {
@@ -56,6 +60,7 @@
   body {
     @apply bg-background text-foreground;
   }
+  
 }
 
 .custom-scrollbar::-webkit-scrollbar,
@@ -118,3 +123,181 @@ body {
 .ant-select-selector:focus {
   border: none !important;
 }
+
+
+
+/* ................................................... */
+/* React Big Calendar Styles */
+/* ................................................... */
+.rbc-month-view {
+  @apply border-gray-200;
+}
+
+.rbc-header {
+  @apply h-12 border-gray-200 py-3.5 text-[13px] font-semibold uppercase text-gray-400 lg:px-7;
+}
+
+:is(
+    .rbc-header + .rbc-header,
+    .rbc-day-bg + .rbc-day-bg,
+    .rbc-month-row + .rbc-month-row,
+    .rbc-timeslot-group
+  ) {
+  @apply border-gray-200;
+}
+
+.rbc-day-bg {
+  @apply sm:px-5;
+}
+
+.rbc-date-cell {
+  @apply p-2.5 text-left text-sm font-medium text-gray-700 md:p-5 md:text-lg;
+}
+
+.rbc-day-bg.rbc-off-range-bg {
+  @apply bg-gray-50;
+}
+
+.rbc-off-range {
+  @apply text-gray-400;
+}
+
+.rbc-time-header.rbc-overflowing,
+.rbc-time-view,
+.rbc-time-content,
+.rbc-time-header-content {
+  @apply border-t border-gray-200;
+}
+
+/* .rbc-today {
+  @apply bg-blue-lighter/10;
+} */
+
+.rbc-day-slot .rbc-time-slot,
+.rbc-timeslot-group {
+  @apply border-gray-200 dark:!border-gray-400;
+}
+
+.rbc-day-slot .rbc-time-slot {
+  @apply border-t-0;
+}
+
+.rbc-day-slot .rbc-event {
+  @apply !h-auto border-0;
+}
+.rbc-event,
+.rbc-day-slot .rbc-background-event {
+  @apply rounded-md bg-primary px-2 py-1.5 text-sm font-medium;
+}
+
+.rbc-time-view .rbc-row {
+  @apply h-12;
+}
+
+.rbc-time-content > * + * > * {
+  @apply border-l border-gray-200;
+}
+.rbc-timeslot-group {
+  @apply border-b border-gray-200;
+}
+
+.rbc-time-header.rbc-overflowing {
+  @apply !mr-0 border-r border-transparent lg:mr-3.5;
+}
+
+.rbc-day-slot .rbc-event,
+.rbc-day-slot .rbc-background-event {
+  flex-flow: column;
+}
+
+.rbc-time-header-content .rbc-row-content {
+  @apply mt-5;
+}
+
+.rbc-time-header-gutter {
+  @apply !w-20 !max-w-full;
+}
+
+.rbc-time-gutter .rbc-timeslot-group {
+  @apply px-3.5 py-2 font-medium text-gray-900;
+}
+
+.rbc-timeslot-group {
+  @apply font-medium text-gray-900;
+}
+
+.rbc-label {
+  @apply px-2;
+}
+
+.rbc-day-slot .rbc-time-slot + .rbc-time-slot {
+  @apply border-t border-gray-200;
+}
+
+.rbc-timeslot-group {
+  @apply min-h-[80px] border-gray-200;
+}
+.rbc-toolbar {
+  @apply mb-0 rounded-t-md border border-b-0 border-gray-200 px-4 py-6;
+}
+
+.rbc-btn-group {
+  @apply rounded-md border border-gray-200;
+}
+
+.rbc-btn-group button {
+  @apply !m-0 !rounded-md border-0 text-sm font-medium text-gray-500 shadow-none hover:bg-white hover:text-gray-800 focus:bg-white active:bg-white active:shadow-none dark:hover:bg-gray-100 dark:focus:bg-gray-100 dark:focus:text-white dark:active:bg-gray-100 dark:active:text-white;
+}
+
+.rbc-toolbar button.rbc-active {
+  @apply border-gray-900 bg-gray-900 text-white shadow-none focus:border-gray-900 focus:bg-gray-900 focus:text-white dark:bg-gray-100;
+}
+
+/* .rbc-toolbar-label {
+  @apply font-lexend text-xl font-medium text-gray-900 dark:text-white;
+} */
+
+.rbc-agenda-view {
+  @apply border;
+}
+
+.rbc-agenda-view,
+.rbc-agenda-view table.rbc-agenda-table,
+.rbc-agenda-view table.rbc-agenda-table thead > tr > th,
+.rbc-agenda-view table.rbc-agenda-table tbody > tr > td + td {
+  @apply border-gray-200;
+}
+
+.rbc-agenda-view table.rbc-agenda-table {
+  @apply border-0 border-b;
+}
+
+.rbc-agenda-empty {
+  @apply p-4 text-center;
+}
+
+/* react-colorful */
+.react-colorful {
+  @apply gap-3;
+}
+
+.react-colorful .react-colorful__pointer {
+  @apply h-4 w-4;
+}
+
+.react-colorful .react-colorful__saturation,
+.react-colorful .react-colorful__hue {
+  @apply rounded-md;
+}
+
+.react-colorful .react-colorful__alpha,
+.react-colorful .react-colorful__hue {
+  @apply h-3 rounded-md;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+
+

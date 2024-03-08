@@ -4,6 +4,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Routings from "./components/routes/Routings";
 import AuthContext from "./components/context/authContext";
 import GlobalDrawer from '../src/layout/sidebar/GlobalDrawer';
+import GlobalModal from "./components/event-calendar/container";
+// import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 
 interface User {
@@ -28,6 +30,7 @@ function App() {
     <AuthContext.Provider value={{ user, setUser }}>
       <Router>
       <GlobalDrawer />
+      <GlobalModal />
         <Routings />
       </Router>
     </AuthContext.Provider>

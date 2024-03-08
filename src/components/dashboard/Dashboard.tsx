@@ -49,6 +49,7 @@ import { useIsMounted } from "../hooks/use-is-mounted";
 import HamburgerButton from "@/layout/sidebar/hamburger-button";
 import NotificationDialog from "./NotificationDialog";
 import Header from "./Header";
+import EventCalendarView from "../event-calendar";
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -126,6 +127,8 @@ const Dashboard = () => {
               <Pie />
             </div>
             <Finance />
+            <EventCalendarView />
+            
           </div>
         </div>
 
