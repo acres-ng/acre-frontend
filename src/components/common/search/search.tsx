@@ -11,7 +11,7 @@ import {
   PiMagnifyingGlassBold,
   PiXBold,
 } from 'react-icons/pi';
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { pageLinks } from './page-links.data';
 
 function SearchBox({ onClose }: { onClose?: () => void }) {

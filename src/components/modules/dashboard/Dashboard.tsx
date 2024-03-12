@@ -1,5 +1,5 @@
 // import { PlusCircledIcon } from "@radix-ui/react-icons"
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { Button } from "../../common/ui/button";
 import Bar from "../../common/charts/Bar";
 import Finance from "../../common/charts/FinanceChart";
@@ -43,7 +43,7 @@ import RightBar from "@/components/layout/righBar";
 // import Header from "../common/sidebar/header";
 import DashCard from "./dashCard";
 import { AcreLoader } from "../../common/ui/acreLoader";
-import { Farm } from "@/lib/types";
+import { Farm } from "@/utils/types";
 import { useWindowScroll } from "../../hooks/use-window-scroll";
 import { useIsMounted } from "../../hooks/use-is-mounted";
 import HamburgerButton from "@/components/layout/sidebar/hamburger-button";

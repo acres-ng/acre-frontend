@@ -6,7 +6,7 @@ import { Popover } from "rizzui";
 import { addSpacesToCamelCase } from "./add-spaces-to-camel-case";
 import { Title, Text } from "rizzui";
 import { PiTextColumns } from "react-icons/pi";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 
 export type ExtractProps<T> = T extends React.ComponentType<infer P> ? P : T;
 

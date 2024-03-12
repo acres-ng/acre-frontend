@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { Button } from "../common/ui/button";
 import { ScrollArea } from "../common/ui/scroll-area";
 import { Link } from "react-router-dom";

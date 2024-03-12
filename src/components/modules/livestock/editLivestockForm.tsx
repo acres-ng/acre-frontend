@@ -21,7 +21,7 @@ import {
 } from "../../common/ui/select";
 import { getAnimalLocal as getAnimalsLocal } from "@/services/localCacheService";
 import { useEffect, useState } from "react";
-import { Animal, AnimalBreed, AnimalWithTraits } from "@/lib/types";
+import { Animal, AnimalBreed, AnimalWithTraits } from "@/utils/types";
 import {
   InputGroup,
   InputRightElement,

@@ -4,7 +4,7 @@ import isString from "lodash/isString";
 import { FieldHelperText } from "rizzui";
 import { Listbox, Transition } from "@headlessui/react";
 import { ExtractProps } from "./table";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { PiCaretUpDown } from "react-icons/pi";
 import { FieldError } from "rizzui";
 import {

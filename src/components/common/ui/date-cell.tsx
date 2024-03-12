@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/utils';
 import { formatDate } from '../../modules/livestock/format-date';
 
 interface DateCellProps {

@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils';
+import { cn } from '@/utils/utils';
 import { Title, Text } from 'rizzui';
 import { Avatar, AvatarProps } from 'rizzui';
 

@@ -5,7 +5,7 @@ import {
 } from './use-drawer';
 
 import { ActionIcon } from 'rizzui';
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 
 interface Props {
   view: JSX.Element;

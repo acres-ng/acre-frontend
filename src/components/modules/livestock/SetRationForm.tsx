@@ -41,7 +41,7 @@ import { API_URL } from "@/config";
 import { getActiveFarm } from "@/services/farmService";
 import { toast } from "sonner";
 import * as z from "zod";
-import { ApiResponse, Feeds } from "@/lib/types";
+import { ApiResponse, Feeds } from "@/utils/types";
 
 interface SetFeedRationProps {
   row: any;

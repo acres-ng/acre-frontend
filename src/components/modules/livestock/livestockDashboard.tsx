@@ -12,7 +12,7 @@ import {
 import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { Card, CardContent } from "@/components/common/ui/card";
 import { BellRing } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn } from "@/utils/utils";
 import { useNavigate } from "react-router-dom";
 import {
   getAnimals,

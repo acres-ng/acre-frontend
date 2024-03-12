@@ -9,7 +9,7 @@ import {
   AnimalBreed,
   AnimalMaturity,
   AnimalWithTraits,
-} from "@/lib/types";
+} from "@/utils/types";
 import { setAnimalLocal } from "./localCacheService";
 
 export const getFarmLivestock = async (farmId?: number, query?: string) => {
