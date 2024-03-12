@@ -16,7 +16,7 @@ import Housing from "../components/modules/livestock/housing/housingList";
 import Layout from "@/components/layout/sidebar/layyout";
 import InventoryList from "../components/modules/livestock/feeding/inventoryList";
 import Rations from "../components/modules/livestock/feeding/rations/rations";
-import RecipeBuilder from "../components/modules/livestock/feeding/recipe builder/recipeBuilder";
+import RecipeBuilder from "../components/modules/livestock/feeding/recipeBuilder/recipeBuilder";
 import Edit from "../components/modules/livestock/livestockEditForm";
 
 const PublicRoutes = () => {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import InventoryList from "./inventoryList";
-import RecipeBuilder from "./recipe builder/recipeBuilder";
+import RecipeBuilder from "./recipeBuilder/recipeBuilder";
 import Rations from "./rations/rations";
 
 const Menu = [
