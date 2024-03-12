@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Button } from "../common/ui/button";
 import { ScrollArea } from "../common/ui/scroll-area";
-// import logo from "../../assets/logo.png";
 import { Link } from "react-router-dom";
 import authService, { getCurrentUser } from "@/services/authService";
 

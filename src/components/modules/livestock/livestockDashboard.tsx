@@ -1,4 +1,4 @@
-import { Button } from "../../../common/ui/button";
+import { Button } from "../../common/ui/button";
 
 import {
   Dialog,
@@ -20,11 +20,11 @@ import {
   getLivestockHousing,
 } from "@/services/livestockService";
 import { useCallback, useEffect, useState } from "react";
-import { AcreLoader } from "../../../common/ui/acreLoader";
+import { AcreLoader } from "../../common/ui/acreLoader";
 import LivestockDataTable from "./livestockDataTable";
 import { getAnimalLocal } from "@/services/localCacheService";
 import { Select } from "antd";
-import { NoFilterResultsCard, NoResourcesCard } from "../Tables";
+import { NoFilterResultsCard, NoResourcesCard } from "./Tables";
 
 const { Option } = Select;
 

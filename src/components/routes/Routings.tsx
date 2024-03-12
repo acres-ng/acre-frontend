@@ -1,16 +1,16 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Login from "../modules/auth/login/Login";
-import Signup from "../modules/auth/signup/Signup";
-import Otp from "../modules/auth/otp/Otp";
-import VerificationSuccess from "../modules/auth/success/VerificationSuccess";
+import Login from "../modules/auth/Login";
+import Signup from "../modules/auth/Signup";
+import Otp from "../modules/auth/Otp";
+import VerificationSuccess from "../modules/auth/VerificationSuccess";
 import RegisterFarm from "../modules/farm/RegisterFarm";
 
 import Dashboard from "../modules/dashboard/Dashboard";
 import Layout from "../layout/Layout";
 
-import Livestock from "../modules/livestock/All-Livestock/livestockDashboard";
-import Add from "../modules/livestock/All-Livestock/addLivestockForm";
+import Livestock from "../modules/livestock/livestockDashboard";
+import Add from "../modules/livestock/addLivestockForm";
 import Feeding from "../modules/livestock/Feeding/Feeding";
 import Health from "../modules/livestock/Health/Health";
 import Housing from "../modules/livestock/Housing/HousingList";
@@ -18,7 +18,7 @@ import Layyout from "@/components/layout/sidebar/layyout";
 import InventoryList from "../modules/livestock/Feeding/InventoryList";
 import Rations from "../modules/livestock/Feeding/Rations";
 import RecipeBuilder from "../modules/livestock/Feeding/RecipeBuilder";
-import Edit from "../modules/livestock/All-Livestock/editLivestockForm";
+import Edit from "../modules/livestock/editLivestockForm";
 
 const PublicRoutes = () => {
   return (

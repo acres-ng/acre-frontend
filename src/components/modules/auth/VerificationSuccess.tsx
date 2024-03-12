@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import success from "../../../../assets/images/successimg.png";
 import tick from "../../../../assets/images/Tick.png";
-import Navbar from "../../../layout/Navbar";
+import Navbar from "../../layout/Navbar";
 import logo from "../../../../assets/images/logo.png";
 import { backgroundColours } from "@/lib/enums";
 

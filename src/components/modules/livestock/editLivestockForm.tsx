@@ -18,7 +18,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../../common/ui/select";
+} from "../../common/ui/select";
 import { getAnimalLocal as getAnimalsLocal } from "@/services/localCacheService";
 import { useEffect, useState } from "react";
 import { Animal, AnimalBreed, AnimalWithTraits } from "@/lib/types";
@@ -35,7 +35,7 @@ import { toast } from "sonner";
 import { API_URL } from "@/config";
 import { getActiveFarm } from "@/services/farmService";
 import HttpService from "@/services/HttpService";
-import SucessDialogue from "../SucessDialogue";
+import SucessDialogue from "./SucessDialogue";
 
 interface AddQuantityFieldProps {
   livestockForm: {

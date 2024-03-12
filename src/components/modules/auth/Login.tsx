@@ -10,8 +10,8 @@ import { FieldValues, useForm } from "react-hook-form";
 import loginimg from "../../../../assets/images/loginimg.png";
 import { encryptData } from "@/lib/encrypt";
 import logo from "../../../../assets/images/logo.png";
-import useAuth from "../../../context/useAuth";
-import AuthContext from "../../../context/authContext";
+import useAuth from "../../context/useAuth";
+import AuthContext from "../../context/authContext";
 import { backgroundColours } from "@/lib/enums";
 
 import { getActiveFarm } from "@/services/farmService";
