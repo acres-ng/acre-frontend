@@ -1,11 +1,11 @@
 import React, { useState, useEffect, FormEvent } from "react";
-import otpimg from "../../../../assets/images/otpimg.png";
-import mail from "../../../../assets/images/mail.png";
+import otpimg from "../../../assets/images/otpimg.png";
+import mail from "../../../assets/images/mail.png";
 import { verifyOtp } from "@/services/userService";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import OtpInput from "react-otp-input";
-import logo from "../../../../assets/images/logo.png";
+import logo from "../../../assets/images/logo.png";
 import Navbar from "../../layout/Navbar";
 import { getCurrentUser, getOTP } from "@/services/authService";
 

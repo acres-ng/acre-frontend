@@ -9,10 +9,10 @@ import PhoneInput, {
 import "react-phone-number-input/style.css";
 import userService from "@/services/userService";
 import { Link, useNavigate } from "react-router-dom";
-import regimg from "../../../../assets/images/regimg.png";
+import regimg from "../../../assets/images/regimg.png";
 import { toast } from "sonner";
 import { encryptData } from "@/lib/encrypt";
-import logo from "../../../../assets/images/logo.png";
+import logo from "../../../assets/images/logo.png";
 
 import { BiSolidLock } from "react-icons/bi";
 import { IoCheckbox } from "react-icons/io5";
