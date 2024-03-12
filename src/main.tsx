@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
-import { AppProvider } from '../src/components/context/SidebarContext';
+import { AppProvider } from './components/context/sidebarContext.tsx';
 import { Toaster } from "sonner";
 import { ChakraProvider, theme } from '@chakra-ui/react'
 import "../src/Poppins-Black.ttf";     // Poppins Black

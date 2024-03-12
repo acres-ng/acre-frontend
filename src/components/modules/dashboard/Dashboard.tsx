@@ -9,7 +9,7 @@ import { Separator } from "../../common/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../common/ui/tabs";
 import { BarChart, Calendar as CalendarIcon } from "lucide-react";
 import { getAnimals } from "@/services/livestockService";
-import Sidebar from "@/components/layout/sidebar/Sidebar";
+import Sidebar from "@/components/layout/sidebar/sidebar";
 import { Input } from "../../common/ui/input";
 import {
   Select,
@@ -38,17 +38,17 @@ import { getCurrentUser } from "@/services/authService";
 import BarCharts from "../../common/charts/BarCharts";
 import PieCharts from "../../common/charts/PieCharts";
 import SearchWidget from "../../common/search/search";
-import RightBar from "@/components/layout/RighBar";
+import RightBar from "@/components/layout/righBar";
 
 // import Header from "../common/sidebar/header";
-import DashCard from "./DashCard";
+import DashCard from "./dashCard";
 import { AcreLoader } from "../../common/ui/acreLoader";
 import { Farm } from "@/lib/types";
 import { useWindowScroll } from "../../hooks/use-window-scroll";
 import { useIsMounted } from "../../hooks/use-is-mounted";
 import HamburgerButton from "@/components/layout/sidebar/hamburger-button";
-import NotificationDialog from "./NotificationDialog";
-import Header from "./Header";
+import NotificationDialog from "./notificationDialog";
+import Header from "./header";
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);

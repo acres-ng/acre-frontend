@@ -56,7 +56,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/common/ui/card";
-import { MeasuringUnitSelect,CurrencySelect } from "../../../common/FormInput/AcreSelect";
+import { MeasuringUnitSelect,CurrencySelect } from "../../../common/formInput/acreSelect";
 
 interface FormData {
   name: string;

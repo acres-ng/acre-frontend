@@ -1,9 +1,9 @@
 //  import Header from './header';
-import Header from "@/components/modules/dashboard/Header";
-import Sidebar from "./Sidebar";
+import Header from "@/components/modules/dashboard/header";
+import Sidebar from "./sidebar";
 
 import React from "react";
-import RightBar from "../RighBar";
+import RightBar from "../righBar";
 import { useLocation } from "react-router-dom";
 
 type Props = {

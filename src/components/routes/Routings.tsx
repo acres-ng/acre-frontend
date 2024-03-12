@@ -1,13 +1,13 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Login from "../modules/auth/Login";
-import Signup from "../modules/auth/Signup";
-import Otp from "../modules/auth/Otp";
-import VerificationSuccess from "../modules/auth/VerificationSuccess";
-import RegisterFarm from "../modules/farm/RegisterFarm";
+import Login from "../modules/auth/login";
+import Signup from "../modules/auth/signup";
+import Otp from "../modules/auth/otp";
+import VerificationSuccess from "../modules/auth/otpVerificationSuccess";
+import RegisterFarm from "../modules/farm/registerFarm";
 
-import Dashboard from "../modules/dashboard/Dashboard";
-import Layout from "../layout/Layout";
+import Dashboard from "../modules/dashboard/dashboard";
+import Layout from "../layout/layout";
 
 import Livestock from "../modules/livestock/livestockDashboard";
 import Add from "../modules/livestock/addLivestockForm";
