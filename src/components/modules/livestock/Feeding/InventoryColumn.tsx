@@ -3,7 +3,7 @@
 import { Text } from "rizzui";
 import { Badge } from "rizzui";
 import { Tooltip } from "rizzui";
-import { HeaderCell } from "../table";
+import { HeaderCell } from "../../../common/tables/table";
 import { Checkbox } from "rizzui";
 import { ActionIcon } from "rizzui";
 import { Popover } from 'rizzui';

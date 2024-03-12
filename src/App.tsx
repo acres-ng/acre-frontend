@@ -1,7 +1,7 @@
 // App.js
 import React, { useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import Routings from "./components/routes/Routings";
+import Routings from "./routes/Routings";
 import AuthContext from "./components/context/authContext";
 import GlobalDrawer from './components/layout/sidebar/globalDrawer';
 

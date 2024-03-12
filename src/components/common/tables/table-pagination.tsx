@@ -1,7 +1,7 @@
 import { PiCaretDownBold } from "react-icons/pi";
-import Pagination, { type PaginationProps } from "../../common/ui/pagination";
-import Select from "./select";
-import { cn } from "@/utils/utils";
+import Pagination, { type PaginationProps } from "../ui/pagination";
+import Select from "../forms/select";
+import { cn } from "@/helpers/utils";
 
 const paginationLimitOptions = [5, 10, 15, 20, 25].map((v, idx) => ({
   id: idx,

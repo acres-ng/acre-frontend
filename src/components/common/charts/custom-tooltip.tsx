@@ -1,6 +1,6 @@
 import { Title, Text } from 'rizzui';
 // import { addSpacesToCamelCase } from '@/utils/add-spaces-to-camel-case';
-import { cn } from "@/utils/utils";
+import { cn } from "@/helpers/utils";
 
 function isValidHexColor(colorCode: string) {
   const hexColorRegex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;

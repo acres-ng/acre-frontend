@@ -1,4 +1,4 @@
-import { cn } from '@/utils/utils';
+import { cn } from '@/helpers/utils';
 import { Title, Text } from 'rizzui';
 import { Avatar, AvatarProps } from 'rizzui';
 

@@ -10,7 +10,7 @@ import { LiaBabySolid } from "react-icons/lia";
 import { TbGrave2 } from "react-icons/tb";
 import { Badge } from "rizzui";
 import { Tooltip } from "rizzui";
-import { HeaderCell } from "./table";
+import { HeaderCell } from "../../common/tables/table";
 import { Checkbox } from "rizzui";
 import { ActionIcon } from "rizzui";
 import { Popover } from "rizzui";
@@ -35,8 +35,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../../common/ui/dialog";
-import SetFeedRation from "./SetRationForm";
-import RecordSale from "./recordSaleForm";
+import SetFeedRation from "./feeding/rations/setRationForm";
+import RecordSale from "./transactions/recordSaleForm";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../../common/ui/avatar";
 import { useIsMounted } from "../../hooks/use-is-mounted";
-import { cn } from "@/utils/utils";
+import { cn } from "@/helpers/utils";
 import {
   Select,
   SelectContent,
@@ -15,7 +15,7 @@ import { useWindowScroll } from "../../hooks/use-window-scroll";
 import HamburgerButton from "@/components/layout/sidebar/hamburger-button";
 import SearchWidget from "../../common/search/search";
 import Sidebar from "@/components/layout/sidebar/sidebar";
-import { Farm } from "@/utils/types";
+import { Farm } from "@/helpers/types";
 import { getActiveFarm, getFarmById } from "@/services/farmService";
 import { getCurrentUser } from "@/services/authService";
 import { useEffect, useState } from "react";

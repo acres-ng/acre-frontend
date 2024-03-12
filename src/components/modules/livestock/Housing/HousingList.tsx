@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import HousingCard from "./HousingCard";
+import HousingCard from "./housingCard";
 import { getLivestockHousing } from "@/services/livestockService";
 import { AcreLoader } from "@/components/common/ui/acreLoader";
-import { NoResourcesCard } from "../Tables";
+import { NoResourcesCard } from "../../../common/inactiveComponentStates";
 const Housing = () => {
   const [housingData, setHousingData] = useState([]);
   const [isLoading, setLoading] = useState(true);

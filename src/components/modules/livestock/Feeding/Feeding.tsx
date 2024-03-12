@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import InventoryList from "./InventoryList";
-import RecipeBuilder from "./RecipeBuilder";
-import Rations from "./Rations";
+import InventoryList from "./inventoryList";
+import RecipeBuilder from "./recipe builder/recipeBuilder";
+import Rations from "./rations/rations";
 
 const Menu = [
   {

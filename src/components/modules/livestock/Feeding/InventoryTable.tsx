@@ -5,12 +5,12 @@ import React, { lazy } from "react";
 import { useTable } from "../../../hooks/use-table";
 import { useColumn } from "../../../hooks/use-column";
 import { Button } from "rizzui";
-import ControlledTable from "../ControlledTable";
-import { getInventoryColumns } from "./InventoryColumn";
+import ControlledTable from "../../../common/tables/controlled-table";
+import { getInventoryColumns } from "./inventoryColumn";
 
 
 
-const TableFooter = lazy(() => import("../table-footer"));
+const TableFooter = lazy(() => import("../../../common/tables/table-footer"));
 
 const filterState = {
   role: "",

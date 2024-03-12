@@ -1,5 +1,5 @@
-import { cn } from '@/utils/utils';
-import { formatDate } from '../../modules/livestock/format-date';
+import { cn } from '@/helpers/utils';
+import { formatDate } from '../../../helpers/format-date';
 
 interface DateCellProps {
   date: Date;

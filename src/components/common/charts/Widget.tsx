@@ -1,5 +1,5 @@
 import { Title } from 'rizzui';
-import { cn } from "@/utils/utils";
+import { cn } from "@/helpers/utils";
 import { ForwardedRef, forwardRef } from 'react';
 
 const widgetCardClasses = {

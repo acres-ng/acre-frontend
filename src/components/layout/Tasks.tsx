@@ -2,7 +2,7 @@ import { Title, Text } from "rizzui";
 
 import WidgetCard from "../common/charts/Widget";
 import { FaTrophy } from "react-icons/fa6";
-import { cn } from "@/utils/utils";
+import { cn } from "@/helpers/utils";
 import SimpleBar from "@/components/common/ui/simplebar";
 
 import { getActiveFarm } from "@/services/farmService";

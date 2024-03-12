@@ -23,7 +23,7 @@ import {
 } from "@/components/common/ui/select";
 import { Label } from "@/components/common/ui/label";
 import { Input } from "@/components/common/ui/input";
-import InventoryTable from "./InventoryTable";
+import InventoryTable from "./inventoryTable";
 import { getFarmFeed } from "@/services/livestockService";
 import HttpService from "@/services/HttpService";
 import { API_URL } from "@/config";
@@ -56,7 +56,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/common/ui/card";
-import { MeasuringUnitSelect,CurrencySelect } from "../../../common/formInput/acreSelect";
+import { MeasuringUnitSelect,CurrencySelect } from "../../../common/forms/acreSelect";
 
 interface FormData {
   name: string;

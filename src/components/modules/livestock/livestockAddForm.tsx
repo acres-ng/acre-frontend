@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/common/ui/button";
@@ -21,26 +21,24 @@ import {
 } from "../../common/ui/select";
 import { getAnimalLocal as getAnimalsLocal } from "@/services/localCacheService";
 import { useEffect, useState } from "react";
-import { Animal, AnimalBreed, AnimalWithTraits } from "@/utils/types";
-import {
-  InputGroup,
-  InputRightElement,
-  NumberIncrementStepperProps,
-} from "@chakra-ui/react";
-import {
-  getLivestockHousing,
-  getOneFarmLivestock,
-} from "@/services/livestockService";
-import { toast } from "sonner";
+import { Animal, AnimalBreed, AnimalWithTraits } from "@/helpers/types";
+import { InputGroup, InputRightElement } from "@chakra-ui/react";
+import { getLivestockHousing } from "@/services/livestockService";
+  import { toast } from "sonner";
 import { API_URL } from "@/config";
 import { getActiveFarm } from "@/services/farmService";
 import HttpService from "@/services/HttpService";
-import SucessDialogue from "./SucessDialogue";
+import SucessDialogue from "../../common/successDialogue";
+
+type AddProps = {
+  entryType?: string;
+};
 
 interface AddQuantityFieldProps {
   livestockForm: {
-    control: any;
+    control: any; 
   };
+  entryType: string | undefined;
 }
 
 const livestockSchema = z.object({
@@ -48,20 +46,18 @@ const livestockSchema = z.object({
   breed: z.number(),
   sex: z.string().min(1),
   housing_id: z.string().min(1),
-  weight: z
-    .number()
-    .min(0.1)
-    .refine((value) => value !== 0, {
-      message: "Weight must be greater than zero.",
-    }),
-
-  // age: z.number().min(1).optional(),
-  age: z.number().min(1),
+  weight: z.string().min(1),
+  age: z.string().min(1).optional(),
   combinedAgeInDays: z.number().int().optional(),
   ageUnit: z.string().min(1).optional(),
   status: z.string().min(1).nullable(),
   measuring_unit: z.string().min(1),
-  price: z.number(),
+  price: z
+    .string()
+    .refine((value) => (value === "0" ? null : !isNaN(parseFloat(value))), {
+      message: "Please enter a valid price or leave it empty.",
+    }),
+
   date_of_stocking: z.string().refine(
     (value) => {
       const currentDate = new Date();
@@ -74,25 +70,46 @@ const livestockSchema = z.object({
         "Please enter a valid date of stocking that is today or earlier.",
     }
   ),
-
   quantity: z
     .number()
     .int()
-    .refine((value) => value > 1, {
-      message: "Quantity must be greater than 1.",
+    .refine((value) => value > 0, {
+      message: "Quantity must be greater than 0.",
     }),
 
-  // quantity: z.number()
+  // quantity: z
+  // .number()
+  // .int()
+  // .refine((value) => value > 0, {
+  //   message: "Quantity must be greater than 0.",
+  // }),
 });
 
 type LiveStockHousing = { id: string; name: string; type?: string };
 
-const Edit = () => {
+const Add = () => {
   const location = useLocation();
-  const { id } = useParams();
-  const { uuid } = useParams();
-
+  const entryType = location.state?.entryType;
   const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  useEffect(() => {
+    getLivestockHousing().then((housing) => {
+      setHousingData(housing);
+    });
+  }, []);
+
+  const livestockForm = useForm<z.infer<typeof livestockSchema>>({
+    resolver: zodResolver(livestockSchema),
+    defaultValues: {
+      weight: "",
+      age: "",
+      measuring_unit: "kg",
+      price: "",
+      date_of_stocking: new Date().toISOString().split("T")[0],
+      quantity: entryType === "flock" ? 2 : 1,
+      ageUnit: "days",
+    },
+  });
 
   const animalsList: Animal[] = getAnimalsLocal()?.animals;
   const [housingData, setHousingData] = useState<LiveStockHousing[]>();
@@ -102,60 +119,6 @@ const Edit = () => {
     breeds: [],
   });
   const [ageUnit, setAgeUnit] = useState("days");
-
-  const [entryType, setEntryType] = useState<"single" | "flock" | "">("");
-
-  useEffect(() => {
-    getLivestockHousing().then((housing) => {
-      setHousingData(housing);
-    });
-  }, []);
-
-  const livestockForm = useForm<z.infer<typeof livestockSchema>>({
-    resolver: entryType === "single" ? undefined : zodResolver(livestockSchema),
-    // resolver: zodResolver(livestockSchema),
-    defaultValues: {
-      weight: 0,
-      age: 0,
-      measuring_unit: "kg",
-      price: 0,
-      date_of_stocking: new Date().toISOString().split("T")[0],
-      quantity: 0,
-      ageUnit: "days",
-    },
-  });
-
-  useEffect(() => {
-    getOneFarmLivestock(id!).then((res) => {
-      console.log("Res>>", res);
-      livestockForm.setValue("weight", res?.weight || 0);
-      livestockForm.setValue("age", res?.age || 0);
-      livestockForm.setValue("measuring_unit", res?.measuring_unit || "kg");
-      livestockForm.setValue("price", res?.price || 0);
-      livestockForm.setValue("date_of_stocking", res?.stocking_date || 0);
-      livestockForm.setValue("quantity", res?.quantity || 0);
-      setEntryType(res?.quantity === 1 ? "single" : "flock");
-      livestockForm.setValue("sex", res?.sex || "");
-      livestockForm.setValue("housing_id", res?.housing_id || "");
-      livestockForm.setValue("animal_type", parseInt(res?.animal_id) || 0);
-      livestockForm.setValue("status", res?.status || "");
-
-      const breeds: AnimalBreed[] = getAnimalsLocal().breeds.filter(
-        (breed: AnimalBreed) => {
-          return breed.animal_type === parseInt(res?.animal_id) || 0;
-        }
-      );
-      const breedObj = breeds.filter((breed: AnimalBreed) => {
-        return breed.name === res?.breed;
-      })?.[0];
-
-      livestockForm.setValue("breed", breedObj?.id || 0);
-      setAnimalTraits({
-        ...animalTraits,
-        breeds: breeds || [],
-      });
-    });
-  }, []);
 
   const breedOptions = animalTraits?.breeds.map((breed, index) => (
     <SelectItem key={index} value={breed.name}>
@@ -171,11 +134,12 @@ const Edit = () => {
     );
   });
 
+  
   const convertToDays = (
-    value: number | undefined,
+    value: string | undefined,
     unit: string | undefined
   ): number => {
-    const numericValue = value || 0;
+    const numericValue = value ? parseFloat(value) : 0;
     const selectedUnit = unit || "days";
 
     switch (selectedUnit) {
@@ -193,8 +157,16 @@ const Edit = () => {
   const onSubmit: SubmitHandler<z.infer<typeof livestockSchema>> = async (
     data
   ) => {
+   
+    data.quantity = entryType === "single" ? 1 : Number(data.quantity);
+
     try {
       const combinedAgeInDays = convertToDays(data.age, data.ageUnit);
+     
+
+      if (entryType !== "flock") {
+        data.quantity = 1;
+      }
 
       const postData = {
         ...data,
@@ -204,11 +176,11 @@ const Edit = () => {
 
       const userActiveFarmId = getActiveFarm().id;
       const postDataToSend =
-        livestockForm.getValues().quantity === 1
+        entryType === "single"
           ? [postData] // Enclose in an array for single entries
           : postData;
-      const response = await HttpService.put(
-        `${API_URL}farms/${userActiveFarmId}/livestock/${id}`,
+      const response = await HttpService.post(
+        `${API_URL}farms/${userActiveFarmId}/livestock`,
         postDataToSend,
         HttpService.getDefaultOptions()
       );
@@ -226,30 +198,48 @@ const Edit = () => {
   };
 
   const AddQuantityField = () => {
-    return (
-      <FormField
-        control={livestockForm.control}
-        name="quantity"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Quantity</FormLabel>
-            <FormControl>
-              <Input
-                placeholder="Enter quantity"
-                type="number"
-                {...field}
-                disabled={entryType === "single"}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  const value = e.target.value;
-                  field.onChange(value.length > 0 ? Number(value) : 0);
-                }}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-    );
+    if (entryType === "flock") {
+      return (
+        <FormField
+          control={livestockForm.control}
+          name="quantity"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Quantity</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Enter quantity"
+                  {...field}
+                  onChange={(e: any) => {
+                    if (e.target.value.length === 0) {
+                      field.onChange(e);
+                    } else {
+                      field.onChange({
+                        ...e,
+                        target: {
+                          ...e.target,
+                          value: parseInt(e.target.value),
+                        },
+                      });
+                    }
+
+                    if (
+                      e.target.value.length > 0 &&
+                      parseInt(e.target.value) === 1
+                    ) {
+                      livestockForm.setError("quantity", {
+                        message: "Ise kushe len she yi oo",
+                      });
+                    }
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      );
+    }
   };
 
   return (
@@ -295,7 +285,7 @@ const Edit = () => {
                               });
                             }
                           }}
-                          value={
+                          defaultValue={
                             animalsList.filter((animal: Animal) => {
                               return animal.id === field.value;
                             })?.[0]?.name
@@ -340,7 +330,7 @@ const Edit = () => {
                               field.onChange(breedObj?.id);
                             }
                           }}
-                          value={
+                          defaultValue={
                             animalTraits.breeds.filter((breed: AnimalBreed) => {
                               return breed.id === field.value;
                             })?.[0]?.name
@@ -374,7 +364,7 @@ const Edit = () => {
                       <FormLabel>Sex</FormLabel>
                       <Select
                         onValueChange={field.onChange}
-                        value={field.value}
+                        defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -400,27 +390,10 @@ const Edit = () => {
                         <FormLabel>Weight at stocking</FormLabel>
                         <FormControl>
                           <InputGroup>
-                            <Input
-                              placeholder="Enter weight"
-                              {...field}
-                              onChange={(e) => {
-                                const inputWeightValue = e.target.value;
-                                if (inputWeightValue === "") {
-                                  livestockForm.setValue("weight", 0); // Set value to 0 if input is cleared
-                                } else {
-                                  livestockForm.setValue(
-                                    "weight",
-                                    parseInt(inputWeightValue, 10)
-                                  ); // Parse the input value as an integer
-                                }
-                              }}
-                            />
+                            <Input placeholder="Enter weight" {...field} />
                             <InputRightElement width={"8rem"}>
                               <Select
-                                value={
-                                  livestockForm.getValues().measuring_unit ||
-                                  "kg"
-                                }
+                                defaultValue="kg"
                                 onValueChange={(value) => {
                                   livestockForm.setValue(
                                     "measuring_unit",
@@ -457,16 +430,9 @@ const Edit = () => {
                               placeholder="Enter age"
                               {...field}
                               onChange={(e) => {
-                                const inputAgeValue = e.target.value.trim();
-                                if (inputAgeValue === "") {
-                                  livestockForm.setValue("age", 0);
-                                } else {
-                                  const parsedValue = parseInt(inputAgeValue);
-                                  if (!isNaN(parsedValue)) {
-                                    livestockForm.setValue("age", parsedValue);
-                                  } else {
-                                  }
-                                }
+                                const inputAgeValue = e.target.value;
+                                livestockForm.setValue("age", inputAgeValue);
+                          
                               }}
                             />
                             <InputRightElement width={"8rem"}>
@@ -474,6 +440,7 @@ const Edit = () => {
                                 defaultValue="days"
                                 onValueChange={(value) => {
                                   livestockForm.setValue("ageUnit", value);
+                              
                                   setAgeUnit(value);
                                 }}
                               >
@@ -505,21 +472,7 @@ const Edit = () => {
                     <FormItem>
                       <FormLabel>Price (optional)</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="Enter price"
-                          {...field}
-                          onChange={(e) => {
-                            const inputPriceValue = e.target.value.trim();
-                            if (inputPriceValue === "") {
-                              livestockForm.setValue("price", 0);
-                            } else if (!isNaN(parseFloat(inputPriceValue))) {
-                              livestockForm.setValue(
-                                "price",
-                                parseFloat(inputPriceValue)
-                              );
-                            }
-                          }}
-                        />
+                        <Input placeholder="Enter price" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -548,7 +501,7 @@ const Edit = () => {
                       <FormLabel>Housing ID</FormLabel>
                       <Select
                         onValueChange={field.onChange}
-                        value={livestockForm.getValues().housing_id}
+                        defaultValue={field.value}
                       >
                         <FormControl>
                           <SelectTrigger>
@@ -574,10 +527,7 @@ const Edit = () => {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Animal status</FormLabel>
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value ?? ""}
-                      >
+                      <Select onValueChange={field.onChange}>
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select status" />
@@ -591,7 +541,7 @@ const Edit = () => {
                     </FormItem>
                   )}
                 />
-
+             
                 <AddQuantityField />
                 <Button
                   type="submit"
@@ -601,11 +551,22 @@ const Edit = () => {
                 </Button>
               </form>
             </Form>
+           
           </div>
         </div>
       </div>
+      
     </div>
   );
 };
 
-export default Edit;
+export default Add;
+
+
+
+
+
+
+
+
+

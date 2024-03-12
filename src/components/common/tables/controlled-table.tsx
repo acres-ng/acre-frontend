@@ -5,7 +5,7 @@ import { Title } from "rizzui";
 import Spinner from "@/components/common/ui/spinner";
 
 import type { TablePaginationProps } from "./table-pagination";
-import { cn } from "@/utils/utils";
+import { cn } from "@/helpers/utils";
 
 const TablePagination = lazy(() => import("./table-pagination"));
 

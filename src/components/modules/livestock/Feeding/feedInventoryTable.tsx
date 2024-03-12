@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import InventoryTable from './InventoryTable'
+import InventoryTable from './inventoryTable'
 import { getFarmFeed } from "@/services/livestockService";
 
-const TableInventory = () => {
+const FeedInventoryTable = () => {
     const [feedData, setFeedData] = useState([]);
     const [isLoading, setLoading] = useState(true);
     useEffect(() => {
@@ -16,5 +16,5 @@ const TableInventory = () => {
   )
 }
 
-export default TableInventory
+export default FeedInventoryTable
 

@@ -1,4 +1,4 @@
-import { cn } from "@/utils/utils";
+import { cn } from "@/helpers/utils";
 
 export function RoundedTopBar({
   x,

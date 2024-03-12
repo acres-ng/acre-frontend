@@ -28,6 +28,10 @@ aliases:
     branch_pattern: "main"
     template: basic_success_1
     channel: "C052YJH1LBC"
+  - &slack-notify-all-branches
+    event: pass
+    template: basic_success_1
+    channel: "C052YJH1LBC"
   - &slack-notify-only-main-fail
     channel: "C052YJH1LBC"
     event: fail
@@ -101,7 +105,7 @@ jobs:
     executor: node_executor
     working_directory: ~/app
     steps:
-      - slack/notify: *slack-notify-only-main
+      - slack/notify: *slack-notify-all-branches
 
 #####################
 # WORKFLOWS

@@ -1,23 +1,23 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Login from "../modules/auth/login";
-import Signup from "../modules/auth/signup";
-import Otp from "../modules/auth/otp";
-import VerificationSuccess from "../modules/auth/otpVerificationSuccess";
-import RegisterFarm from "../modules/farm/registerFarm";
+import Login from "../components/modules/auth/login";
+import Signup from "../components/modules/auth/signup";
+import Otp from "../components/modules/auth/otp";
+import VerificationSuccess from "../components/modules/auth/otpVerificationSuccess";
+import RegisterFarm from "../components/modules/farm/registerFarm";
 
-import Dashboard from "../modules/dashboard/dashboard";
+import Dashboard from "../components/modules/dashboard/dashboard";
 
-import Livestock from "../modules/livestock/livestockDashboard";
-import Add from "../modules/livestock/addLivestockForm";
-import Feeding from "../modules/livestock/Feeding/Feeding";
-import Health from "../modules/livestock/Health/Health";
-import Housing from "../modules/livestock/Housing/HousingList";
+import Livestock from "../components/modules/livestock/livestockDashboard";
+import Add from "../components/modules/livestock/livestockAddForm";
+import Feeding from "../components/modules/livestock/feeding/feeding";
+import Health from "../components/modules/livestock/health/health";
+import Housing from "../components/modules/livestock/housing/housingList";
 import Layout from "@/components/layout/sidebar/layyout";
-import InventoryList from "../modules/livestock/Feeding/InventoryList";
-import Rations from "../modules/livestock/Feeding/Rations";
-import RecipeBuilder from "../modules/livestock/Feeding/RecipeBuilder";
-import Edit from "../modules/livestock/editLivestockForm";
+import InventoryList from "../components/modules/livestock/feeding/inventoryList";
+import Rations from "../components/modules/livestock/feeding/rations/rations";
+import RecipeBuilder from "../components/modules/livestock/feeding/recipe builder/recipeBuilder";
+import Edit from "../components/modules/livestock/livestockEditForm";
 
 const PublicRoutes = () => {
   return (

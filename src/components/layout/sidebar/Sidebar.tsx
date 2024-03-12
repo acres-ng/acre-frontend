@@ -3,7 +3,7 @@ import { Fragment } from "react";
 import { useLocation } from "react-router-dom";
 import { Title } from "rizzui";
 import { Collapse } from "rizzui";
-import { cn } from "@/utils/utils";
+import { cn } from "@/helpers/utils";
 import { PiCaretDownBold } from "react-icons/pi";
 import SimpleBar from "simplebar-react";
 import { menuItems } from "./menu-items";

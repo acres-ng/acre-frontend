@@ -3,7 +3,7 @@
 import RcPagination, {
   PaginationProps as RcPaginationProps,
 } from 'rc-pagination';
-import { cn } from "@/utils/utils";
+import { cn } from "@/helpers/utils";
 import 'rc-pagination/assets/index.css';
 
 const classes = {

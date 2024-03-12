@@ -3,10 +3,10 @@ import RcTable from "rc-table";
 import { ActionIcon } from "rizzui";
 import { Checkbox, CheckboxGroup } from "rizzui";
 import { Popover } from "rizzui";
-import { addSpacesToCamelCase } from "./add-spaces-to-camel-case";
+import { addSpacesToCamelCase } from "../../../helpers/add-spaces-to-camel-case";
 import { Title, Text } from "rizzui";
 import { PiTextColumns } from "react-icons/pi";
-import { cn } from "@/utils/utils";
+import { cn } from "@/helpers/utils";
 
 export type ExtractProps<T> = T extends React.ComponentType<infer P> ? P : T;
 

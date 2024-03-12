@@ -3,8 +3,8 @@ import isNumber from "lodash/isNumber";
 import isString from "lodash/isString";
 import { FieldHelperText } from "rizzui";
 import { Listbox, Transition } from "@headlessui/react";
-import { ExtractProps } from "./table";
-import { cn } from "@/utils/utils";
+import { ExtractProps } from "../tables/table";
+import { cn } from "@/helpers/utils";
 import { PiCaretUpDown } from "react-icons/pi";
 import { FieldError } from "rizzui";
 import {

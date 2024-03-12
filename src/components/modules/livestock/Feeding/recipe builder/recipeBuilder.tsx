@@ -1,6 +1,6 @@
-import RecipeForm from "./RecipeForm";
-import Preparation from "./Preparation";
-import RecipeDetailForm from "./RecipeDetailForm";
+import RecipeForm from "./recipeBuilderForm";
+import Preparation from "./recipeBuilderPreparation";
+import RecipeDetailForm from "./recipeBuilderDetailForm";
 
 const RecipeBuilder = () => {
   return (

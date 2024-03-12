@@ -9,7 +9,7 @@ import {
   DialogClose,
   DialogTitle,
   DialogTrigger,
-} from "../../common/ui/dialog";
+} from "../ui/dialog";
 import {
   Card,
   CardContent,

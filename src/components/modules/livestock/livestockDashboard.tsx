@@ -12,7 +12,7 @@ import {
 import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { Card, CardContent } from "@/components/common/ui/card";
 import { BellRing } from "lucide-react";
-import { cn } from "@/utils/utils";
+import { cn } from "@/helpers/utils";
 import { useNavigate } from "react-router-dom";
 import {
   getAnimals,
@@ -24,7 +24,7 @@ import { AcreLoader } from "../../common/ui/acreLoader";
 import LivestockDataTable from "./livestockDataTable";
 import { getAnimalLocal } from "@/services/localCacheService";
 import { Select } from "antd";
-import { NoFilterResultsCard, NoResourcesCard } from "./Tables";
+import { NoFilterResultsCard, NoResourcesCard } from "../../common/inactiveComponentStates";
 
 const { Option } = Select;
 

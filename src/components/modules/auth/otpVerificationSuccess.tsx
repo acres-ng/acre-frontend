@@ -3,7 +3,7 @@ import success from "../../../assets/images/successimg.png";
 import tick from "../../../assets/images/Tick.png";
 import Navbar from "../../layout/navbar";
 import logo from "../../../assets/images/logo.png";
-import { backgroundColours } from "@/utils/enums";
+import { backgroundColours } from "@/helpers/enums";
 
 const VerificationSuccess = () => {
   const navigate = useNavigate();
