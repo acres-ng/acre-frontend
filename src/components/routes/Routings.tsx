@@ -1,24 +1,24 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Login from "../login/Login";
-import Signup from "../signup/Signup";
-import Otp from "../otp/Otp";
-import VerificationSuccess from "../success/VerificationSuccess";
-import RegisterFarm from "../farm/RegisterFarm";
+import Login from "../modules/autth/login/Login";
+import Signup from "../modules/autth/signup/Signup";
+import Otp from "../modules/autth/otp/Otp";
+import VerificationSuccess from "../modules/autth/success/VerificationSuccess";
+import RegisterFarm from "../modules/farm/RegisterFarm";
 
-import Dashboard from "../dashboard/Dashboard";
-import Layout from "../../layout/Layout";
+import Dashboard from "../modules/dashboard/Dashboard";
+import Layout from "../layout/Layout";
 
-import Livestock from "../livestock/All-Livestock/livestockDashboard";
-import Add from "../livestock/All-Livestock/addLivestockForm";
-import Feeding from "../livestock/Feeding/Feeding";
-import Health from "../livestock/Health/Health";
-import Housing from "../livestock/Housing/HousingList";
-import Layyout from "@/layout/sidebar/layyout";
-import InventoryList from "../livestock/Feeding/InventoryList";
-import Rations from "../livestock/Feeding/Rations";
-import RecipeBuilder from "../livestock/Feeding/RecipeBuilder";
-import Edit from "../livestock/All-Livestock/editLivestockForm";
+import Livestock from "../modules/livestock/All-Livestock/livestockDashboard";
+import Add from "../modules/livestock/All-Livestock/addLivestockForm";
+import Feeding from "../modules/livestock/Feeding/Feeding";
+import Health from "../modules/livestock/Health/Health";
+import Housing from "../modules/livestock/Housing/HousingList";
+import Layyout from "@/components/layout/sidebar/layyout";
+import InventoryList from "../modules/livestock/Feeding/InventoryList";
+import Rations from "../modules/livestock/Feeding/Rations";
+import RecipeBuilder from "../modules/livestock/Feeding/RecipeBuilder";
+import Edit from "../modules/livestock/All-Livestock/editLivestockForm";
 
 const PublicRoutes = () => {
   return (

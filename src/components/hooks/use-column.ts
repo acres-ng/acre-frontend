@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { filterData } from '../livestock/filter-data';
+import { filterData } from '../modules/livestock/filter-data';
 
 export function useColumn<T extends Record<string, any>>(columnsData: T[]) {
   const [checkedColumns, setCheckedColumns] = useState(
