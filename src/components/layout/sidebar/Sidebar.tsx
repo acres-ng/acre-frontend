@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { PiCaretDownBold } from "react-icons/pi";
 import SimpleBar from "simplebar-react";
 import { menuItems } from "./menu-items";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/images/logo.png";
 import authService, { getCurrentUser } from "@/services/authService";
 import { Button } from "@/components/common/ui/button";
 import HamburgerButton from "./hamburger-button";

@@ -1,9 +1,9 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Login from "../modules/autth/login/Login";
-import Signup from "../modules/autth/signup/Signup";
-import Otp from "../modules/autth/otp/Otp";
-import VerificationSuccess from "../modules/autth/success/VerificationSuccess";
+import Login from "../modules/auth/login/Login";
+import Signup from "../modules/auth/signup/Signup";
+import Otp from "../modules/auth/otp/Otp";
+import VerificationSuccess from "../modules/auth/success/VerificationSuccess";
 import RegisterFarm from "../modules/farm/RegisterFarm";
 
 import Dashboard from "../modules/dashboard/Dashboard";
