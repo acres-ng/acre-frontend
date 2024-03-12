@@ -4,7 +4,7 @@ import { useTable } from "../../hooks/use-table";
 import { useColumn } from "../../hooks/use-column";
 import { Button } from "rizzui";
 import ControlledTable from "../ControlledTable";
-import { getColumns } from "./columns";
+import { getColumns } from "./livestockColumns";
 import HttpService from "@/services/HttpService";
 import { API_URL } from "@/config";
 import { toast } from "sonner";
@@ -22,7 +22,7 @@ interface IProp {
   handleRationCreated: () => void;
 }
 
-export default function UsersTable({ data = [], handleRationCreated }: IProp) {
+export default function LivestockDataTable({ data = [], handleRationCreated }: IProp) {
   const [pageSize, setPageSize] = useState(10);
 
   const onHeaderCellClick = (value: string) => ({

@@ -1,4 +1,4 @@
-import { STATUSES, type User } from "../users-data";
+// import { STATUSES, type User } from "../users-data";
 // import { routes } from '@/config/routes';
 import { Text } from "rizzui";
 import { Badge } from "rizzui";
@@ -15,39 +15,7 @@ import {
   PiTrashSimple,
 } from 'react-icons/pi';
 
-function getStatusBadge(status: User["status"]) {
-  switch (status) {
-    case STATUSES.Deactivated:
-      return (
-        <div className="flex items-center">
-          <Badge color="danger" renderAsDot />
-          {/* <Text className="ms-2 font-medium text-orange-dark">{status}</Text> */}
-          <Text className="ms-2 font-medium text-red-dark">{status}</Text>
-        </div>
-      );
-    case STATUSES.Active:
-      return (
-        <div className="flex items-center">
-          <Badge color="success" renderAsDot />
-          <Text className="ms-2 font-medium text-green-dark">{status}</Text>
-        </div>
-      );
-    case STATUSES.Pending:
-      return (
-        <div className="flex items-center">
-          <Badge renderAsDot className="bg-gray-400" />
-          <Text className="ms-2 font-medium text-gray-600">{status}</Text>
-        </div>
-      );
-    default:
-      return (
-        <div className="flex items-center">
-          <Badge renderAsDot className="bg-gray-400" />
-          <Text className="ms-2 font-medium text-gray-600">{status}</Text>
-        </div>
-      );
-  }
-}
+
 
 type InventoryColumns = {
   data: any[];
@@ -208,48 +176,7 @@ export const getInventoryColumns = ({
     dataIndex: "action",
     key: "action",
     width: 60,
-    render: (_: string, user: User) => (
-      // <div className="flex items-center justify-end gap-3 pe-3">
-      //   <Tooltip
-      //     size="sm"
-      //     content={() => "Edit User"}
-      //     placement="top"
-      //     color="invert"
-      //   >
-      //     {/* <Link href={routes.invoice.edit(user.id)}> */}
-      //     <ActionIcon
-      //       tag="span"
-      //       size="sm"
-      //       variant="outline"
-      //       className="hover:!border-gray-900 hover:text-gray-700"
-      //     >
-      //       <PencilIcon className="h-4 w-4" />
-      //     </ActionIcon>
-      //     {/* </Link> */}
-      //   </Tooltip>
-      //   <Tooltip
-      //     size="sm"
-      //     content={() => "View User"}
-      //     placement="top"
-      //     color="invert"
-      //   >
-      //     {/* <Link href={routes.invoice.details(user.id)}> */}
-      //     <ActionIcon
-      //       tag="span"
-      //       size="sm"
-      //       variant="outline"
-      //       className="hover:!border-gray-900 hover:text-gray-700"
-      //     >
-      //       <EyeIcon className="h-4 w-4" />
-      //     </ActionIcon>
-      //     {/* </Link> */}
-      //   </Tooltip>
-      //   <DeletePopover
-      //     title={`Delete this user`}
-      //     description={`Are you sure you want to delete this #${user.id} user?`}
-      //     onDelete={() => onDeleteItem(user.id)}
-      //   />
-      // </div>
+    render: (_: string, row: any) => (
 
       <div className="flex items-center justify-end gap-3">
       <Popover
@@ -274,7 +201,6 @@ export const getInventoryColumns = ({
             <Button
               variant="text"
               className="flex w-full items-center justify-start px-2 py-2 hover:bg-gray-100 focus:outline-none dark:hover:bg-gray-50"
-              onClick={() => onDeleteItem(user.id)}
             >
               <PiTrashSimple className="mr-2 h-5 w-5 text-gray-500" />
               Delete

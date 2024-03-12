@@ -21,7 +21,7 @@ import {
 } from "@/services/livestockService";
 import { useCallback, useEffect, useState } from "react";
 import { AcreLoader } from "../../ui/acreLoader";
-import UsersTable from "./UsersTable";
+import LivestockDataTable from "./livestockDataTable";
 import { getAnimalLocal } from "@/services/localCacheService";
 import { Select } from "antd";
 import { NoFilterResultsCard, NoResourcesCard } from "../Tables";
@@ -43,15 +43,14 @@ const Livestock = () => {
   });
   const [filterApplied, setFilterApplied] = useState(false);
   const handleRationCreated = async () => {
-      try {
-        const updatedData = await getFarmLivestock();
-        setLivestockData(updatedData);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error updating livestock data:", error);
-      }
-    };
-  
+    try {
+      const updatedData = await getFarmLivestock();
+      setLivestockData(updatedData);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error updating livestock data:", error);
+    }
+  };
 
   useEffect(() => {
     getAnimals(undefined, "maturity,breeds").then(() => {
@@ -179,7 +178,10 @@ const Livestock = () => {
   const LivestockTable = () => {
     return (
       <div className="w-full">
-        <UsersTable handleRationCreated={handleRationCreated} data={livestock} />
+        <LivestockDataTable
+          handleRationCreated={handleRationCreated}
+          data={livestock}
+        />
       </div>
     );
   };

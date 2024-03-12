@@ -1,6 +1,5 @@
 
 
-import { STATUSES, type User } from "../users-data";
 import { Text } from "rizzui";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
@@ -37,7 +36,7 @@ import {
   DialogTrigger,
 } from "../../ui/dialog";
 import SetFeedRation from "./SetRationForm";
-import RecordSale from "./RecordSale";
+import RecordSale from "./recordSaleForm";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
