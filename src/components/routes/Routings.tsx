@@ -7,14 +7,13 @@ import VerificationSuccess from "../modules/auth/otpVerificationSuccess";
 import RegisterFarm from "../modules/farm/registerFarm";
 
 import Dashboard from "../modules/dashboard/dashboard";
-import Layout from "../layout/layout";
 
 import Livestock from "../modules/livestock/livestockDashboard";
 import Add from "../modules/livestock/addLivestockForm";
 import Feeding from "../modules/livestock/Feeding/Feeding";
 import Health from "../modules/livestock/Health/Health";
 import Housing from "../modules/livestock/Housing/HousingList";
-import Layyout from "@/components/layout/sidebar/layyout";
+import Layout from "@/components/layout/sidebar/layyout";
 import InventoryList from "../modules/livestock/Feeding/InventoryList";
 import Rations from "../modules/livestock/Feeding/Rations";
 import RecipeBuilder from "../modules/livestock/Feeding/RecipeBuilder";
@@ -27,9 +26,9 @@ const PublicRoutes = () => {
       <Route
         path="/"
         element={
-          <Layyout>
+          <Layout>
             <Dashboard />
-          </Layyout>
+          </Layout>
         }
       />
       {/* <Route
@@ -45,58 +44,58 @@ const PublicRoutes = () => {
         <Route
           path="list"
           element={
-            <Layyout>
+            <Layout>
               <Livestock />
-            </Layyout>
+            </Layout>
           }
         />
         <Route
           path="add"
           element={
-            <Layyout>
+            <Layout>
               <Add />
-            </Layyout>
+            </Layout>
           }
         />
         <Route
           path="edit/:id"
           element={
-            <Layyout>
+            <Layout>
               <Edit />
-            </Layyout>
+            </Layout>
           }
         />
         <Route
           path="feed"
           element={
-            <Layyout>
+            <Layout>
               <Feeding />
-            </Layyout>
+            </Layout>
           }
         />
         <Route
           path="health"
           element={
-            <Layyout>
+            <Layout>
               <Health />
-            </Layyout>
+            </Layout>
           }
         />
         <Route
           path="house"
           element={
-            <Layyout>
+            <Layout>
               <Housing />
-            </Layyout>
+            </Layout>
           }
         />
 
         <Route
           path="house"
           element={
-            <Layyout>
+            <Layout>
               <InventoryList />
-            </Layyout>
+            </Layout>
           }
         />
       </Route>

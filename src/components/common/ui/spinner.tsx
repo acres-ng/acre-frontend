@@ -41,7 +41,7 @@ export default function Spinner({
   color = 'DEFAULT',
   className,
 }: SpinnerProps) {
-  let Component = tag;
+  const Component = tag;
 
   return (
     <Component

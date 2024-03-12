@@ -63,7 +63,7 @@ export function useTable<T extends AnyObject>(
   }
 
   const sortedData = useMemo(() => {
-    let newData = data;
+    const newData = data;
     if (!sortConfig.key) {
       return newData;
     }
