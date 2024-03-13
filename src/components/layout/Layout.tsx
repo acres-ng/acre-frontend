@@ -1,4 +1,4 @@
-import Side from "./sidebar/layyout";
+import Side from "./sidebar/layout";
 import React, { useEffect } from "react";
 // import Sidebar from "./Sidebar";
 import Sidebar from "./sidebar/sidebar";

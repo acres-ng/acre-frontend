@@ -13,7 +13,7 @@ import Add from "../components/modules/livestock/livestockAddForm";
 import Feeding from "../components/modules/livestock/feeding/feeding";
 import Health from "../components/modules/livestock/health/health";
 import Housing from "../components/modules/livestock/housing/housingList";
-import Layout from "@/components/layout/sidebar/layyout";
+import Layout from "@/components/layout/sidebar/layout";
 import InventoryList from "../components/modules/livestock/feeding/inventoryList";
 import Rations from "../components/modules/livestock/feeding/rations/rations";
 import RecipeBuilder from "../components/modules/livestock/feeding/recipeBuilder/recipeBuilder";
