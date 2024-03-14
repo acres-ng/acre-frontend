@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import HousingCard from "./housingCard";
+import HousingCard from "./HousingCard";
 import { getLivestockHousing } from "@/services/livestockService";
 import { AcreLoader } from "@/components/common/ui/acreLoader";
 import { NoResourcesCard } from "../../../common/inactiveComponentStates";

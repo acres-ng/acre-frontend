@@ -12,9 +12,9 @@ import {
   SelectValue,
 } from "../../common/ui/select";
 import { useWindowScroll } from "../../hooks/use-window-scroll";
-import HamburgerButton from "@/components/layout/sidebar/hamburger-button";
+import HamburgerButton from "@/components/layout/sidebar/HamburgerButton";
 import SearchWidget from "../../common/search/search";
-import Sidebar from "@/components/layout/sidebar/sidebar";
+import Sidebar from "@/components/layout/sidebar/Sidebar";
 import { Farm } from "@/helpers/types";
 import { getActiveFarm, getFarmById } from "@/services/farmService";
 import { getCurrentUser } from "@/services/authService";

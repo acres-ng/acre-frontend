@@ -6,11 +6,11 @@ import { Collapse } from "rizzui";
 import { cn } from "@/helpers/utils";
 import { PiCaretDownBold } from "react-icons/pi";
 import SimpleBar from "simplebar-react";
-import { menuItems } from "./menu-items";
+import { menuItems } from "./MenuItems";
 import logo from "@/assets/images/logo.png";
 import authService, { getCurrentUser } from "@/services/authService";
 import { Button } from "@/components/common/ui/button";
-import HamburgerButton from "./hamburger-button";
+import HamburgerButton from "./HamburgerButton";
 
 export default function Sidebar({ className }: { className?: string }) {
   const location = useLocation();

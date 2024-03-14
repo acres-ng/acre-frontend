@@ -6,7 +6,7 @@ import { useTable } from "../../../hooks/use-table";
 import { useColumn } from "../../../hooks/use-column";
 import { Button } from "rizzui";
 import ControlledTable from "../../../common/tables/controlled-table";
-import { getInventoryColumns } from "./inventoryColumn";
+import { getInventoryColumns } from "./InventoryColumn";
 
 
 

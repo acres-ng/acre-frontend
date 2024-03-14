@@ -21,7 +21,7 @@ import {
 } from "@/services/livestockService";
 import { useCallback, useEffect, useState } from "react";
 import { AcreLoader } from "../../common/ui/acreLoader";
-import LivestockDataTable from "./livestockDataTable";
+import LivestockDataTable from "./LivestockDataTable";
 import { getAnimalLocal } from "@/services/localCacheService";
 import { Select } from "antd";
 import { NoFilterResultsCard, NoResourcesCard } from "../../common/inactiveComponentStates";

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import OtpInput from "react-otp-input";
 import logo from "../../../assets/images/logo.png";
-import Navbar from "../../layout/navbar";
+import Navbar from "../../layout/Navbar";
 import { getCurrentUser, getOTP } from "@/services/authService";
 
 const Otp = () => {

@@ -4,7 +4,7 @@ import { RiWindyLine } from "react-icons/ri";
 import { BiCloudRain } from "react-icons/bi";
 import { IoBarbellOutline } from "react-icons/io5";
 import { WiHumidity } from "react-icons/wi";
-import Tasks from "./tasks";
+import Tasks from "./Tasks";
 import { weatherLocalKey } from "@/services/userService";
 import { fetchWeatherDataByGeocode } from "@/services/weatherService";
 import { getActiveFarm, getFarmLocalTime } from "@/services/farmService";

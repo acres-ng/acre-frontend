@@ -1,11 +1,11 @@
-import Side from "./sidebar/layout";
+import Side from "./sidebar/Layout";
 import React, { useEffect } from "react";
 // import Sidebar from "./Sidebar";
-import Sidebar from "./sidebar/sidebar";
+import Sidebar from "./sidebar/Sidebar";
 import { useNavigate } from "react-router-dom";
 import { getCurrentUser } from "@/services/authService";
-import Header from "@/components/modules/dashboard/header";
-import LayoutHeader from "./layoutHeader";
+import Header from "@/components/modules/dashboard/Header";
+import LayoutHeader from "./LayoutHeader";
 
 type Props = {
   children: React.ReactNode;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import InventoryTable from './inventoryTable'
+import InventoryTable from './InventoryTable'
 import { getFarmFeed } from "@/services/livestockService";
 
 const FeedInventoryTable = () => {

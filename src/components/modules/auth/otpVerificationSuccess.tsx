@@ -1,11 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import success from "../../../assets/images/successimg.png";
 import tick from "../../../assets/images/Tick.png";
-import Navbar from "../../layout/navbar";
+import Navbar from "../../layout/Navbar";
 import logo from "../../../assets/images/logo.png";
 import { backgroundColours } from "@/helpers/enums";
 
-const VerificationSuccess = () => {
+const OtpVerificationSuccess = () => {
   const navigate = useNavigate();
 
   return (
@@ -70,4 +70,4 @@ const VerificationSuccess = () => {
   );
 };
 
-export default VerificationSuccess;
+export default OtpVerificationSuccess;

@@ -1,21 +1,21 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import Login from "../components/modules/auth/login";
-import Signup from "../components/modules/auth/signup";
-import Otp from "../components/modules/auth/otp";
-import VerificationSuccess from "../components/modules/auth/otpVerificationSuccess";
-import RegisterFarm from "../components/modules/farm/registerFarm";
-import Dashboard from "../components/modules/dashboard/dashboard";
-import Livestock from "../components/modules/livestock/livestockDashboard";
-import Add from "../components/modules/livestock/livestockAddForm";
-import Feeding from "../components/modules/livestock/feeding/feeding";
-import Health from "../components/modules/livestock/health/health";
-import Housing from "../components/modules/livestock/housing/housingList";
-import Layout from "@/components/layout/sidebar/layout";
-import InventoryList from "../components/modules/livestock/feeding/inventoryList";
-import Rations from "../components/modules/livestock/feeding/rations/rations";
-import RecipeBuilder from "../components/modules/livestock/feeding/recipeBuilder/recipeBuilder";
-import Edit from "../components/modules/livestock/livestockEditForm";
+import Login from "../components/modules/auth/Login";
+import Signup from "../components/modules/auth/Signup";
+import Otp from "../components/modules/auth/Otp";
+import OtpVerificationSuccess from "../components/modules/auth/OtpVerificationSuccess";
+import RegisterFarm from "../components/modules/farm/RegisterFarm";
+import Dashboard from "../components/modules/dashboard/Dashboard";
+import Livestock from "../components/modules/livestock/LivestockDashboard";
+import Add from "../components/modules/livestock/LivestockAddForm";
+import Feeding from "../components/modules/livestock/feeding/Feeding";
+import Health from "../components/modules/livestock/health/Health";
+import Housing from "../components/modules/livestock/housing/HousingList";
+import Layout from "@/components/layout/sidebar/Layout";
+import InventoryList from "../components/modules/livestock/feeding/InventoryList";
+import Rations from "../components/modules/livestock/feeding/rations/Rations";
+import RecipeBuilder from "../components/modules/livestock/feeding/recipeBuilder/RecipeBuilder";
+import Edit from "../components/modules/livestock/LivestockEditForm";
 
 const PublicRoutes = () => {
   return (
@@ -103,7 +103,7 @@ const PublicRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
       <Route path="/otp" element={<Otp />} />
-      <Route path="/success" element={<VerificationSuccess />} />
+      <Route path="/success" element={<OtpVerificationSuccess />} />
       <Route path="/add-farm" element={<RegisterFarm />} />
       <Route path="*" element={<></>} />
     </Routes>
