@@ -4,7 +4,7 @@ import { useTable } from "../../hooks/use-table";
 import { useColumn } from "../../hooks/use-column";
 import { Button } from "rizzui";
 import ControlledTable from "../ControlledTable";
-import { getColumns } from "./livestockColumns";
+import { getColumns } from "./LivestockColumns";
 import HttpService from "@/services/HttpService";
 import { API_URL } from "@/config";
 import { toast } from "sonner";

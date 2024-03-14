@@ -36,7 +36,7 @@ import {
   DialogTrigger,
 } from "../../ui/dialog";
 import SetFeedRation from "./SetRationForm";
-import RecordSale from "./recordSaleForm";
+import RecordSale from "./RecordSaleForm";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 

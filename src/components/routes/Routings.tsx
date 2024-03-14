@@ -7,18 +7,14 @@ import VerificationSuccess from "../success/VerificationSuccess";
 import RegisterFarm from "../farm/RegisterFarm";
 
 import Dashboard from "../dashboard/Dashboard";
-import Layout from "../../layout/Layout";
 
-import Livestock from "../livestock/All-Livestock/livestockDashboard";
-import Add from "../livestock/All-Livestock/addLivestockForm";
-import Feeding from "../livestock/Feeding/Feeding";
-import Health from "../livestock/Health/Health";
-import Housing from "../livestock/Housing/HousingList";
+import Livestock from "../modules/livestock/LivestockDashboard";
+import Add from "../modules/livestock/LivestockAddForm";
+import Feeding from "../modules/feeding/Feeding";
+import Health from "../modules/health/Health";
+import Housing from "../modules/housing/HousingList";
 import Layyout from "@/layout/sidebar/layyout";
-import InventoryList from "../livestock/Feeding/InventoryList";
-import Rations from "../livestock/Feeding/Rations";
-import RecipeBuilder from "../livestock/Feeding/RecipeBuilder";
-import Edit from "../livestock/All-Livestock/editLivestockForm";
+import Edit from "../modules/livestock/LivestockEditForm";
 
 const PublicRoutes = () => {
   return (
@@ -91,14 +87,7 @@ const PublicRoutes = () => {
           }
         />
 
-        <Route
-          path="house"
-          element={
-            <Layyout>
-              <InventoryList />
-            </Layyout>
-          }
-        />
+    
       </Route>
 
       {/* <---- End of Protected Routes ---> */}

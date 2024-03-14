@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import UsersTable from "../All-Livestock/livestockDataTable";
-import { usersData } from "../users-data";
 import InventoryList from "./InventoryList";
 import RecipeBuilder from "./RecipeBuilder";
 import Rations from "./Rations";

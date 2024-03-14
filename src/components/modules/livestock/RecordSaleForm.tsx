@@ -41,7 +41,7 @@ interface RecordSaleProps {
   
 }
 
-const RecordSale: React.FC<RecordSaleProps> = ({ row }) => {
+const RecordSaleForm: React.FC<RecordSaleProps> = ({ row }) => {
   const [transactionUtils, setTransactionUtils] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   
@@ -189,5 +189,5 @@ const RecordSale: React.FC<RecordSaleProps> = ({ row }) => {
   );
 };
 
-export default RecordSale;
+export default RecordSaleForm;
 
