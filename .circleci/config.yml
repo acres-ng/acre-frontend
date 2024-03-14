@@ -47,9 +47,9 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout
-      # - restore_cache:
-      #     keys:
-      #       - node_modules-{{ checksum "package.json" }}
+      - restore_cache:
+          keys:
+            - node_modules-{{ checksum "package.json" }}
           # Install dependencies
       - run:
           name: Install Node.js dependencies
@@ -58,6 +58,9 @@ jobs:
           key: node_modules-{{ checksum "package.json" }}
           paths:
             - node_modules
+      - run:
+          name: List DIR
+          command: ls -R
       # Build the app
       - run:
           name: Build acre frontend
