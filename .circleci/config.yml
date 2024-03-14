@@ -47,9 +47,6 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout
-      - run:
-          name: List DIR 1
-          command: ls -R
       - restore_cache:
           keys:
             - node_modules-{{ checksum "package.json" }}
@@ -61,22 +58,10 @@ jobs:
           key: node_modules-{{ checksum "package.json" }}
           paths:
             - node_modules
-      - run:
-          name: List DIR
-          command: ls -R
       # Build the app
       - run:
           name: Build acre frontend
           command: npm run build
-      - run:
-          name: List dir
-          command: ls -R
-          # Deploy to Heroku 
-      #- run:
-      #    name: Deploy to Heroku
-      #    command: |
-      #      docker login --username=${HEROKU_USERNAME} --password=${HEROKU_API_KEY2} registry.heroku.com
-      #      git push https://heroku:${HEROKU_API_KEY2}@git.heroku.com/acre-frontend-staging.git main --force
       - slack/notify: *slack-notify-only-main-fail
       - persist_to_workspace:
           root: ~/app

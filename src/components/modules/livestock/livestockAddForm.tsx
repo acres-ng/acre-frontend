@@ -87,7 +87,7 @@ const livestockSchema = z.object({
 
 type LiveStockHousing = { id: string; name: string; type?: string };
 
-const Add = () => {
+const LivestockAddForm = () => {
   const location = useLocation();
   const entryType = location.state?.entryType;
   const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -560,7 +560,7 @@ const Add = () => {
   );
 };
 
-export default Add;
+export default LivestockAddForm;
 
 
 

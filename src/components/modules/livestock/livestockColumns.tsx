@@ -40,7 +40,7 @@ import RecordSale from "./transactions/RecordSaleForm";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
-type Columns = {
+type LivestockColumns = {
   data: any[];
   sortConfig?: any;
   handleSelectAll: any;
@@ -60,7 +60,7 @@ export const getColumns = ({
   handleSelectAll,
   onChecked,
   handleRationCreated,
-}: Columns) => {
+}: LivestockColumns) => {
   const navigate = useNavigate();
 
   return [

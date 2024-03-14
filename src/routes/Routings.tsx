@@ -6,8 +6,8 @@ import Otp from "../components/modules/auth/Otp";
 import OtpVerificationSuccess from "../components/modules/auth/OtpVerificationSuccess";
 import RegisterFarm from "../components/modules/farm/RegisterFarm";
 import Dashboard from "../components/modules/dashboard/Dashboard";
-import Livestock from "../components/modules/livestock/LivestockDashboard";
-import Add from "../components/modules/livestock/LivestockAddForm";
+import LivestockDashboard from "../components/modules/livestock/LivestockDashboard";
+import LivestockAddForm from "../components/modules/livestock/LivestockAddForm";
 import Feeding from "../components/modules/livestock/feeding/Feeding";
 import Health from "../components/modules/livestock/health/Health";
 import Housing from "../components/modules/livestock/housing/HousingList";
@@ -15,7 +15,7 @@ import Layout from "@/components/layout/sidebar/Layout";
 import InventoryList from "../components/modules/livestock/feeding/InventoryList";
 import Rations from "../components/modules/livestock/feeding/rations/Rations";
 import RecipeBuilder from "../components/modules/livestock/feeding/recipeBuilder/RecipeBuilder";
-import Edit from "../components/modules/livestock/LivestockEditForm";
+import LivestockEditForm from "../components/modules/livestock/LivestockEditForm";
 
 const PublicRoutes = () => {
   return (
@@ -43,7 +43,7 @@ const PublicRoutes = () => {
           path="list"
           element={
             <Layout>
-              <Livestock />
+              <LivestockDashboard />
             </Layout>
           }
         />
@@ -51,7 +51,7 @@ const PublicRoutes = () => {
           path="add"
           element={
             <Layout>
-              <Add />
+              <LivestockAddForm />
             </Layout>
           }
         />
@@ -59,7 +59,7 @@ const PublicRoutes = () => {
           path="edit/:id"
           element={
             <Layout>
-              <Edit />
+              <LivestockEditForm />
             </Layout>
           }
         />

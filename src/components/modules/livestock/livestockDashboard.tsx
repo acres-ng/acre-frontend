@@ -28,7 +28,7 @@ import { NoFilterResultsCard, NoResourcesCard } from "../../common/inactiveCompo
 
 const { Option } = Select;
 
-const Livestock = () => {
+const LivestockDashboard = () => {
   const navigate = useNavigate();
 
   const [livestock, setLivestockData] = useState([]);
@@ -304,4 +304,4 @@ const Livestock = () => {
   );
 };
 
-export default Livestock;
+export default LivestockDashboard;

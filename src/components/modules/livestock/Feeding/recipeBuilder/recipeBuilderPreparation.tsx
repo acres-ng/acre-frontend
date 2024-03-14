@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "@/components/common/ui/select"
 
-const Preparation = () => {
+const RecipeBuilderPreparation = () => {
   return (
     <Card className="mt-4 rounded-2xl" >
      <CardHeader>
@@ -61,4 +61,4 @@ const Preparation = () => {
   )
 }
 
-export default Preparation
+export default RecipeBuilderPreparation

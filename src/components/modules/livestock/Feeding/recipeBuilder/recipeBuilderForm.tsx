@@ -19,7 +19,7 @@ interface Ingredient {
   quantity: string;
 }
 
-const RecipeForm: React.FC = () => {
+const RecipeBuilderForm: React.FC = () => {
     const [ingredientName, setIngredientName] = useState<string>("");
     const [quantityType, setQuantityType] = useState<string>("kg");
     const [quantityValue, setQuantityValue] = useState<string>("");
@@ -154,4 +154,4 @@ const RecipeForm: React.FC = () => {
   };
   
 
-export default RecipeForm;
+export default RecipeBuilderForm;

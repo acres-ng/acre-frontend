@@ -87,7 +87,7 @@ const livestockSchema = z.object({
 
 type LiveStockHousing = { id: string; name: string; type?: string };
 
-const Edit = () => {
+const LivestockEditForm = () => {
   const location = useLocation();
   const { id } = useParams();
   const { uuid } = useParams();
@@ -608,4 +608,4 @@ const Edit = () => {
   );
 };
 
-export default Edit;
+export default LivestockEditForm;

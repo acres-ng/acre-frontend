@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/common/ui/select";
 
-const RecipeDetailForm = () => {
+const RecipeBuilderDetailForm = () => {
   return (
     <Card className=" rounded-2xl">
  <CardHeader>
@@ -96,4 +96,4 @@ const RecipeDetailForm = () => {
   )
 }
 
-export default RecipeDetailForm
+export default RecipeBuilderDetailForm
