@@ -47,6 +47,9 @@ jobs:
     working_directory: ~/app
     steps:
       - checkout
+      - run:
+          name: Build acre frontend1
+          command: npm run build
       - restore_cache:
           keys:
             - node_modules-{{ checksum "package.json" }}
