@@ -6,6 +6,7 @@ import { AppProvider } from '../src/components/context/SidebarContext';
 import { Toaster } from "sonner";
 import { ChakraProvider, theme } from '@chakra-ui/react'
 import "../src/Poppins-Black.ttf";     // Poppins Black
+import GlobalModal from "./components/calendar/container.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -15,5 +16,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <App/>
     </ChakraProvider>
     </AppProvider>
+    
   </React.StrictMode>
 );

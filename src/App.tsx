@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import Routings from "./components/routes/Routings";
 import AuthContext from "./components/context/authContext";
 import GlobalDrawer from '../src/layout/sidebar/GlobalDrawer';
-import GlobalModal from "./components/event-calendar/container";
+import GlobalModal from "./components/calendar/container";
 // import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 
