@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import Routings from "./routes/Routings";
 import AuthContext from "./components/context/authContext";
-import GlobalDrawer from './components/layout/sidebar/globalDrawer';
-
+import GlobalDrawer from './components/layout/sidebar/globalDrawer'
 
 interface User {
   token: string;
