@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { formatDate } from '../livestock/format-date';
+import { formatDate } from '../../lib/format-date';
 
 interface DateCellProps {
   date: Date;
