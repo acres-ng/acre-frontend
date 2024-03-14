@@ -4,8 +4,7 @@ import Login from "../components/modules/auth/login";
 import Signup from "../components/modules/auth/signup";
 import Otp from "../components/modules/auth/otp";
 import VerificationSuccess from "../components/modules/auth/otpVerificationSuccess";
-import RegisterFarm from "../components/modules/farm/registerFarm";
-
+import RegisterFarm from "../components/modules/farm/registerFarm.tsx";
 import Dashboard from "../components/modules/dashboard/dashboard";
 
 import Livestock from "../components/modules/livestock/livestockDashboard";
