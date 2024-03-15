@@ -41,7 +41,7 @@ function DashCard() {
   }, []);
 
   return (
-    <div className="grid gap-4 grid-cols-2  md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid gap-4 grid-cols-2 md:grid-cols-2 lg:grid-cols-4 mt-3">
     {/* Total Livestock Card */}
     <Card className="border-0 bg-whit overflow-hidden rounded-xl shadow-lg duration-300 hover:shadow-2xl ">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 ">
@@ -99,7 +99,7 @@ function DashCard() {
       </CardContent>
     </Card>
 
-    <Card className="border-0 bg-white  overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA] rounded-xl shadow-lg duration-300 hover:shadow-2xl ">
+    <Card className="border-0 bg-white  overflow-hidden  rounded-xl shadow-lg duration-300 hover:shadow-2xl ">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M26.9388 7.1494C25.4255 5.5414 23.3775 4.63873 21.1735 4.6054C19.2482 4.56807 17.4615 5.20007 16.0002 6.37607C14.5388 5.2014 12.7188 4.5614 10.8268 4.6054C8.62282 4.63873 6.57615 5.5414 5.06149 7.1494C2.09882 10.2961 2.27082 15.4387 5.44549 18.6134L14.0082 27.1761C14.5575 27.7254 15.2788 28.0001 15.9988 28.0001C16.7188 28.0001 17.4415 27.7254 17.9895 27.1761L26.5522 18.6134C29.7268 15.4387 29.9002 10.2961 26.9362 7.1494H26.9388Z" fill="#FD6C77"/>
@@ -115,7 +115,7 @@ function DashCard() {
       </CardContent>
     </Card>
 
-    <Card className="border-0 bg-white  overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA] rounded-xl shadow-lg duration-300 hover:shadow-2xl ">
+    <Card className="border-0 bg-white  overflow-hidden  rounded-xl shadow-lg duration-300 hover:shadow-2xl ">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g clip-path="url(#clip0_2975_1486)">
@@ -145,7 +145,7 @@ function DashCard() {
       </CardContent>
     </Card>
 
-    <Card className="border-0 bg-white  overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA] rounded-xl shadow-lg duration-300 hover:shadow-2xl ">
+    <Card className="border-0 bg-white  overflow-hidden  rounded-xl shadow-lg duration-300 hover:shadow-2xl ">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
       <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path fill-rule="evenodd" clip-rule="evenodd" d="M3.87644 20.2219C5.32463 20.2219 6.49994 21.3991 6.49994 22.8468C6.49994 22.9858 6.61225 23.097 6.75094 23.097H25.2527C25.3903 23.097 25.5009 22.9839 25.5009 22.8468C25.5009 21.3986 26.6794 20.2219 28.1273 20.2219C28.2651 20.2219 28.3754 20.109 28.3754 19.9718V12.0282C28.3754 11.8911 28.2649 11.7783 28.1273 11.7783C26.6797 11.7783 25.5009 10.6009 25.5009 9.15308C25.5009 9.01595 25.3903 8.9032 25.2527 8.9032H6.751C6.61231 8.9032 6.5 9.01408 6.5 9.15308C6.5 10.6005 5.32444 11.7783 3.8765 11.7783C3.73781 11.7783 3.6255 11.8892 3.6255 12.0282V19.9718C3.62544 20.1108 3.73756 20.2219 3.87644 20.2219ZM1.25 8.05508C1.25 7.21308 1.93619 6.52808 2.77787 6.52808H29.2229C30.0662 6.52808 30.7508 7.2117 30.7508 8.05508V23.9451C30.7508 24.7883 30.0661 25.4718 29.2229 25.4718H2.77787C1.93631 25.4718 1.25 24.787 1.25 23.9451V8.05508Z" fill="#8CCDAC"/>
