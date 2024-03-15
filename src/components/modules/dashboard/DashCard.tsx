@@ -43,7 +43,7 @@ function DashCard() {
   return (
     <div className="grid gap-4 grid-cols-2  md:grid-cols-2 lg:grid-cols-4">
     {/* Total Livestock Card */}
-    <Card className="border-0 bg-white    overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA] rounded-xl shadow-lg duration-300 hover:shadow-2xl ">
+    <Card className="border-0 bg-whit overflow-hidden rounded-xl shadow-lg duration-300 hover:shadow-2xl ">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 ">
         <svg
           width="32"

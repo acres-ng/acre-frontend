@@ -115,7 +115,7 @@ const RightBar = () => {
 
         <div className="grid grid-cols-2 gap-4 my-4  justify-center">
           {/* Card 1 - Wind */}
-          <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA] duration-300 hover:shadow-2xl">
+          <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow overflow-hidden ">
             <div className="flex h-[65px] flex-col items-center justify-center ">
               <div className="flex gap-2 items-center">
                 <span>
@@ -132,7 +132,7 @@ const RightBar = () => {
           </Card>
 
           {/* Card 2 - Humidity */}
-          <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA] duration-300 hover:shadow-2xl">
+          <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow overflow-hidden ">
             <div className="flex flex-col  h-[65px] items-center justify-center ">
               <div className="flex gap-2 items-center">
                 <span>
@@ -149,7 +149,7 @@ const RightBar = () => {
           </Card>
 
           {/* Card 3 - Sunrise */}
-          <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA] duration-300 hover:shadow-2xl">
+          <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow overflow-hidden">
             <div className="flex flex-col  h-[65px] items-center justify-center ">
               <div className="flex gap-2 items-center">
                 <span>
@@ -166,7 +166,7 @@ const RightBar = () => {
           </Card>
 
           {/* Card 4 - Sunset */}
-          <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow overflow-hidden hover:bg-gradient-to-br hover:from-[#CCE6DA] hover:via-white hover:to-[#CCE6DA] duration-300 hover:shadow-2xl">
+          <Card className="bg-white bg-opacity-60 backdrop-filter backdrop-blur-lg border border-gray-200 rounded-xl shadow overflow-hidden ">
             <div className="flex flex-col  h-[65px] items-center justify-center ">
               <div className="flex gap-2 items-center">
                 <span>
