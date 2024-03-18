@@ -40,8 +40,22 @@ import HttpService from "@/services/HttpService";
 import { API_URL } from "@/config";
 import { getActiveFarm } from "@/services/farmService";
 import { toast } from "sonner";
+import { Controller } from "react-hook-form";
 import * as z from "zod";
+import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { ApiResponse, Feeds } from "@/helpers/types";
+import CustomTooltip from "@/components/common/CustomTooltip";
+import { IoMdInformationCircleOutline } from "react-icons/io";
+// import { DatePicker } from "@/components/common/ui/datepicker";
+import DatePicker from "react-datepicker";
+import { Checkbox } from "@/components/common/ui/checkbox";
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/components/common/ui/form";
 
 interface SetFeedRationProps {
   row: any;
@@ -70,6 +84,27 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
   const [rationName, setRationName] = useState<string>(rationAutoName);
   const [formError, setFormError] = useState<string>("");
   const [selectedUnit, setSelectedUnit] = useState<string>("");
+
+  const initialDate = new Date();
+  initialDate.setHours(8);
+  initialDate.setMinutes(0);
+
+  const [selectedDate, setSelectedDate] = useState(initialDate);
+
+  const handleDateChange = (date: React.SetStateAction<Date>) => {
+    setSelectedDate(date);
+  };
+
+  const CustomInput = ({ value, onClick }: { value: any; onClick: any }) => (
+    <input
+      type="text"
+      value={value}
+      onClick={onClick}
+      readOnly
+      style={{ cursor: "pointer" }}
+      className="w-full p-2 border border-gray-300 rounded-md"
+    />
+  );
 
   const fetchFeedData = async () => {
     try {
@@ -104,8 +139,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
     rationForm.setValue("animal_type", parseInt(row.animal_id));
   }, []);
 
-  useEffect(() => {
-  }, [rationName, formError, selectedUnit]);
+  useEffect(() => {}, [rationName, formError, selectedUnit]);
 
   const handleFeedSelection = (value: string) => {
     rationForm.setValue("feed_id", value);
@@ -155,17 +189,32 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
     <div>
       <Form {...rationForm}>
         <DialogTitle className="mb-6 flex justify-between items-center">
-          <span className="text-green-500">
-            {editMode ? (
-              <input
-                type="text"
-                value={rationName}
-                onChange={handleNameChange}
+          <div className="flex items-center">
+            <span className="text-green-500">
+              {editMode ? (
+                <input
+                  type="text"
+                  value={rationName}
+                  onChange={handleNameChange}
+                />
+              ) : (
+                <>{rationName}</>
+              )}
+            </span>
+            <div className="ml-2">
+              <CustomTooltip
+                triggerText={
+                  <IoMdInformationCircleOutline className="w-8 h-6" />
+                }
+                tooltipContent={
+                  <p>
+                    Enter a unique name for the ration. This helps you identify
+                    and manage different feeding rations easily.
+                  </p>
+                }
               />
-            ) : (
-              <>{rationName}</>
-            )}
-          </span>
+            </div>
+          </div>
 
           <span className="material-icons" onClick={handleEditName}>
             <CiEdit />
@@ -185,7 +234,23 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
         )}
         <div className="grid w-full items-center gap-4">
           <div className="flex flex-col space-y-1.5 mt-3">
-            <Label htmlFor="feedName">Feed Name or ID</Label>
+            <div className="flex items-center">
+              <Label htmlFor="feedName">Feed Name or ID</Label>
+              <div className="ml-2">
+                <CustomTooltip
+                  triggerText={
+                    <IoMdInformationCircleOutline className="w-8 h-6" />
+                  }
+                  tooltipContent={
+                    <p>
+                      Choose which feed to include in the ration. This
+                      determines what your livestock will be fed.
+                    </p>
+                  }
+                />
+              </div>
+            </div>
+
             <Select
               {...rationForm.register("feed_id")}
               onValueChange={(value: string) => handleFeedSelection(value)}
@@ -207,7 +272,23 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
           </div>
 
           <div className="flex flex-col space-y-1.5 pt-2">
-            <Label htmlFor="daily_ration_weight">Daily Ration</Label>
+            <div className="flex items-center">
+              <Label htmlFor="feedName">Daily Ration</Label>
+              <div className="ml-2">
+                <CustomTooltip
+                  triggerText={
+                    <IoMdInformationCircleOutline className="w-8 h-6" />
+                  }
+                  tooltipContent={
+                    <p>
+                      Specify the weight of the selected feed for this ration.
+                      This determines how much of the feed will be given to each
+                      animal.
+                    </p>
+                  }
+                />
+              </div>
+            </div>
             <InputGroup>
               <Input
                 placeholder="Enter Ration"
@@ -232,6 +313,123 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
                 />
               </InputRightElement>
             </InputGroup>
+          </div>
+          <div className="flex items-center">
+
+            <Label htmlFor="feedName">Feed Name or ID</Label>
+
+   
+            <div className="ml-2">
+              <CustomTooltip
+                triggerText={
+                  <IoMdInformationCircleOutline className="w-8 h-6" />
+                }
+                tooltipContent={
+                  <p>
+                    Set the time for the feeding schedule. This determines when the ration should be given to your livestock.
+                  </p>
+                }
+              />
+            </div>
+          </div>
+
+          <DatePicker
+            selected={selectedDate}
+            onChange={handleDateChange}
+            showTimeSelect
+            showTimeSelectOnly
+            timeIntervals={15}
+            dateFormat="h:mm aa"
+            timeCaption="Time"
+            customInput={<CustomInput />}
+          />
+
+          <div className="bg-[#EAF8F2]">
+            <div className="flex flex-col items-start space-y-1">
+              <h1>Feeding Schedule</h1>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-[10rem]">
+                  {/* Checkbox and text on the left */}
+                  <div className="flex items-center space-x-2">
+                    <Checkbox defaultChecked />
+                    <span className="text-sm font-medium leading-none">
+                      Activate Feeding Schedule
+                    </span>
+                  </div>
+
+                  {/* Tooltip on the right */}
+                  <div>
+                    <CustomTooltip
+                      triggerText={
+                        <IoMdInformationCircleOutline className="w-8 h-6" />
+                      }
+                      tooltipContent={
+                        <p>
+                          Check this box to activate the feeding schedule
+                          immediately after creation. If checked, the schedule
+                          will be applied to your livestock.
+                        </p>
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col items-start space-y-1">
+              <h1>Apply feeding ration to:</h1>
+              <div className="flex items-center justify-between gap-[8rem]">
+                {/* Checkbox and text on the left */}
+                <div className="flex items-center space-x-2">
+                  <Checkbox defaultChecked />
+                  <span className="text-sm font-medium leading-none">
+                    All livestock in the ration group
+                  </span>
+                </div>
+
+                {/* Tooltip on the right */}
+                <div>
+                  <CustomTooltip
+                    triggerText={
+                      <IoMdInformationCircleOutline className="w-8 h-6" />
+                    }
+                    tooltipContent={
+                      <p>
+                        Apply this schedule to all livestock with the same type
+                        and maturity level as the current one. This saves time
+                        by automatically setting up feeding schedules for
+                        similar livestock
+                      </p>
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between gap-10">
+                {/* Checkbox and text on the left */}
+                <div className="flex items-center space-x-2">
+                  <Checkbox />
+                  <span className="text-sm font-medium leading-none">
+                    All livestock in “Mcdonald Stable 1” housing
+                  </span>
+                </div>
+
+                {/* Tooltip on the right */}
+                <div>
+                  <CustomTooltip
+                    triggerText={
+                      <IoMdInformationCircleOutline className="w-8 h-6" />
+                    }
+                    tooltipContent={
+                      <p>
+                        Apply this schedule to all livestock in the same housing
+                        or location as the current one. This ensures consistent
+                        feeding across all animals in the same area.
+                      </p>
+                    }
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

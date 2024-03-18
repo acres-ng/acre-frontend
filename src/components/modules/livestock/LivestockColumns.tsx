@@ -1,5 +1,3 @@
-
-
 import { Text } from "rizzui";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { CiEdit } from "react-icons/ci";
@@ -9,12 +7,11 @@ import { LuCircleDollarSign } from "react-icons/lu";
 import { LiaBabySolid } from "react-icons/lia";
 import { TbGrave2 } from "react-icons/tb";
 import { Badge } from "rizzui";
-import { Tooltip } from "rizzui";
 import { HeaderCell } from "../../common/tables/table";
 import { Checkbox } from "rizzui";
 import { ActionIcon } from "rizzui";
 import { Popover } from "rizzui";
-import { Button } from "rizzui";
+
 import * as React from "react";
 import { getFarmFeed } from "@/services/livestockService";
 import {
@@ -39,6 +36,9 @@ import SetFeedRation from "./feeding/rations/SetRationForm";
 import RecordSale from "./transactions/RecordSaleForm";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { IoMdInformationCircleOutline } from "react-icons/io";
+import CustomTooltip from "../../common/CustomTooltip";
+import { Tooltip, Button } from "rizzui";
 
 type LivestockColumns = {
   data: any[];
@@ -195,7 +195,7 @@ export const getColumns = ({
       width: 120,
       render: (stocking_date: string) => stocking_date,
     },
- 
+
     {
       title: (
         <HeaderCell
@@ -257,10 +257,12 @@ export const getColumns = ({
                   <DialogContent className=" rounded-2xl">
                     <CardHeader>
                       <CardTitle className="flex">
-                        <span className="mr-2 bg-[#CCE6DA]  border-b rounded-full p-2">
+                        <span className="mr-2 bg-[#CCE6DA] border-b rounded-full p-2">
                           <BiSolidBowlRice className="text-green-500" />
                         </span>
-                        <span className="mt-2"> Set Feed Ration</span>
+                        <span className="mt-2 flex items-center">
+                          Set Feed Ration
+                        </span>
                       </CardTitle>
                     </CardHeader>
 
@@ -327,24 +329,25 @@ export const getColumns = ({
                     <CardContent>
                       {/* <DialogTitle>Are you sure you want to permanently delete Livestock Name/ID from your farm?</DialogTitle> */}
                       <DialogDescription className="font-medium text-black">
-                        Are you sure you want to permanently delete Livestock {row.name}
-                        {''} from your farm?
+                        Are you sure you want to permanently delete Livestock{" "}
+                        {row.name}
+                        {""} from your farm?
                       </DialogDescription>
                     </CardContent>
                     <CardFooter className="flex justify-between gap-4">
-                    <DialogClose asChild>
-                      <Button className="bg-white text-black shadow-md w-full">
-                        Cancel
-                      </Button>
-                    </DialogClose>
+                      <DialogClose asChild>
+                        <Button className="bg-white text-black shadow-md w-full">
+                          Cancel
+                        </Button>
+                      </DialogClose>
 
-                    <Button
-                      className="bg-red-500 w-full text-white"
-                      onClick={() => onDeleteItem([row.uuid])}
-                    >
-                      Delete
-                    </Button>
-                  </CardFooter>
+                      <Button
+                        className="bg-red-500 w-full text-white"
+                        onClick={() => onDeleteItem([row.uuid])}
+                      >
+                        Delete
+                      </Button>
+                    </CardFooter>
                   </DialogContent>
                 </Dialog>
               </div>
