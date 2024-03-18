@@ -56,6 +56,7 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/common/ui/form";
+import { FiClock } from "react-icons/fi";
 
 interface SetFeedRationProps {
   row: any;
@@ -89,22 +90,28 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
   initialDate.setHours(8);
   initialDate.setMinutes(0);
 
-  const [selectedDate, setSelectedDate] = useState(initialDate);
-
-  const handleDateChange = (date: React.SetStateAction<Date>) => {
-    setSelectedDate(date);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate);
+  const handleDateChange = (date: Date | null) => {
+    setSelectedDate(date); 
   };
 
-  const CustomInput = ({ value, onClick }: { value: any; onClick: any }) => (
+
+
+ const CustomInput = ({ value, onClick }: { value: any; onClick: any }) => (
+  <div className="relative">
     <input
       type="text"
       value={value}
       onClick={onClick}
       readOnly
       style={{ cursor: "pointer" }}
-      className="w-full p-2 border border-gray-300 rounded-md"
+      className="w-full p-2 border border-gray-300 mt-1 rounded-md pl-10" 
     />
-  );
+    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+      <FiClock className="text-gray-400" /> 
+    </div>
+  </div>
+);
 
   const fetchFeedData = async () => {
     try {
@@ -188,7 +195,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
   return (
     <div>
       <Form {...rationForm}>
-        <DialogTitle className="mb-6 flex justify-between items-center">
+        <DialogTitle className="mb-2 flex justify-between items-center">
           <div className="flex items-center">
             <span className="text-green-500">
               {editMode ? (
@@ -271,7 +278,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
             )}
           </div>
 
-          <div className="flex flex-col space-y-1.5 pt-2">
+          <div className="flex flex-col space-y-1.5 ">
             <div className="flex items-center">
               <Label htmlFor="feedName">Daily Ration</Label>
               <div className="ml-2">
@@ -314,48 +321,53 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
               </InputRightElement>
             </InputGroup>
           </div>
-          <div className="flex items-center">
+          <div className="flex flex-col">
+            <div className="flex items-center">
+              {/* Label */}
+              <Label htmlFor="feedName">Set Livestock Feeding Time</Label>
 
-            <Label htmlFor="feedName">Feed Name or ID</Label>
-
-   
-            <div className="ml-2">
-              <CustomTooltip
-                triggerText={
-                  <IoMdInformationCircleOutline className="w-8 h-6" />
-                }
-                tooltipContent={
-                  <p>
-                    Set the time for the feeding schedule. This determines when the ration should be given to your livestock.
-                  </p>
-                }
-              />
+              {/* Tooltip */}
+              <span className="flex items-center ml-2">
+                <CustomTooltip
+                  triggerText={
+                    <IoMdInformationCircleOutline className="w-8 h-6" />
+                  }
+                  tooltipContent={
+                    <p>
+                      Set the time for the feeding schedule. This determines
+                      when the ration should be given to your livestock.
+                    </p>
+                  }
+                />
+              </span>
             </div>
+
+            {/* DatePicker */}
+            <DatePicker
+              selected={selectedDate}
+              onChange={handleDateChange}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={15}
+              dateFormat="h:mm aa"
+              timeCaption="Time"
+              customInput={<CustomInput value={undefined} onClick={undefined} />}
+            />
           </div>
 
-          <DatePicker
-            selected={selectedDate}
-            onChange={handleDateChange}
-            showTimeSelect
-            showTimeSelectOnly
-            timeIntervals={15}
-            dateFormat="h:mm aa"
-            timeCaption="Time"
-            customInput={<CustomInput />}
-          />
-
-          <div className="bg-[#EAF8F2]">
+          <div className="bg-[#EAF8F2] p-3 rounded-lg">
             <div className="flex flex-col items-start space-y-1">
-              <h1>Feeding Schedule</h1>
+              <h1 className="font-semibold">Feeding Schedule</h1>
               <div className="flex items-center justify-between">
                 <div className="flex items-center justify-between gap-[10rem]">
                   {/* Checkbox and text on the left */}
-                  <div className="flex items-center space-x-2">
-                    <Checkbox defaultChecked />
-                    <span className="text-sm font-medium leading-none">
-                      Activate Feeding Schedule
-                    </span>
-                  </div>
+              <div className="flex items-center space-x-2">
+  <Checkbox defaultChecked />
+  <span className="text-sm font-normal leading-none whitespace-nowrap">
+    Activate Feeding Schedule
+  </span>
+</div>
+
 
                   {/* Tooltip on the right */}
                   <div>
@@ -376,12 +388,12 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
               </div>
             </div>
             <div className="flex flex-col items-start space-y-1">
-              <h1>Apply feeding ration to:</h1>
+              <h1 className="font-semibold pt-1">Apply feeding ration to:</h1>
               <div className="flex items-center justify-between gap-[8rem]">
                 {/* Checkbox and text on the left */}
                 <div className="flex items-center space-x-2">
                   <Checkbox defaultChecked />
-                  <span className="text-sm font-medium leading-none">
+                  <span className="text-sm font-normal leading-none">
                     All livestock in the ration group
                   </span>
                 </div>
@@ -440,7 +452,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
           </div>
         )}
 
-        <CardFooter className="flex justify-between mt-8 gap-9">
+        <CardFooter className="flex justify-between mt-6 gap-9">
           <DialogClose asChild>
             <Btn className="w-full text-black border-[3px]border-gray-200">
               Cancel

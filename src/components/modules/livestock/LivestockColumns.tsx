@@ -256,11 +256,11 @@ export const getColumns = ({
 
                   <DialogContent className=" rounded-2xl">
                     <CardHeader>
-                      <CardTitle className="flex">
+                      <CardTitle className="flex pt-6">
                         <span className="mr-2 bg-[#CCE6DA] border-b rounded-full p-2">
                           <BiSolidBowlRice className="text-green-500" />
                         </span>
-                        <span className="mt-2 flex items-center">
+                        <span className=" flex items-center">
                           Set Feed Ration
                         </span>
                       </CardTitle>
