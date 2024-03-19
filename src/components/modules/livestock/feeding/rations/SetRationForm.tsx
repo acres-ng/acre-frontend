@@ -86,32 +86,33 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
   const [formError, setFormError] = useState<string>("");
   const [selectedUnit, setSelectedUnit] = useState<string>("");
 
+  const [applyToHousing, setApplyToHousing] = useState<boolean>(false);
+  const [applyToMaturity, setApplyToMaturity] = useState<boolean>(false);
+
   const initialDate = new Date();
   initialDate.setHours(8);
   initialDate.setMinutes(0);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate);
   const handleDateChange = (date: Date | null) => {
-    setSelectedDate(date); 
+    setSelectedDate(date);
   };
 
-
-
- const CustomInput = ({ value, onClick }: { value: any; onClick: any }) => (
-  <div className="relative">
-    <input
-      type="text"
-      value={value}
-      onClick={onClick}
-      readOnly
-      style={{ cursor: "pointer" }}
-      className="w-full p-2 border border-gray-300 mt-1 rounded-md pl-10" 
-    />
-    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-      <FiClock className="text-gray-400" /> 
+  const CustomInput = ({ value, onClick }: { value: any; onClick: any }) => (
+    <div className="relative">
+      <input
+        type="text"
+        value={value}
+        onClick={onClick}
+        readOnly
+        style={{ cursor: "pointer" }}
+        className="w-full p-2 border border-gray-300 mt-1 rounded-md pl-10"
+      />
+      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+        <FiClock className="text-gray-400" />
+      </div>
     </div>
-  </div>
-);
+  );
 
   const fetchFeedData = async () => {
     try {
@@ -184,6 +185,24 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
         onRationCreated();
       } else {
         toast.error(data.message);
+      }
+      // Submit data for feeding schedule
+      if (applyToHousing || applyToMaturity) {
+        const applyTo = [];
+        if (applyToHousing) applyTo.push("housing");
+        if (applyToMaturity) applyTo.push("maturity");
+
+        const scheduleData = {
+          ...postData,
+          applyTo: applyTo.join(","),
+          auto_feed_active: true, 
+        };
+
+        await HttpService.post(
+          `${API_URL}farms/${userActiveFarmId}/feeding/schedule`,
+          scheduleData,
+          HttpService.getDefaultOptions()
+        );
       }
     } catch (error) {
       console.error("Error:", error);
@@ -325,7 +344,6 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
             <div className="flex items-center">
               {/* Label */}
               <Label htmlFor="feedName">Set Livestock Feeding Time</Label>
-
               {/* Tooltip */}
               <span className="flex items-center ml-2">
                 <CustomTooltip
@@ -351,7 +369,9 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
               timeIntervals={15}
               dateFormat="h:mm aa"
               timeCaption="Time"
-              customInput={<CustomInput value={undefined} onClick={undefined} />}
+              customInput={
+                <CustomInput value={undefined} onClick={undefined} />
+              }
             />
           </div>
 
@@ -360,16 +380,13 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
               <h1 className="font-semibold">Feeding Schedule</h1>
               <div className="flex items-center justify-between">
                 <div className="flex items-center justify-between gap-[10rem]">
-                  {/* Checkbox and text on the left */}
-              <div className="flex items-center space-x-2">
-  <Checkbox defaultChecked />
-  <span className="text-sm font-normal leading-none whitespace-nowrap">
-    Activate Feeding Schedule
-  </span>
-</div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox defaultChecked />
+                    <span className="text-sm font-normal leading-none whitespace-nowrap">
+                      Activate Feeding Schedule
+                    </span>
+                  </div>
 
-
-                  {/* Tooltip on the right */}
                   <div>
                     <CustomTooltip
                       triggerText={
@@ -390,15 +407,17 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
             <div className="flex flex-col items-start space-y-1">
               <h1 className="font-semibold pt-1">Apply feeding ration to:</h1>
               <div className="flex items-center justify-between gap-[8rem]">
-                {/* Checkbox and text on the left */}
                 <div className="flex items-center space-x-2">
-                  <Checkbox defaultChecked />
+                  <Checkbox
+                    defaultChecked
+                    checked={applyToHousing}
+                    onChange={(e) => setApplyToHousing(e.target.checked)}
+                  />
                   <span className="text-sm font-normal leading-none">
                     All livestock in the ration group
                   </span>
                 </div>
 
-                {/* Tooltip on the right */}
                 <div>
                   <CustomTooltip
                     triggerText={
@@ -417,15 +436,15 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
               </div>
 
               <div className="flex items-center justify-between gap-10">
-                {/* Checkbox and text on the left */}
                 <div className="flex items-center space-x-2">
-                  <Checkbox />
+                  <Checkbox
+                    checked={applyToMaturity}
+                    onChange={(e) => setApplyToMaturity(e.target.checked)}
+                  />
                   <span className="text-sm font-medium leading-none">
                     All livestock in “Mcdonald Stable 1” housing
                   </span>
                 </div>
-
-                {/* Tooltip on the right */}
                 <div>
                   <CustomTooltip
                     triggerText={
