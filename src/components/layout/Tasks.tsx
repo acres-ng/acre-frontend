@@ -10,6 +10,9 @@ import { useEffect, useState } from "react";
 import { getJwt } from "@/services/userService";
 import http from "@/services/HttpService";
 import { API_URL } from "@/config";
+// import {Button} from "rizzui";
+import { Button } from "../common/ui/button";
+import { PlusIcon } from "@heroicons/react/24/outline";
 
 interface Task {
   title: string;
@@ -55,12 +58,18 @@ export default function Members({ className }: { className?: string }) {
   return (
     <div className="">
       <WidgetCard title="" headerClassName="hidden" className="p-0 lg:p-0 ">
-        <Title
-          as="h3"
-          className="my-3 pt-3 ml-4 text-lg lg:text-lg font-semibold text-gray-900 xl:text-xl 2xl:mb-5"
-        >
-          Tasks
-        </Title>
+        <div className="flex items-center justify-between p-3">
+          <Title
+            as="h3"
+            className="my-3  ml-4 text-lg lg:text-lg font-semibold text-gray-900 xl:text-xl 2xl:mb-5"
+          >
+            Tasks
+          </Title>
+          <Button className="flex items-center h-10 rounded-xl">
+            <PlusIcon className="ml-1 h-5 w-5" /> New Task
+          </Button>
+        </div>
+
         <SimpleBar style={{ maxHeight: 450 }}>
           <div className="flex items-center justify-center mb-4">
             <div className="relative inline-flex mr-auto left-4">
