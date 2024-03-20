@@ -13,6 +13,8 @@ import logo from "../../../assets/images/logo.png";
 import useAuth from "../../context/useAuth";
 import AuthContext from "../../context/authContext";
 import { backgroundColours } from "@/helpers/enums";
+import { Password } from "rizzui";
+import { Input } from "rizzui";
 
 import { getActiveFarm } from "@/services/farmService";
 
@@ -124,9 +126,9 @@ function Login() {
                     htmlFor="login"
                     className="block mb-2 text-sm font-medium text-gray-900 "
                   >
-                    Your email or phone number
+                   Email or phone number
                   </label>
-                  <input
+                  <Input
                     {...register("login", {
                       required: "Email or phone is required",
                       pattern: {
@@ -138,7 +140,8 @@ function Login() {
                     type="text"
                     name="login"
                     id="login"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                    placeholder="Enter your email"
+                   
                   />
                   {errors.login && (
                     <p className="text-red-500 text-sm">
@@ -147,24 +150,19 @@ function Login() {
                   )}
                 </div>
                 <div>
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm font-medium text-gray-900"
-                  >
-                    Password
-                  </label>
-                  <input
-                    {...register("password", {
-                      required: "Password is required",
-                      minLength: {
-                        value: 6,
-                        message: "Password must be at least 6 characters long",
-                      },
-                    })}
-                    type="password"
+                  <Password
+                   {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters long",
+                    },
+                  })}
                     name="password"
-                    id="password"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                    label="Password"
+                    placeholder="Enter your password"
+                    variant="outline"
+                    
                   />
                   {errors.password && (
                     <p className="text-red-500 text-sm">
