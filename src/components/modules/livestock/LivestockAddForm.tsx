@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/common/ui/button";
+import { Button as Btn } from "rizzui";
 import {
   Form,
   FormControl,
@@ -24,7 +25,7 @@ import { useEffect, useState } from "react";
 import { Animal, AnimalBreed, AnimalWithTraits } from "@/helpers/types";
 import { InputGroup, InputRightElement } from "@chakra-ui/react";
 import { getLivestockHousing } from "@/services/livestockService";
-  import { toast } from "sonner";
+import { toast } from "sonner";
 import { API_URL } from "@/config";
 import { getActiveFarm } from "@/services/farmService";
 import HttpService from "@/services/HttpService";
@@ -36,7 +37,7 @@ type AddProps = {
 
 interface AddQuantityFieldProps {
   livestockForm: {
-    control: any; 
+    control: any;
   };
   entryType: string | undefined;
 }
@@ -134,7 +135,6 @@ const LivestockAddForm = () => {
     );
   });
 
-  
   const convertToDays = (
     value: string | undefined,
     unit: string | undefined
@@ -157,12 +157,10 @@ const LivestockAddForm = () => {
   const onSubmit: SubmitHandler<z.infer<typeof livestockSchema>> = async (
     data
   ) => {
-   
     data.quantity = entryType === "single" ? 1 : Number(data.quantity);
 
     try {
       const combinedAgeInDays = convertToDays(data.age, data.ageUnit);
-     
 
       if (entryType !== "flock") {
         data.quantity = 1;
@@ -432,7 +430,6 @@ const LivestockAddForm = () => {
                               onChange={(e) => {
                                 const inputAgeValue = e.target.value;
                                 livestockForm.setValue("age", inputAgeValue);
-                          
                               }}
                             />
                             <InputRightElement width={"8rem"}>
@@ -440,7 +437,7 @@ const LivestockAddForm = () => {
                                 defaultValue="days"
                                 onValueChange={(value) => {
                                   livestockForm.setValue("ageUnit", value);
-                              
+
                                   setAgeUnit(value);
                                 }}
                               >
@@ -541,32 +538,29 @@ const LivestockAddForm = () => {
                     </FormItem>
                   )}
                 />
-             
+
                 <AddQuantityField />
-                <Button
-                  type="submit"
-                  disabled={livestockForm.formState.isSubmitting}
-                >
-                  Submit
-                </Button>
+
+                <div className="flex justify-center space-x-10">
+                  <Btn className="w-[15rem] bg-white text-green-400 border border-green-400">
+                    Back
+                  </Btn>
+                  <Button
+                    type="submit"
+                    disabled={livestockForm.formState.isSubmitting}
+                    className="w-[15rem] bg-green-500 hover:bg-green-600"
+                  >
+                    Submit
+                  </Button>
+                </div>
+
               </form>
             </Form>
-           
           </div>
         </div>
       </div>
-      
     </div>
   );
 };
 
 export default LivestockAddForm;
-
-
-
-
-
-
-
-
-
