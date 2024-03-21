@@ -215,7 +215,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
         };
 
         await HttpService.post(
-          `${API_URL}farms/${userActiveFarmId}/feeding/schedule${applyTo.length ? '?applyTo=' + applyTo.join(",") : ''}}`,
+          `${API_URL}farms/${userActiveFarmId}/feeding/schedule${applyTo.length ? '?applyTo=' + applyTo.join(",") : ''}`,
           scheduleData,
           HttpService.getDefaultOptions()
         );
