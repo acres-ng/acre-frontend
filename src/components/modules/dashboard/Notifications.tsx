@@ -9,6 +9,7 @@ import { Avatar } from "rizzui";
 import { Badge } from "rizzui";
 // import { routes } from '@/config/routes';
 import { default as useMedia } from "react-use/lib/useMedia";
+
 // import SimpleBar from 'rizzui';
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
@@ -37,9 +38,7 @@ const data = [
   },
   {
     id: 3,
-    message: `You: I never received any phone calls about it. Omnis,
-        quidem non. Sint inventore quasi temporibus architecto eaque,
-        natus aspernatur minus?`,
+    message: `Today. 09:32 AM`,
     avatar: [
       "https://isomorphic-furyroad.s3.amazonaws.com/public/avatars-blur/avatar-12.webp",
     ],
