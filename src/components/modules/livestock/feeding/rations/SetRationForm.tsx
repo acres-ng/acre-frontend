@@ -246,7 +246,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
             <div className="ml-2">
               <CustomTooltip
                 triggerText={
-                  <IoMdInformationCircleOutline className="w-8 h-6" />
+                  <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
                 }
                 tooltipContent={
                   <p>
@@ -281,7 +281,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
               <div className="ml-2">
                 <CustomTooltip
                   triggerText={
-                    <IoMdInformationCircleOutline className="w-8 h-6" />
+                    <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
                   }
                   tooltipContent={
                     <p>
@@ -319,7 +319,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
               <div className="ml-2">
                 <CustomTooltip
                   triggerText={
-                    <IoMdInformationCircleOutline className="w-8 h-6" />
+                    <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
                   }
                   tooltipContent={
                     <p>
@@ -364,7 +364,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
               <span className="flex items-center ml-2">
                 <CustomTooltip
                   triggerText={
-                    <IoMdInformationCircleOutline className="w-8 h-6" />
+                    <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
                   }
                   tooltipContent={
                     <p>
@@ -410,7 +410,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
                   <div>
                     <CustomTooltip
                       triggerText={
-                        <IoMdInformationCircleOutline className="w-8 h-6" />
+                        <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
                       }
                       tooltipContent={
                         <p>
@@ -441,7 +441,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
                 <div>
                   <CustomTooltip
                     triggerText={
-                      <IoMdInformationCircleOutline className="w-8 h-6" />
+                      <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
                     }
                     tooltipContent={
                       <p>
@@ -469,7 +469,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
                 <div>
                   <CustomTooltip
                     triggerText={
-                      <IoMdInformationCircleOutline className="w-8 h-6" />
+                      <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
                     }
                     tooltipContent={
                       <p>
