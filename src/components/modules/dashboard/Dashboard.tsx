@@ -4,58 +4,94 @@ import { Button } from "../../common/ui/button";
 import Bar from "../../common/charts/Bar";
 import Finance from "../../common/charts/FinanceChart";
 import Pie from "../../common/charts/Pie";
-import { ScrollArea, ScrollBar } from "../../common/ui/scroll-area";
-import { Separator } from "../../common/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../common/ui/tabs";
-import { BarChart, Calendar as CalendarIcon } from "lucide-react";
+import { Calendar as CalendarIcon } from "lucide-react";
 import { getAnimals } from "@/services/livestockService";
-import Sidebar from "@/components/layout/sidebar/Sidebar";
-import { Input } from "../../common/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "../../common/ui/select";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "../../common/ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "../../common/ui/avatar";
-import { Popover, PopoverContent, PopoverTrigger } from "../../common/ui/popover";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../common/ui/popover";
 import { Calendar } from "../../common/ui/calendar";
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
-import { getActiveFarm, getFarmById } from "@/services/farmService";
-import { getFarmFeed } from "@/services/livestockService";
+import {
+  getActiveFarm,
+  getFarmById,
+  getFarmLocalTime,
+} from "@/services/farmService";
 import { getCurrentUser } from "@/services/authService";
-import BarCharts from "../../common/charts/BarCharts";
-import PieCharts from "../../common/charts/PieCharts";
-import SearchWidget from "../../common/search/search";
 import RightBar from "@/components/layout/RightBar";
 
 // import Header from "../common/sidebar/header";
 import DashCard from "./DashCard";
 import { AcreLoader } from "../../common/ui/acreLoader";
 import { Farm } from "@/helpers/types";
-import { useWindowScroll } from "../../hooks/use-window-scroll";
-import { useIsMounted } from "../../hooks/use-is-mounted";
-import HamburgerButton from "@/components/layout/sidebar/HamburgerButton";
-import NotificationDialog from "./NotificationDialog";
-import Header from "./Header";
+import { fetchWeatherDataByGeocode } from "@/services/weatherService";
+import { weatherLocalKey } from "@/services/userService";
+import Tasks from "@/components/layout/Tasks";
+import WeatherWidget from "@/components/layout/WeatherWidget";
+
+export interface WeatherData {
+  temperature: number | string;
+  windSpeed: number | string;
+  humidity: number | string;
+  pressure: number | string;
+  rain: number | string;
+  icon: string;
+  description: string;
+  date: string;
+  time: string;
+}
+
+export const weatherEmptyState = {
+  temperature: "0",
+  windSpeed: "-",
+  humidity: "-",
+  pressure: "-",
+  rain: "-",
+  icon: "02d",
+  description: "No weather data",
+  date: "-",
+  time: "-",
+};
 
 const Dashboard = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [date, setDate] = useState<Date>();
   const [farms, setFarms] = useState<Farm>();
-  const [feedData, setFeedData] = useState<any[]>([]);
   const user = getCurrentUser();
+
+  const [weatherData, setWeatherData] = useState<WeatherData | null>(weatherEmptyState);
+  const [todayDate, setToday] = useState({
+    date: "",
+    time: "",
+  });
+
+  useEffect(() => {
+    let parsedWeatherData = null;
+
+    // get weather from api
+    fetchWeatherDataByGeocode(getActiveFarm().geocode)
+      .then((data) => {
+        parsedWeatherData = data ?? weatherEmptyState;
+        const date = parsedWeatherData
+          ? parsedWeatherData.date
+          : new Date().toLocaleDateString();
+        const time = parsedWeatherData
+          ? parsedWeatherData.time
+          : getFarmLocalTime();
+
+        setWeatherData(parsedWeatherData);
+        setToday({
+          date,
+          time,
+        });
+        localStorage.setItem(weatherLocalKey, JSON.stringify(data));
+      })
+      .catch((error) => {
+        console.error("Error fetching weather data:", error);
+      });
+  }, []);
 
   useEffect(() => {
     const fetchFarms = async () => {
@@ -84,7 +120,11 @@ const Dashboard = () => {
       {isLoading ? <AcreLoader /> : Dashboard}
       <div className="pt-5">
         {/* main content */}
-        <div className="flex flex-col items-center justify-between w-full space-y-10 mx-auto">
+        <div className="lg:hidden w-full p-10">
+          <WeatherWidget todayDate={todayDate} weatherData={weatherData} />
+        </div>
+
+        <div className="flex flex-col items-center justify-between w-full space-y-10 mx-auto p-4">
           <div className="w-full">
             <p className="font-bold text-gray-700 text-lg tracking-tight">
               {farms?.farm_name}
@@ -129,8 +169,10 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="lg:hidden flex w-full">
-          <RightBar />
+        <div className="lg:hidden flex w-full p-4">
+          <div className="w-full h-full mt-8">
+            <Tasks />
+          </div>
         </div>
       </div>
     </>
@@ -138,4 +180,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
