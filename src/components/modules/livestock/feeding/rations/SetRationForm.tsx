@@ -3,18 +3,12 @@ import { CiEdit } from "react-icons/ci";
 import { Input } from "@/components/common/ui/input";
 import { Button as Btn } from "rizzui";
 import {
-  Card,
-  CardContent,
-  CardDescription,
   CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/common/ui/card";
 import { Button } from "../../../../common/ui/button";
 import {
   InputGroup,
   InputRightElement,
-  InputLeftElement,
 } from "@chakra-ui/react";
 import {
   Select,
@@ -24,12 +18,8 @@ import {
   SelectValue,
 } from "@/components/common/ui/select";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
   DialogTitle,
   DialogClose,
-  DialogTrigger,
 } from "../../../../common/ui/dialog";
 import { Label } from "@/components/common/ui/label";
 import { getFarmFeed } from "@/services/livestockService";
@@ -40,22 +30,13 @@ import HttpService from "@/services/HttpService";
 import { API_URL } from "@/config";
 import { getActiveFarm } from "@/services/farmService";
 import { toast } from "sonner";
-import { Controller } from "react-hook-form";
 import * as z from "zod";
-import { InformationCircleIcon } from "@heroicons/react/24/solid";
-import { ApiResponse, Feeds } from "@/helpers/types";
+import { Feeds } from "@/helpers/types";
 import CustomTooltip from "@/components/common/CustomTooltip";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 // import { DatePicker } from "@/components/common/ui/datepicker";
 import DatePicker from "react-datepicker";
 import { Checkbox } from "@/components/common/ui/checkbox";
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/common/ui/form";
 import { FiClock } from "react-icons/fi";
 
 interface SetFeedRationProps {
@@ -72,6 +53,12 @@ const setRationSchema = z.object({
   animal_type: z.number().min(1),
   animal_maturity: z.number().min(1),
   weight_measuring_unit: z.string().min(1),
+  livestock_id: z.string().refine((value) => {
+    const parsedValue = parseInt(value);
+    return !isNaN(parsedValue) && parsedValue > 0;
+  }, {
+    message: "Livestock ID must be a valid positive number"
+  })
 });
 
 const SetFeedRation: React.FC<SetFeedRationProps> = ({
@@ -86,7 +73,8 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
   const [formError, setFormError] = useState<string>("");
   const [selectedUnit, setSelectedUnit] = useState<string>("");
 
-  const [applyToHousing, setApplyToHousing] = useState<boolean>(false);
+  const [schedule_active, setScheduleActive] = useState<boolean>(true);
+  const [applyToHousing, setApplyToHousing] = useState<boolean>(true);
   const [applyToMaturity, setApplyToMaturity] = useState<boolean>(false);
 
   const initialDate = new Date();
@@ -95,6 +83,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate);
   const handleDateChange = (date: Date | null) => {
+    console.log(date)
     setSelectedDate(date);
   };
 
@@ -138,6 +127,8 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
       animal_type: row.animal_id,
       animal_maturity: row.maturity_id,
       weight_measuring_unit: selectedUnit,
+      livestock_id: row.uuid,
+      
     },
   });
 
@@ -147,7 +138,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
     rationForm.setValue("animal_type", parseInt(row.animal_id));
   }, []);
 
-  useEffect(() => {}, [rationName, formError, selectedUnit]);
+  useEffect(() => { }, [rationName, formError, selectedUnit]);
 
   const handleFeedSelection = (value: string) => {
     rationForm.setValue("feed_id", value);
@@ -186,20 +177,45 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
       } else {
         toast.error(data.message);
       }
+      const rationId = data.data.id;
+      rationForm.setValue("name", rationId);
+      const getTime_N_Timezone = (date: Date | null) => {
+        if (!date) return [];
+        const hours = ("0" + date.getHours()).slice(-2);
+        const minutes = ("0" + date.getMinutes()).slice(-2);
+        const seconds = ("0" + date.getSeconds()).slice(-2);
+        const time = `${hours}:${minutes}:${seconds}`;
+
+        const timezoneOffset = date.getTimezoneOffset();
+        const timezoneHours = Math.abs(Math.floor(timezoneOffset / 60));
+        const timezoneMinutes = Math.abs(timezoneOffset % 60);
+        const timezoneDirection = timezoneOffset > 0 ? '-' : '+';
+        const timezone = `UTC${timezoneDirection}${("0" + timezoneHours).slice(-2)}:${("0" + timezoneMinutes).slice(-2)} (West Africa Standard Time)`;
+
+        return [time, timezone]
+
+      }
+
+      const [time, timezone] = getTime_N_Timezone(selectedDate)
       // Submit data for feeding schedule
       if (applyToHousing || applyToMaturity) {
         const applyTo = [];
         if (applyToHousing) applyTo.push("housing");
         if (applyToMaturity) applyTo.push("maturity");
 
+        const livestock_id = row.uuid;
         const scheduleData = {
-          ...postData,
+          time,
+          timezone,
           applyTo: applyTo.join(","),
-          auto_feed_active: true, 
+          auto_feed_active: true,
+          schedule_active,
+          livestock_id,
+          ration_id: rationId,
         };
 
         await HttpService.post(
-          `${API_URL}farms/${userActiveFarmId}/feeding/schedule`,
+          `${API_URL}farms/${userActiveFarmId}/feeding/schedule${applyTo.length ? '?applyTo=' + applyTo.join(",") : ''}}`,
           scheduleData,
           HttpService.getDefaultOptions()
         );
@@ -381,7 +397,11 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
               <div className="flex items-center justify-between">
                 <div className="flex items-center justify-between gap-[10rem]">
                   <div className="flex items-center space-x-2">
-                    <Checkbox defaultChecked />
+                    <Checkbox
+                      checked={schedule_active}
+                      id="activateFeedingSchedule"
+                      onCheckedChange={(e) => setScheduleActive(e as boolean)}
+                    />
                     <span className="text-sm font-normal leading-none whitespace-nowrap">
                       Activate Feeding Schedule
                     </span>
@@ -409,9 +429,9 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
               <div className="flex items-center justify-between gap-[8rem]">
                 <div className="flex items-center space-x-2">
                   <Checkbox
-                    defaultChecked
                     checked={applyToHousing}
-                    onChange={(e) => setApplyToHousing(e.target.checked)}
+                    id="applyToHousing"
+                    onCheckedChange={(e) => setApplyToHousing(e as boolean)}
                   />
                   <span className="text-sm font-normal leading-none">
                     All livestock in the ration group
@@ -439,7 +459,8 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
                 <div className="flex items-center space-x-2">
                   <Checkbox
                     checked={applyToMaturity}
-                    onChange={(e) => setApplyToMaturity(e.target.checked)}
+                    id="applyToMaturity"
+                    onCheckedChange={(e) => setApplyToMaturity(e as boolean)}
                   />
                   <span className="text-sm font-medium leading-none">
                     All livestock in “Mcdonald Stable 1” housing
@@ -504,3 +525,4 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
 };
 
 export default SetFeedRation;
+
