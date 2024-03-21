@@ -20,6 +20,9 @@ import { getActiveFarm, getFarmById } from "@/services/farmService";
 import { getCurrentUser } from "@/services/authService";
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import MessagesDropdown from "./Notifications";
+import { ActionIcon, Badge } from 'rizzui';
+import { IoMdNotificationsOutline } from "react-icons/io";
 
 const Header = () => {
   const location = useLocation();
@@ -66,9 +69,7 @@ const Header = () => {
             />
           </div>
 
-          <div className="">
-            {pathname === "/" && <SearchWidget />}
-          </div>
+          <div className="">{pathname === "/" && <SearchWidget />}</div>
 
           <div className="flex">
             <Select>
@@ -89,20 +90,24 @@ const Header = () => {
             </Select>
 
             <div className="flex">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-10 h-10 px-2 "
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"
-                />
-              </svg>
+              <MessagesDropdown>
+                <ActionIcon
+                  aria-label="Messages"
+                  variant="text"
+                  className={cn(
+                    " relative h-[34px] w-[34px] overflow-hidden rounded-full md:h-9 md:w-9 3xl:h-10 3xl:w-10 "
+                  )}
+                >
+                  <IoMdNotificationsOutline className="h-6 w-auto" />
+                  
+                  <Badge
+                    renderAsDot
+                    color="success"
+                    enableOutlineRing
+                    className="absolute right-1 top-2.5 -translate-x-1 -translate-y-1/4"
+                  />
+                </ActionIcon>
+              </MessagesDropdown>
               <Avatar>
                 <AvatarImage
                   src="https://github.com/shadcn.png"
