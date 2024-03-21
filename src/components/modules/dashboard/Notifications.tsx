@@ -55,7 +55,7 @@ function MessagesList({
 }) {
   return (
     <div className="w-[320px] text-left rtl:text-right sm:w-[360px] 2xl:w-[420px]">
-            <Title as="h6" className="">
+            <Title as="h6" className="ml-2 font-bold text-xl p-3">
           Notifications
         </Title>
       <div className="mb-2 flex items-center justify-between ps-6">
