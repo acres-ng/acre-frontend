@@ -6,11 +6,13 @@ import { NoResourcesCard } from "../../../common/inactiveComponentStates";
 import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { Select } from "antd";
 import {Button} from "rizzui";
+import { useNavigate } from "react-router-dom";
 
 const { Option } = Select;
 const Housing = () => {
   const [housingData, setHousingData] = useState([]);
   const [isLoading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getLivestockHousing().then((data) => {
@@ -36,7 +38,7 @@ const Housing = () => {
         
           <div className="flex justify-between items-center w-full max-md:max-w-full max-md:flex-wrap ">
             <h1 className="text-2xl font-bold pl-4 text-gray-800">Housing</h1>
-            <Button className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg focus:outline-none focus:border-blue-500">
+            <Button className="flex items-center gap-2 bg-green-500 text-white px-4 py-2 rounded-lg focus:outline-none focus:border-blue-500" onClick={() => navigate(`/livestock/add-house`)}>
               <PlusIcon className="h-5 w-5" />
               Add Housing
             </Button>

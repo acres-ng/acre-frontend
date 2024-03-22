@@ -16,6 +16,7 @@ import InventoryList from "../components/modules/livestock/feeding/InventoryList
 import Rations from "../components/modules/livestock/feeding/rations/Rations";
 import RecipeBuilder from "../components/modules/livestock/feeding/recipeBuilder/RecipeBuilder";
 import LivestockEditForm from "../components/modules/livestock/LivestockEditForm";
+import HousingAddForm from "@/components/modules/livestock/housing/HousingAddForm";
 
 const PublicRoutes = () => {
   return (
@@ -84,6 +85,14 @@ const PublicRoutes = () => {
           element={
             <Layout>
               <Housing />
+            </Layout>
+          }
+        />
+          <Route
+          path="add-house"
+          element={
+            <Layout>
+              <HousingAddForm />
             </Layout>
           }
         />

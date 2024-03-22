@@ -30,6 +30,7 @@ import { BiSolidBowlRice } from "react-icons/bi";
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { MdOutlineVaccines } from "react-icons/md";
 import { GoPulse } from "react-icons/go";
+import { useNavigate } from "react-router-dom";
 
 // types
 type ImgAndIconProps = {
@@ -55,6 +56,8 @@ type HousingCardProps = {
     imageAlt: string,
     info: HousingInfoProps;
     };
+
+   
 
 
 // components
