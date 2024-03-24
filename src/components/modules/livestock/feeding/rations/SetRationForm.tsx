@@ -32,7 +32,7 @@ import { getActiveFarm } from "@/services/farmService";
 import { toast } from "sonner";
 import * as z from "zod";
 import { Feeds } from "@/helpers/types";
-import CustomTooltip from "@/components/common/CustomTooltip";
+import AcreTooltip from "@/components/common/AcreTooltip";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 // import { DatePicker } from "@/components/common/ui/datepicker";
 import DatePicker from "react-datepicker";
@@ -57,7 +57,7 @@ const setRationSchema = z.object({
     const parsedValue = parseInt(value);
     return !isNaN(parsedValue) && parsedValue > 0;
   }, {
-    message: "Livestock ID must be a valid positive number"
+    message: "Invalid Livestock selected"
   })
 });
 
@@ -244,7 +244,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
               )}
             </span>
             <div className="ml-2">
-              <CustomTooltip
+              <AcreTooltip
                 triggerText={
                   <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
                 }
@@ -279,7 +279,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
             <div className="flex items-center">
               <Label htmlFor="feedName">Feed Name or ID</Label>
               <div className="ml-2">
-                <CustomTooltip
+                <AcreTooltip
                   triggerText={
                     <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
                   }
@@ -317,7 +317,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
             <div className="flex items-center">
               <Label htmlFor="feedName">Daily Ration</Label>
               <div className="ml-2">
-                <CustomTooltip
+                <AcreTooltip
                   triggerText={
                     <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
                   }
@@ -362,7 +362,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
               <Label htmlFor="feedName">Set Livestock Feeding Time</Label>
               {/* Tooltip */}
               <span className="flex items-center ml-2">
-                <CustomTooltip
+                <AcreTooltip
                   triggerText={
                     <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
                   }
@@ -408,7 +408,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
                   </div>
 
                   <div>
-                    <CustomTooltip
+                    <AcreTooltip
                       triggerText={
                         <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
                       }
@@ -439,7 +439,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
                 </div>
 
                 <div>
-                  <CustomTooltip
+                  <AcreTooltip
                     triggerText={
                       <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
                     }
@@ -467,7 +467,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
                   </span>
                 </div>
                 <div>
-                  <CustomTooltip
+                  <AcreTooltip
                     triggerText={
                       <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
                     }
