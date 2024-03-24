@@ -1,7 +1,3 @@
-
-
-
-
 import React from "react";
 import { Checkbox, CheckboxGroup } from "rizzui";
 import {
@@ -31,7 +27,7 @@ const VaccinationRecordForm = () => {
   const [state, setState] = useState(0);
   const [values, setValues] = useState(["yes"]);
   return (
-    <div>
+    <div style={{ maxHeight: "400px", overflowY: "auto" }}>
       <div>
         <Input
           label="Quantity Of Livestock"
@@ -61,7 +57,6 @@ const VaccinationRecordForm = () => {
         />
       </div>
 
-      
       <div className="mt-4">
         <Label htmlFor="daily_ration_weight">Vaccinated From</Label>
         <InputGroup>
@@ -87,7 +82,11 @@ const VaccinationRecordForm = () => {
       <div className="mt-4">
         <Label htmlFor="daily_ration_weight">Vet Name or Id</Label>
         <InputGroup>
-          <Input type="tel" placeholder="e.g animals bestie" className="w-full" />
+          <Input
+            type="tel"
+            placeholder="e.g animals bestie"
+            className="w-full"
+          />
         </InputGroup>
       </div>
 
@@ -104,7 +103,6 @@ const VaccinationRecordForm = () => {
         </CheckboxGroup>
       </div>
 
-
       <div className="flex flex-col space-y-1.5 mt-4">
         <Label htmlFor="notes">Notes (Optional)</Label>
         <Textarea id="notes" placeholder="Write Something" />
@@ -112,10 +110,14 @@ const VaccinationRecordForm = () => {
 
       <CardFooter className="flex  gap-12 mt-4">
         <DialogClose asChild>
-          <Button variant="outline" className="w-full">Cancel</Button>
+          <Button variant="outline" className="w-full">
+            Cancel
+          </Button>
         </DialogClose>
 
-        <Button type="submit" className="w-full bg-green-400 text-white">Save</Button>
+        <Button type="submit" className="w-full bg-green-400 text-white">
+          Save
+        </Button>
       </CardFooter>
     </div>
   );
