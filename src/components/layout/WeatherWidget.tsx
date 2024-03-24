@@ -4,7 +4,7 @@ import { RiWindyLine } from "react-icons/ri";
 import { BiCloudRain } from "react-icons/bi";
 import { IoBarbellOutline } from "react-icons/io5";
 import { WiHumidity } from "react-icons/wi";
-import { Button } from "../common/ui/button";
+import { Button } from "rizzui";
 import { IoMdArrowDropdown } from "react-icons/io";
 import { WeatherData } from "../modules/dashboard/Dashboard";
 
@@ -28,9 +28,10 @@ const WeatherWidget = ({ weatherData, todayDate }: IProps) => {
 
   return (
     <>
-      <Button onClick={handleShowWeather} className="w-full lg:hidden block">
-        <IoMdArrowDropdown className="left-0" />
+      <Button className="w-full rounded-xl bg-[#CCE6DA] lg:hidden flex justify-end items-center">
+        <IoMdArrowDropdown onClick={handleShowWeather} className="ml-2" />
       </Button>
+
       <div
         className={`w-full flex flex-col px-6 py-2 overflow-hidden bg-[#CCE6DA] rounded-xl shadow-lg duration-300 hover:shadow-2xl lg:block ${
           weatherOpen ? "block" : "hidden"
