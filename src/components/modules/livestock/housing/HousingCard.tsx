@@ -254,7 +254,7 @@ const HousingCard: React.FC<HousingCardProps> = ({
   imageAlt,
   info,
 }) => (
-  <div className="flex gap-5 max-md:flex-col max-md:gap-0 max-md: mb-5">
+  <div className="flex gap-5 max-md:flex-col max-md:gap-0 max-md:mb-5 border-gray-300 border rounded-xl py-3 my-4">
     <aside className="flex flex-col w-[27%] max-md:ml-0 max-md:w-full">
       <ImageWithAlt
         src={imageSrc}
