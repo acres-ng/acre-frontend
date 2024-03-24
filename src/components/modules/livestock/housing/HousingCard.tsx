@@ -32,6 +32,7 @@ import { MdOutlineVaccines } from "react-icons/md";
 import { GoPulse } from "react-icons/go";
 import { useNavigate } from "react-router-dom";
 import SalesOrderForm from "./SalesOrderForm";
+import MortalityRecordForm from "./MortalityRecordForm";
 
 // types
 type ImgAndIconProps = {
@@ -153,7 +154,7 @@ const HousingInfo: React.FC<HousingInfoProps> = ({
                             </CardTitle>
                           </CardHeader>
 
-                          <CardContent>{/* <SetFeedRation /> */}</CardContent>
+                          <CardContent><MortalityRecordForm /></CardContent>
                         </DialogContent>
                       </Dialog>
 
