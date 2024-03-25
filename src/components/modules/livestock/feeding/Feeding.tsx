@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InventoryList from "./InventoryList";
 import RecipeBuilder from "./recipeBuilder/RecipeBuilder";
 import Rations from "./rations/Rations";
+import { AcreLoader } from "@/components/common/ui/acreLoader";
 
 const Menu = [
   {
@@ -23,6 +24,16 @@ const Menu = [
 
 const Feeding = () => {
   const [activeMenu, setActiveMenu] = useState(Menu);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, []);
+
   const handleTabChange = (id: number) => {
     setActiveMenu((prevMenu) =>
       prevMenu.map((menu) => ({
@@ -54,9 +65,15 @@ const Feeding = () => {
       </div>
 
       <div>
-        {active?.id === 1 && <InventoryList />}
-        {active?.id === 2 && <Rations />}
-        {active?.id === 3 && <RecipeBuilder />}
+        {loading ? (
+          <div><AcreLoader /></div> 
+        ) : (
+          <>
+            {active?.id === 1 && <InventoryList />}
+            {active?.id === 2 && <Rations />}
+            {active?.id === 3 && <RecipeBuilder />}
+          </>
+        )}
       </div>
     </div>
   );
