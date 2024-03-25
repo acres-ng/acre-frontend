@@ -82,11 +82,6 @@ const Header = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  {/* {farms?.map((farm: any, idx: number) => (
-                        <SelectItem key={idx} value={farm.id}>
-                          {farm.farm_name}
-                        </SelectItem>
-                      ))}  */}
                 </SelectGroup>
               </SelectContent>
             </Select>

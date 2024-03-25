@@ -1,4 +1,4 @@
-// import Link from 'next/link';
+
 import { RefObject, useState } from "react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -7,10 +7,8 @@ import { Popover } from "rizzui";
 import { Title, Text } from "rizzui";
 import { Avatar } from "rizzui";
 import { Badge } from "rizzui";
-// import { routes } from '@/config/routes';
-import { default as useMedia } from "react-use/lib/useMedia";
 
-// import SimpleBar from 'rizzui';
+import { default as useMedia } from "react-use/lib/useMedia";
 import SimpleBar from "simplebar-react";
 import "simplebar-react/dist/simplebar.min.css";
 import { PiCheck } from "react-icons/pi";
@@ -65,7 +63,6 @@ function MessagesList({
         </div>
 
         <a
-          //   href={routes.support.inbox}
           onClick={() => setIsOpen(false)}
           className="hover:underline"
         >
