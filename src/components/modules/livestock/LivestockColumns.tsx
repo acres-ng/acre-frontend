@@ -37,7 +37,7 @@ import RecordSale from "./transactions/RecordSaleForm";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { IoMdInformationCircleOutline } from "react-icons/io";
-import CustomTooltip from "../../common/CustomTooltip";
+import CustomTooltip from "../../common/AcreTooltip";
 import { Tooltip, Button } from "rizzui";
 
 type LivestockColumns = {

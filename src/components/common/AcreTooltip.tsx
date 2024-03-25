@@ -4,16 +4,16 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "../common/ui/tooltip";
+} from "./ui/tooltip";
 // import { Tooltip, Text } from "rizzui";
 import { Button } from "rizzui";
 
-interface CustomTooltipProps {
+interface AcreTooltipProps {
   triggerText: ReactNode;
   tooltipContent: ReactNode;
 }
 
-const CustomTooltip: React.FC<CustomTooltipProps> = ({
+const AcreTooltip: React.FC<AcreTooltipProps> = ({
   triggerText,
   tooltipContent,
 }) => {
@@ -29,6 +29,4 @@ const CustomTooltip: React.FC<CustomTooltipProps> = ({
   );
 };
 
-export default CustomTooltip;
-
-
+export default AcreTooltip;
