@@ -524,5 +524,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
   );
 };
 
+
 export default SetFeedRation;
+
 

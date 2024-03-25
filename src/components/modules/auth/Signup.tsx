@@ -13,10 +13,11 @@ import regimg from "../../../assets/images/regimg.png";
 import { toast } from "sonner";
 import { encryptData } from "@/helpers/encrypt";
 import logo from "../../../assets/images/logo.png";
-
+import { Password } from "rizzui";
 import { BiSolidLock } from "react-icons/bi";
 import { IoCheckbox } from "react-icons/io5";
 import { backgroundColours } from "@/helpers/enums";
+import { Input } from "rizzui";
 
 const signUpSchema = z
 .object({
@@ -203,7 +204,7 @@ const Signup = () => {
                   >
                     Your name
                   </label>
-                  <input
+                  <Input
                     {...register("firstname", {
                       required: "Name is required",
                       pattern: {
@@ -212,10 +213,10 @@ const Signup = () => {
                           " name cannot contain whitespace",
                       },
                     })}
-                    type="text"
+                    placeholder="Enter your name"
                     name="firstname"
                     id="name"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   
                   />
                   {errors.firstname && (
                     <p className="text-red-500 text-sm">
@@ -255,7 +256,7 @@ const Signup = () => {
                   >
                     Email address{" "}
                   </label>
-                  <input
+                  <Input
                     {...register("email", {
                       // required: "Email is required",
                       pattern: {
@@ -265,7 +266,8 @@ const Signup = () => {
                     })}
                     id="email"
                     type="email"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Enter your email"
+                   
                   />
                   {errors.email && (
                     <p className="text-red-500 text-sm">
@@ -281,7 +283,7 @@ const Signup = () => {
                     Password
                   </label>
 
-                  <input
+                  <Password
                     {...register("password", {
                       required: "Password is required",
                       minLength: {
@@ -289,11 +291,11 @@ const Signup = () => {
                         message: "Password must be at least 8 characters long",
                       },
                     })}
-                    type="password"
+                    placeholder="Enter password"
                     name="password"
                     id="password"
                     onChange={handlePasswordChange}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   
                   />
                   {getValues()?.password?.length > 0 && (
                     <div>
@@ -371,7 +373,7 @@ const Signup = () => {
                   >
                     Confirm password
                   </label>
-                  <input
+                  <Password
                     {...register("confirmPassword", {
                       required: "Password do not match",
                       minLength: {
@@ -379,10 +381,10 @@ const Signup = () => {
                         message: "Password must be at least 6 characters long",
                       },
                     })}
-                    type="password"
+                    placeholder="Confirm your password"
                     name="confirmPassword"
                     id="confirm-password"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                    
                   />
                   {errors.confirmPassword && (
                     <p className="text-red-500 text-sm">
@@ -441,19 +443,6 @@ const Signup = () => {
                     Login
                   </Link>
                 </p>
-                {/* <div className="flex items-center justify-center dark:bg-gray-800">
-                  <button className="px-4 py-2 border flex gap-2 w-full border-slate-200 dark:border-slate-700 rounded-lg text-slate-700 dark:text-slate-200 hover:border-slate-400 dark:hover:border-slate-500 hover:text-slate-900 dark:hover:text-slate-300 hover:shadow transition duration-150 items-center justify-center">
-                    <span className="flex items-center justify-center">
-                      <img
-                        className="w-6 h-6"
-                        src="https://www.svgrepo.com/show/475656/google-color.svg"
-                        loading="lazy"
-                        alt="Google Logo"
-                      />
-                      <span>Login with reg</span>
-                    </span>
-                  </button>
-                </div> */}
               </form>
             </div>
           </div>

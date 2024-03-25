@@ -217,7 +217,7 @@ const Otp = () => {
                     )}
                     <button
                       type="submit"
-                      className="bg-green-500 cursor-pointer hover-bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline"
+                      className="bg-green-500 hover:bg-green-700 w-full cursor-pointer hover-bg-green-700 text-white font-bold py-3 px-8 rounded-lg focus:outline-none focus:shadow-outline"
                     >
                       Continue
                     </button>
