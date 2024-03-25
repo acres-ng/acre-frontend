@@ -3,18 +3,12 @@ import { CiEdit } from "react-icons/ci";
 import { Input } from "@/components/common/ui/input";
 import { Button as Btn } from "rizzui";
 import {
-  Card,
-  CardContent,
-  CardDescription,
   CardFooter,
-  CardHeader,
-  CardTitle,
 } from "@/components/common/ui/card";
 import { Button } from "../../../../common/ui/button";
 import {
   InputGroup,
   InputRightElement,
-  InputLeftElement,
 } from "@chakra-ui/react";
 import {
   Select,
@@ -24,12 +18,8 @@ import {
   SelectValue,
 } from "@/components/common/ui/select";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
   DialogTitle,
   DialogClose,
-  DialogTrigger,
 } from "../../../../common/ui/dialog";
 import { Label } from "@/components/common/ui/label";
 import { getFarmFeed } from "@/services/livestockService";
@@ -41,7 +31,13 @@ import { API_URL } from "@/config";
 import { getActiveFarm } from "@/services/farmService";
 import { toast } from "sonner";
 import * as z from "zod";
-import { ApiResponse, Feeds } from "@/helpers/types";
+import { Feeds } from "@/helpers/types";
+import AcreTooltip from "@/components/common/AcreTooltip";
+import { IoMdInformationCircleOutline } from "react-icons/io";
+// import { DatePicker } from "@/components/common/ui/datepicker";
+import DatePicker from "react-datepicker";
+import { Checkbox } from "@/components/common/ui/checkbox";
+import { FiClock } from "react-icons/fi";
 
 interface SetFeedRationProps {
   row: any;
@@ -57,6 +53,12 @@ const setRationSchema = z.object({
   animal_type: z.number().min(1),
   animal_maturity: z.number().min(1),
   weight_measuring_unit: z.string().min(1),
+  livestock_id: z.string().refine((value) => {
+    const parsedValue = parseInt(value);
+    return !isNaN(parsedValue) && parsedValue > 0;
+  }, {
+    message: "Invalid Livestock selected"
+  })
 });
 
 const SetFeedRation: React.FC<SetFeedRationProps> = ({
@@ -70,6 +72,36 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
   const [rationName, setRationName] = useState<string>(rationAutoName);
   const [formError, setFormError] = useState<string>("");
   const [selectedUnit, setSelectedUnit] = useState<string>("");
+
+  const [schedule_active, setScheduleActive] = useState<boolean>(true);
+  const [applyToHousing, setApplyToHousing] = useState<boolean>(true);
+  const [applyToMaturity, setApplyToMaturity] = useState<boolean>(false);
+
+  const initialDate = new Date();
+  initialDate.setHours(8);
+  initialDate.setMinutes(0);
+
+  const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate);
+  const handleDateChange = (date: Date | null) => {
+    console.log(date)
+    setSelectedDate(date);
+  };
+
+  const CustomInput = ({ value, onClick }: { value: any; onClick: any }) => (
+    <div className="relative">
+      <input
+        type="text"
+        value={value}
+        onClick={onClick}
+        readOnly
+        style={{ cursor: "pointer" }}
+        className="w-full p-2 border border-gray-300 mt-1 rounded-md pl-10"
+      />
+      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+        <FiClock className="text-gray-400" />
+      </div>
+    </div>
+  );
 
   const fetchFeedData = async () => {
     try {
@@ -95,6 +127,8 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
       animal_type: row.animal_id,
       animal_maturity: row.maturity_id,
       weight_measuring_unit: selectedUnit,
+      livestock_id: row.uuid,
+      
     },
   });
 
@@ -104,8 +138,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
     rationForm.setValue("animal_type", parseInt(row.animal_id));
   }, []);
 
-  useEffect(() => {
-  }, [rationName, formError, selectedUnit]);
+  useEffect(() => { }, [rationName, formError, selectedUnit]);
 
   const handleFeedSelection = (value: string) => {
     rationForm.setValue("feed_id", value);
@@ -144,6 +177,49 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
       } else {
         toast.error(data.message);
       }
+      const rationId = data.data.id;
+      rationForm.setValue("name", rationId);
+      const getTime_N_Timezone = (date: Date | null) => {
+        if (!date) return [];
+        const hours = ("0" + date.getHours()).slice(-2);
+        const minutes = ("0" + date.getMinutes()).slice(-2);
+        const seconds = ("0" + date.getSeconds()).slice(-2);
+        const time = `${hours}:${minutes}:${seconds}`;
+
+        const timezoneOffset = date.getTimezoneOffset();
+        const timezoneHours = Math.abs(Math.floor(timezoneOffset / 60));
+        const timezoneMinutes = Math.abs(timezoneOffset % 60);
+        const timezoneDirection = timezoneOffset > 0 ? '-' : '+';
+        const timezone = `UTC${timezoneDirection}${("0" + timezoneHours).slice(-2)}:${("0" + timezoneMinutes).slice(-2)} (West Africa Standard Time)`;
+
+        return [time, timezone]
+
+      }
+
+      const [time, timezone] = getTime_N_Timezone(selectedDate)
+      // Submit data for feeding schedule
+      if (applyToHousing || applyToMaturity) {
+        const applyTo = [];
+        if (applyToHousing) applyTo.push("housing");
+        if (applyToMaturity) applyTo.push("maturity");
+
+        const livestock_id = row.uuid;
+        const scheduleData = {
+          time,
+          timezone,
+          applyTo: applyTo.join(","),
+          auto_feed_active: true,
+          schedule_active,
+          livestock_id,
+          ration_id: rationId,
+        };
+
+        await HttpService.post(
+          `${API_URL}farms/${userActiveFarmId}/feeding/schedule${applyTo.length ? '?applyTo=' + applyTo.join(",") : ''}`,
+          scheduleData,
+          HttpService.getDefaultOptions()
+        );
+      }
     } catch (error) {
       console.error("Error:", error);
       toast.error("An error occurred. Please try again later.");
@@ -154,18 +230,33 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
   return (
     <div>
       <Form {...rationForm}>
-        <DialogTitle className="mb-6 flex justify-between items-center">
-          <span className="text-green-500">
-            {editMode ? (
-              <input
-                type="text"
-                value={rationName}
-                onChange={handleNameChange}
+        <DialogTitle className="mb-2 flex justify-between items-center">
+          <div className="flex items-center">
+            <span className="text-green-500">
+              {editMode ? (
+                <input
+                  type="text"
+                  value={rationName}
+                  onChange={handleNameChange}
+                />
+              ) : (
+                <>{rationName}</>
+              )}
+            </span>
+            <div className="ml-2">
+              <AcreTooltip
+                triggerText={
+                  <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
+                }
+                tooltipContent={
+                  <p>
+                    Enter a unique name for the ration. This helps you identify
+                    and manage different feeding rations easily.
+                  </p>
+                }
               />
-            ) : (
-              <>{rationName}</>
-            )}
-          </span>
+            </div>
+          </div>
 
           <span className="material-icons" onClick={handleEditName}>
             <CiEdit />
@@ -185,7 +276,23 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
         )}
         <div className="grid w-full items-center gap-4">
           <div className="flex flex-col space-y-1.5 mt-3">
-            <Label htmlFor="feedName">Feed Name or ID</Label>
+            <div className="flex items-center">
+              <Label htmlFor="feedName">Feed Name or ID</Label>
+              <div className="ml-2">
+                <AcreTooltip
+                  triggerText={
+                    <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
+                  }
+                  tooltipContent={
+                    <p>
+                      Choose which feed to include in the ration. This
+                      determines what your livestock will be fed.
+                    </p>
+                  }
+                />
+              </div>
+            </div>
+
             <Select
               {...rationForm.register("feed_id")}
               onValueChange={(value: string) => handleFeedSelection(value)}
@@ -206,8 +313,24 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
             )}
           </div>
 
-          <div className="flex flex-col space-y-1.5 pt-2">
-            <Label htmlFor="daily_ration_weight">Daily Ration</Label>
+          <div className="flex flex-col space-y-1.5 ">
+            <div className="flex items-center">
+              <Label htmlFor="feedName">Daily Ration</Label>
+              <div className="ml-2">
+                <AcreTooltip
+                  triggerText={
+                    <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
+                  }
+                  tooltipContent={
+                    <p>
+                      Specify the weight of the selected feed for this ration.
+                      This determines how much of the feed will be given to each
+                      animal.
+                    </p>
+                  }
+                />
+              </div>
+            </div>
             <InputGroup>
               <Input
                 placeholder="Enter Ration"
@@ -233,6 +356,133 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
               </InputRightElement>
             </InputGroup>
           </div>
+          <div className="flex flex-col">
+            <div className="flex items-center">
+              {/* Label */}
+              <Label htmlFor="feedName">Set Livestock Feeding Time</Label>
+              {/* Tooltip */}
+              <span className="flex items-center ml-2">
+                <AcreTooltip
+                  triggerText={
+                    <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
+                  }
+                  tooltipContent={
+                    <p>
+                      Set the time for the feeding schedule. This determines
+                      when the ration should be given to your livestock.
+                    </p>
+                  }
+                />
+              </span>
+            </div>
+
+            {/* DatePicker */}
+            <DatePicker
+              selected={selectedDate}
+              onChange={handleDateChange}
+              showTimeSelect
+              showTimeSelectOnly
+              timeIntervals={15}
+              dateFormat="h:mm aa"
+              timeCaption="Time"
+              customInput={
+                <CustomInput value={undefined} onClick={undefined} />
+              }
+            />
+          </div>
+
+          <div className="bg-[#EAF8F2] p-3 rounded-lg">
+            <div className="flex flex-col items-start space-y-1">
+              <h1 className="font-semibold">Feeding Schedule</h1>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between gap-[10rem]">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={schedule_active}
+                      id="activateFeedingSchedule"
+                      onCheckedChange={(e) => setScheduleActive(e as boolean)}
+                    />
+                    <span className="text-sm font-normal leading-none whitespace-nowrap">
+                      Activate Feeding Schedule
+                    </span>
+                  </div>
+
+                  <div>
+                    <AcreTooltip
+                      triggerText={
+                        <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
+                      }
+                      tooltipContent={
+                        <p>
+                          Check this box to activate the feeding schedule
+                          immediately after creation. If checked, the schedule
+                          will be applied to your livestock.
+                        </p>
+                      }
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-col items-start space-y-1">
+              <h1 className="font-semibold pt-1">Apply feeding ration to:</h1>
+              <div className="flex items-center justify-between gap-[8rem]">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    checked={applyToHousing}
+                    id="applyToHousing"
+                    onCheckedChange={(e) => setApplyToHousing(e as boolean)}
+                  />
+                  <span className="text-sm font-normal leading-none">
+                    All livestock in the ration group
+                  </span>
+                </div>
+
+                <div>
+                  <AcreTooltip
+                    triggerText={
+                      <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
+                    }
+                    tooltipContent={
+                      <p>
+                        Apply this schedule to all livestock with the same type
+                        and maturity level as the current one. This saves time
+                        by automatically setting up feeding schedules for
+                        similar livestock
+                      </p>
+                    }
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between gap-10">
+                <div className="flex items-center space-x-2">
+                  <Checkbox
+                    checked={applyToMaturity}
+                    id="applyToMaturity"
+                    onCheckedChange={(e) => setApplyToMaturity(e as boolean)}
+                  />
+                  <span className="text-sm font-medium leading-none">
+                    All livestock in “Mcdonald Stable 1” housing
+                  </span>
+                </div>
+                <div>
+                  <AcreTooltip
+                    triggerText={
+                      <IoMdInformationCircleOutline className="w-8 h-6 text-gray-400" />
+                    }
+                    tooltipContent={
+                      <p>
+                        Apply this schedule to all livestock in the same housing
+                        or location as the current one. This ensures consistent
+                        feeding across all animals in the same area.
+                      </p>
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* error pane */}
@@ -242,7 +492,7 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
           </div>
         )}
 
-        <CardFooter className="flex justify-between mt-8 gap-9">
+        <CardFooter className="flex justify-between mt-6 gap-9">
           <DialogClose asChild>
             <Btn className="w-full text-black border-[3px]border-gray-200">
               Cancel
@@ -275,3 +525,4 @@ const SetFeedRation: React.FC<SetFeedRationProps> = ({
 };
 
 export default SetFeedRation;
+
