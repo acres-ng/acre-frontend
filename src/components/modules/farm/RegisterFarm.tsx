@@ -208,7 +208,7 @@ const RegisterFarm = () => {
   };
 
   const prevStep = () => {
-    setLoader(false); //enable submit button in step3
+    setLoader(false); 
     if (step > 1) {
       setStep(step - 1);
     }
@@ -219,13 +219,7 @@ const RegisterFarm = () => {
       if (step === 1) {
         setStep1Data(stepData);
       } else if (step === 2) {
-        const step2merge = {
-          ...stepData,
-          ...step2Data,
-        };
-        setStep2Data(step2merge);
-      } else if (step === 3) {
-        setStep3Data(stepData);
+        setStep2Data(stepData);
       }
       nextStep();
     } else {
@@ -233,7 +227,7 @@ const RegisterFarm = () => {
       const payload = {
         ...step1Data,
         ...step2Data,
-        ...step3Data,
+        ...stepData,
       };
       try {
         setLoader(true); //disables the submit button after click

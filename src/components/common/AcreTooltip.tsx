@@ -29,4 +29,6 @@ const AcreTooltip: React.FC<AcreTooltipProps> = ({
   );
 };
 
+
 export default AcreTooltip;
+
