@@ -135,6 +135,23 @@ export async function getTransactionUtils() {
   }
 }
 
+export async function getHousingUtils() {
+  try {
+    const activeFarmId = getActiveFarm().id;
+    const url = `${config.API_URL}farms/${activeFarmId}/housing/utils`;
+    const response = await http.get(url, getDefaultOptions());
+    if (response.data.status === "success") {
+      return response.data.data;
+    } else {
+      toast.error(response.data.message);
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching transaction utilities:", error);
+    throw error;
+  }
+}
+
 
 
 
