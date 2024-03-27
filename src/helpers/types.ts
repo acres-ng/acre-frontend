@@ -57,3 +57,9 @@ export type Farm = {
     name: string;
     description?: string;
   }
+
+  export type Housing = {
+    id: string;
+    name: string;
+    description?: string;
+  }
