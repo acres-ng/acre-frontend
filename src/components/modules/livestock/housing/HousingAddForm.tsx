@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Textarea } from "@/components/common/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/common/ui/select";
 import { Input } from "rizzui";
 import { Label } from "@/components/common/ui/label";
 import { Button as Btn } from "rizzui";
@@ -48,7 +41,7 @@ const HousingAddForm = () => {
   const fetchHousingData = async () => {
     try {
       const response = await getHousingUtils();
-      const housingTypes: Housing[] = response.data?.housing_types || [];
+      const housingTypes: Housing[] = response?.housing_types || [];
       const housing: Housing[] = housingTypes.map((house) => {
         return {
           id: house.id,
@@ -62,16 +55,9 @@ const HousingAddForm = () => {
     }
   };
 
-
-  
-
   useEffect(() => {
     fetchHousingData();
   }, []);
-
-  const handleHousingSelection = (value: string) => {
-    housingForm.setValue("id", value);
-  };
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     try {
@@ -124,21 +110,25 @@ const HousingAddForm = () => {
             <div className="flex flex-col space-y-1.5 mt-3">
               <Label htmlFor="feedName">Housing Name or ID</Label>
 
-              <Select
+              <select
                 {...housingForm.register("id")}
-                onValueChange={(value: string) => handleHousingSelection(value)}
+                onChange={(e) => housingForm.setValue("id", e.target.value)}
+                className="block w-full py-2 px-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-gray-400"
               >
-                <SelectTrigger id="housing">
-                  <SelectValue placeholder="Select Housing" />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  {housingData.map((housing) => (
-                    <SelectItem key={housing.id} value={housing.id}>
-                      {housing.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                <option value="" disabled selected className="text-gray-400">
+                  Select Housing
+                </option>
+                {housingData.map((housing) => (
+                  <option
+                    key={housing.id}
+                    value={housing.id}
+                    className="text-gray-900"
+                  >
+                    {housing.name}
+                  </option>
+                ))}
+              </select>
+
               {housingForm.formState.errors.id && (
                 <span>{housingForm.formState.errors.id.message}</span>
               )}
